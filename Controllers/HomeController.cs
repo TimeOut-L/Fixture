@@ -10,7 +10,7 @@ namespace FixtureManagement.Controllers
     {
 
 
-        [Authorize(Roles ="admin")]
+        
         public ActionResult Index()
         {
             return View();
