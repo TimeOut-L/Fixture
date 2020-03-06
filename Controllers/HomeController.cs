@@ -12,5 +12,6 @@ namespace FixtureManagement.Controllers
         {
             return View();
         }
+
     }
 }

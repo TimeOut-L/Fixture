@@ -1,0 +1,172 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css">
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <link href="~/Content/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
+    <!-- Latest compiled and minified Locales -->
+    <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+</head>
+<body>
+    <div class="panel-body" style="padding-bottom:0px;">
+        <div id="toolbar" class="btn-group">
+            <button id="btn_add" type="button" class="btn btn-default" data-toggle="modal" data-target="#addModal">
+                <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                <span>新增</span>
+            </button>
+            <button id="btn_update" type="button" class="btn btn-default">
+                <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
+                <span>编辑</span>
+            </button>
+            <button id="btn_delete" type="button" class="btn btn-default" onclick="BtchDeleteBook()">
+                <i class="glyphicon glyphicon-remove" aria-hidden="true"></i>
+                <span>删除</span>
+            </button>
+        </div>
+        <!-- <button type="button" id="download" style="margin-left:50px" id="btn_download" class="btn btn-primary" onClick ="$(‘#myTable‘).tableExport({ type: ‘excel‘, escape: ‘false‘ })">数据导出</button> -->
+        <table id="myTable">
+
+
+        </table>
+        <!-- 添加 -->
+        <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">添加记录</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" action="javascript:void(0)" id="addForm">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="goodsName" placeholder="请输入商品名称">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="goodsPrice" placeholder="请输入商品价格">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="goodsType" placeholder="请输入商品型号">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="statusId" placeholder="请输入商品状态">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="goodsStore" placeholder="请输入商品数量">
+                            </div>
+
+                        </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="addRecord">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        $(function () {
+            var itable = TableInit();//.初始化Table
+            itable.Init();
+
+        });
+        function changeDateFormat(cellval) {
+            if (cellval != null) {
+                var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+                var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+                var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+                var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+                var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+                var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+                return date.getFullYear() + "-" + month + "-" + currentDate + " " + hours + ":" + minutes + ":" + seconds;
+
+            }
+        };
+        var TableInit = function () {
+            var myTableInit = new Object();
+            //.初始化Table
+            myTableInit.Init = function () {
+                $("#myTable").bootstrapTable({
+                    url: '/Test/DoTest',
+                    method: 'post',
+                    toolbar: '#toolbar',//工具列
+                    striped: true,//隔行换色
+                    cache: false,//禁用缓存
+                    pagination: true,//关闭分页
+                    showFooter: false,//是否显示列脚
+                    showPaginationSwitch: true,//是否显示 数据条数选择框
+                    sortable: false,//排序
+                    search: true,//启用搜索
+                    showFullscreen: true,//全屏按钮
+                    /* showToggle:true,//显示详细视图和列表 */
+                    showColumns: true,//是否显示 内容列下拉框
+                    showRefresh: true,//显示刷新按钮
+                    clickToSelect: true,//点击选中checkbox
+                    pageNumber: 1,//初始化加载第一页，默认第一页
+                    pageSize: 3,   //每页的记录行数
+                    pageList: [1, 2, 3, 4, 5],//可选择的每页行数
+                    paginationPreText: "上一页",
+                    paginationNextText: "下一页",
+                    paginationFirstText: "First",
+                    paginationLastText: "Last",
+
+                    showExport: true,  //是否显示导出按钮
+                    buttonsAlign: "right",  //按钮位置
+                    exportTypes: ['excel', 'json', 'txt', 'csv', 'xml'],  //导出文件类型
+                    Icons: 'glyphicon-export ',
+                    columns: [{
+                            title: "全选", field: "select", checkbox: true
+                    }, {
+                            field: 'Code',
+                            title: '夹具代码',
+                            switchable: true
+                    }, {
+                            field: 'SeqID',
+                            title: '夹具序列号',
+                            switchable: true
+                    }, {
+                            field: 'BillNo',
+                            title: '采购单号',
+                            switchable: true
+                    }, {
+                            field: 'RegDate',
+                            title: '入库日期',
+                            switchable: true,
+                             formatter: function (value, row, index) {
+                                  return changeDateFormat(value)
+                             }
+                    }, {
+                            field: 'UsedCount',
+                            title: '使用次数',
+                            switchable: true,
+                            sortable: true
+                    }, {
+                            field: 'Location',
+                            title: '存放库位',
+                            switchable: true
+                    },],
+                });
+            };
+             return myTableInit;
+        }
+    </script>
+
+</body>
+</html>
