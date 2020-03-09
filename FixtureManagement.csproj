@@ -215,15 +215,17 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InRecordController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\OutRecordController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\FixtureEntity.cs" />
     <Compile Include="Models\FixtureEntityContext.cs" />
-    <Compile Include="Models\FixtureInOutRecord.cs" />
-    <Compile Include="Models\FixtureInOutRecordContext.cs" />
+    <Compile Include="Models\FixtureOutRecord.cs" />
+    <Compile Include="Models\FixtureOutRecordContext.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -283,6 +285,8 @@
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
+    <Content Include="Views\InRecord\Index.cshtml" />
+    <Content Include="Views\OutRecord\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

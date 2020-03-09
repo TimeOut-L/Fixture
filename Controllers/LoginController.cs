@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace FixtureManagement.Controllers
 {
+    //登录控制器
     public class LoginController :Controller
     {
         UserContext context = new UserContext();
@@ -17,10 +18,10 @@ namespace FixtureManagement.Controllers
         }
 
         [HttpPost]
-        public ActionResult DoLogin(string code ,string password)
+        public ActionResult DoLogin()
         {
-            code = Request["code"];
-            password = Request["password"];
+            string code = Request["code"];
+            string password = Request["password"];
             SqlParameter[] parms = new SqlParameter[]
             {
                 new SqlParameter ("@code",code),

@@ -8,7 +8,7 @@ using System.Web.Script.Serialization;
 
 namespace FixtureManagement.Controllers
 {
-    //多夹具实体信息的查询测试和 bootstrap table 
+    //夹具实体信息的查询测试和 bootstrap table 
     public class TestController:Controller
     {
         FixtureEntityContext context = new FixtureEntityContext();
@@ -17,13 +17,17 @@ namespace FixtureManagement.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult DoTest()
         {
             List<FixtureEntity> entities = context.fixtureEntities.SqlQuery("select * from FixtureEntity").ToList();
-            JavaScriptSerializer jsSer = new JavaScriptSerializer(); 
-            string jsonStr = jsSer.Serialize(entities);
+          
             return Json(entities, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Purchase()
+        {
+            return View();
         }
     }
 }

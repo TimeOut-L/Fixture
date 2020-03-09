@@ -7,16 +7,18 @@ using System.Web;
 
 namespace FixtureManagement.Models
 {
-    public class FixtureEntityContext:DbContext
+    public class FixtureOutRecordContext:DbContext
     {
-        public FixtureEntityContext() : base("name=FixtureManagement")
+       public FixtureOutRecordContext() : base("name=FixtureManagement")
         {
-            Database.SetInitializer<FixtureEntityContext>(null);//表示实体对象不初始化数据库
+            Database.SetInitializer<FixtureOutRecordContext>(null);//表示实体对象不初始化数据库
+            
         }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            //移除复数表名约定
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
-        public DbSet<FixtureEntity> fixtureEntities { get; set; }
+        public DbSet<FixtureOutRecord> OutRecords { get; set; }
     }
 }

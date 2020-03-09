@@ -29,8 +29,8 @@
 
 </head>
 
-<body>
-    <section id="container">
+<body style="background-color:antiquewhite">
+    <section id="container" >
         <!--header start-->
         <header class="header black-bg">
             <div class="sidebar-toggle-box">
@@ -88,9 +88,9 @@
                             <i class="fa fa-edit" aria-hidden="true"></i>
                             <span>夹具出入库登记</span>
                         </a>
-                        <ul id="Collapse" class=" nav-list collapse in">
-                            <li><a href="#">出库登记</a></li>
-                            <li><a href="#">入库登记</a></li>
+                        <ul id="Collapse" class=" nav-list collapse in ">
+                            <li><a href="/OutRecord/Index">领用 ( 出库 )登记</a></li>
+                            <li><a href="#">归还 ( 入库 )登记</a></li>
                         </ul>
                     </li>
                     <li class="sub-menu ">
@@ -107,8 +107,14 @@
                     </li>
                     <li class="sub-menu">
                         <a href="javascript:;">
+                            <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                            <span>夹具采购入库</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a href="/Test/Index">
                             <i class="fa fa-trash" aria-hidden="true"></i>
-                            <span>夹具采购</span>
+                            <span>Test</span>
                         </a>
                     </li>
                 </ul>
@@ -116,8 +122,8 @@
             </div>
         </aside>
         <!--sidebar end-->
-        <section id="main-content">
-            <section class="wrapper">
+        <section id="main-content" >
+            <section class="wrapper" >
                 <div id="right-container">
                     @RenderBody()
                 </div>
