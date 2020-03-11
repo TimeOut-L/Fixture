@@ -15,6 +15,7 @@ namespace FixtureManagement.Models
         }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            //移除复数表名约定 否则会在数据库自动建立复数表
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
         public DbSet<User> users { get; set; }
