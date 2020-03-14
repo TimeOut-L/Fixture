@@ -85,7 +85,7 @@
     <script type="text/javascript">
 
         $(function () {
-            var itable = TableInit();//.初始化 Table
+            var itable = TableInit();//.初始化  Table
             itable.Init();
 
         });
@@ -122,7 +122,7 @@
         };
         var TableInit = function () {
             var outRecordTableInit = new Object();
-            //.初始化 Table
+            //    初始化  Table
             outRecordTableInit.Init = function () {
                 $("#outRecordTable").bootstrapTable({
                     url: '/OutRecord/ReadOutRecords',
@@ -130,27 +130,27 @@
                     toolbar: '#toolbar',//工具列
                     rowStyle: rowStyle,
                     theadClasses: "thead-blue",//设置thead-blue为表头样式
-                    cache: false,//禁用缓存
+                    cache: false, //禁用缓存
                     pagination: true,//关闭分页
                     showFooter: false,//是否显示列脚
                     showPaginationSwitch: false,//是否显示 数据条数选择框
                     sortable: false,//排序
-                    search: true,//启用搜索
-                    showSearchButton: true,//
-                    showFullscreen: true,//全屏按钮
+                    search: true, //启用搜索
+                    showSearchButton: true,  //
+                    showFullscreen: true,   // 全屏按钮
                     showToggle: true,//显示详细视图和列表
                     showColumns: true,
                     showRefresh: true,//显示刷新按钮
-                    clickToSelect: true,//点击选中checkbox
+                    clickToSelect: true,//点击选中 checkbox
                     pageNumber: 1, //初始化加载第一页，默认第一页
                     pageSize: 7,   //每页的记录行数
-                    pageList: [3, 5, 7, 9, 'ALL'], //可供选择的页面显示条数
+                    pageList: [3, 5, 7, 9, 'ALL'],   //可供选择的页面显示条数
                     maintainSelected: true, //记住选中项即使翻页
                     paginationPreText: "上一页",
                     paginationNextText: "下一页",
                     paginationFirstText: "First",
                     paginationLastText: "Last",
-                    clickToSelect: true,  //是否启动点击选中行
+                    clickToSelect: false ,
 
                     Icons: 'glyphicon-export ',
                     columns: [{
@@ -190,8 +190,8 @@
                         formatter: function (value, row, index) {
                             return [
                                 '<div class="btn-group">',
-                                '<button id="btn_update" type="button" class="btn btn-warning"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i><span>编辑</span></button>',
-                                '<button id="btn_delete" type="button" class="btn btn-danger" ><i class="glyphicon glyphicon-remove" aria-hidden="true"></i><span>删除</span></button>',
+                                '<button id="btn_update" type="button" class="btn btn-warning"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i><span></span></button>',
+                                '<button id="btn_delete" type="button" class="btn btn-danger" ><i class="glyphicon glyphicon-remove" aria-hidden="true"></i><span></span></button>',
                                 '</div>'
                             ].join(' ');
                         }
