@@ -13,6 +13,7 @@
     <script src="https://cdn.bootcss.com/moment.js/2.18.1/moment-with-locales.min.js"></script>
     <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootbox.js/5.4.0/bootbox.min.js"></script>
     <style>
 
         /*表头样式*/
@@ -37,7 +38,10 @@
                 <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
                 <span>新增</span>
             </button>
-
+            <button id="btn_remove" type="button" class="btn btn-danger">
+                <i class="glyphicon glyphicon-remove" aria-hidden="true"></i>
+                <span>删除</span>
+            </button>
         </div>
         <!-- <button type="button" id="download" style="margin-left:50px" id="btn_download" class="btn btn-primary" onClick ="$(‘#myTable‘).tableExport({ type: ‘excel‘, escape: ‘false‘ })">数据导出</button> -->
         <table id="outRecordTable" class="table-striped">
@@ -75,8 +79,6 @@
                             </div>
                         </form>
                     </div>
-                   
-
                 </div>
             </div>
         </div>
@@ -93,13 +95,58 @@
         function addOutRecord() {
 
         }
-
-
-        //操作事情
-        function operationEvents() {
-
-
+        //获取要删除的code seqID 并转jsonstr
+        function getJsonData() {
+             var rows = $("#outRecordTable").bootstrapTable('getSelections');
+            //存储数据
+            var ItemCodes = new Array();
+            //console.log(rows);
+            if (rows.length == 0) {// rows 主要是为了判断是否选中，下面的else内容才是主要
+                alert("请先选择要删除的记录!");
+                return;
+            } else {
+                 //  声明一个object 存储行某几列数据
+                $(rows).each(function () {
+                    var item = new Object();
+                    item.Code = this.Code;
+                    item.SeqID = this.SeqID;
+                    ItemCodes.push(item);
+                    console.log(ItemCodes);
+                });
+            }
+            return JSON.stringify(ItemCodes);
         }
+        //btn_remove 事件
+        $("#btn_remove").on("click", function () {
+            //获取选中数据
+            var jsonData = getJsonData();
+            //删除数据
+            deleteData(jsonData);
+        })
+
+        function deleteData(jsonData) {
+              $.ajax({
+                url: "/OutRecord/DeleteOutRecords",
+                type: "post",
+                data: { "ItemCodes": jsonData },
+                  success: function () {
+                      $("#outRecordTable").bootstrapTable('refresh');
+                }
+            });
+        }
+        
+        //操作列事情
+        window.operationEvents = {
+            //编辑事件
+            'click #btn_update': function (e, value, row, index) {
+               
+            },
+            //删除事件
+            'click #btn_delete': function (e, value, row, index) {
+                alert(index);
+            }
+        }
+
         //行样式
         function rowStyle(row, index) {
 
@@ -120,6 +167,7 @@
 
             }
         };
+        //初始化
         var TableInit = function () {
             var outRecordTableInit = new Object();
             //    初始化  Table
@@ -150,7 +198,7 @@
                     paginationNextText: "下一页",
                     paginationFirstText: "First",
                     paginationLastText: "Last",
-                    clickToSelect: false ,
+                    //clickToSelect: false ,
 
                     Icons: 'glyphicon-export ',
                     columns: [{

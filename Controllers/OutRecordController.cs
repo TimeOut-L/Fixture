@@ -1,4 +1,7 @@
-﻿using FixtureManagement.Models;
+﻿using FixtureManagement.Common;
+using FixtureManagement.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -22,9 +25,11 @@ namespace FixtureManagement.Controllers
         public ActionResult ReadOutRecords()
         {
             List<FixtureOutRecord> fixtureOutRecords = context.OutRecords.SqlQuery("select * from FixtureOutRecord").ToList();
-            JavaScriptSerializer jsSer = new JavaScriptSerializer();
+
             return Json(fixtureOutRecords, JsonRequestBehavior.AllowGet);
         }
+
+        //添加领用记录
         [HttpPost]
         public ActionResult AddOutRecord()
         {
@@ -33,7 +38,7 @@ namespace FixtureManagement.Controllers
             string UsedByName = Request["usedByName"];
             string OperationByName = Request["operationByName"];
             int ProLineID = Convert.ToInt32(Request["proLineID"]);
-            DateTime UsedDate = Convert.ToDateTime( Request["usedDate"]);
+            DateTime UsedDate = Convert.ToDateTime(Request["usedDate"]);
             FixtureOutRecord outRecord = new FixtureOutRecord();
             outRecord.Code = Code;
             outRecord.SeqID = SeqID;
@@ -50,9 +55,35 @@ namespace FixtureManagement.Controllers
             //    new SqlParameter("@proLineID",ProLineID),
             //    new SqlParameter("@usedDate",UsedDate),
             //};
+            //TODO try catch
             context.OutRecords.Add(outRecord);
             context.SaveChanges();
-            return RedirectToAction("Index", "OutRecord");
+            return Redirect("/OutRecord/Index");
+        }
+
+        [HttpPost]
+        public ActionResult DeleteOutRecords()
+        {
+            var data = new object();
+            //TODO
+            string jsonData = Request["ItemCodes"];
+            JArray jArray = JArray.Parse(jsonData);
+            foreach (var item in jArray)
+            {
+                JsonSerializer js = new JsonSerializer();
+                ItemCode obj = (ItemCode)js.Deserialize(item.CreateReader(), typeof(ItemCode));
+                SqlParameter[] parms = new SqlParameter[]
+                {
+                     new SqlParameter ("@code",obj.Code),
+                     new SqlParameter("@seqID",obj.SeqID)
+                };
+                //TODO try catch
+                FixtureOutRecord record= context.OutRecords.SqlQuery("select * from FixtureOutRecord where Code=@code and SeqID=@seqID",parms).Single();
+                context.OutRecords.Remove(record);
+                context.SaveChanges();
+            }
+            //return RedirectToAction("Index", "OutRecord");
+            return Redirect("/OutRecord/Index");
         }
     }
 }
