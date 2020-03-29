@@ -1,4 +1,5 @@
 ﻿using FixtureManagement.Common;
+using FixtureManagement.filter;
 using FixtureManagement.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,6 +13,8 @@ using System.Web.Script.Serialization;
 
 namespace FixtureManagement.Controllers
 {
+    [LoginCheckFilter]
+    //领用
     public class OutRecordController : Controller
     {
         FixtureOutRecordContext context = new FixtureOutRecordContext();

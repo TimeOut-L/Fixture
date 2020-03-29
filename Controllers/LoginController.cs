@@ -12,12 +12,14 @@ namespace FixtureManagement.Controllers
     public class LoginController :Controller
     {
         UserContext context = new UserContext();
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult DoLogin()
         {
             string code = Request["code"];
@@ -27,7 +29,7 @@ namespace FixtureManagement.Controllers
                 new SqlParameter ("@code",code),
                 new SqlParameter("@password",password)
             };
-            //var user = context.users.Where(u => u.Code == code && u.Password == password).SingleOrDefault();
+            //User user = context.users.Where(u => u.Code == code && u.Password == password).Single();
             List<User> users = context.users.SqlQuery("select * from TestUser where Code =@code and Password=@password",parms).ToList();  
             if (users.Count == 0)
             {
@@ -40,6 +42,8 @@ namespace FixtureManagement.Controllers
                 return Content("<script>alert('用户名或密码错误');history.go(-1);</script>");
             }
             else{
+                //TODO 
+                Session["CurrentUser"] = users.First();
                 return RedirectToAction("Index", "Home");
             }          
         }

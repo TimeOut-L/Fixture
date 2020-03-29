@@ -220,6 +220,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\OutRecordController.cs" />
     <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="filter\LoginCheckFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
