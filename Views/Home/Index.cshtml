@@ -1,8 +1,4 @@
-﻿
-@{
-    ViewBag.Title = "Index";
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -11,16 +7,152 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <link href="~/Content/fontawesome/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/Content/bootstrap.min.css">
-
-    <link href="~/Content/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
-
     <script src="~/Scripts/bootstrap.min.js"></script>
-</head>
-<body>
-    <div>
-        <p>公司介绍</p>
-    </div>
 
+    <link href="~/Content/Layout.css" rel="stylesheet">
+
+
+</head>
+
+<body style="background-color:antiquewhite">
+    <section id="container">
+        <!--header start-->
+        <header class="header black-bg">
+            <div class="sidebar-toggle-box">
+                <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+            </div>
+            <!--logo start-->
+            <a href="/Home/Index" class="logo"><b>Ja<span>bil</span></b></a>
+            <!--logo end-->
+            <div class="nav notify-row" id="top_menu">
+                <!--  notification start -->
+                <ul class="nav top-menu">
+                    <!-- settings start -->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" href="index.html#">
+                            <i class="fa fa-tasks"></i>
+                            <span class="badge bg-theme">4</span>
+                        </a>
+                    </li>
+                    <!-- settings end -->
+                    <!-- inbox dropdown start-->
+                    <li id="header_inbox_bar" class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+                            <i class="fa fa-envelope-o"></i>
+                            <span class="badge bg-theme">5</span>
+                        </a>
+                    </li>
+                    <!-- inbox dropdown end -->
+                    <!-- notification dropdown start-->
+                    <li id="header_notification_bar" class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+                            <i class="fa fa-bell-o"></i>
+                            <span class="badge bg-warning">7</span>
+                        </a>
+                    </li>
+                    <!-- notification dropdown end -->
+                </ul>
+                <!--  notification end -->
+            </div>
+            <div class="top-menu">
+                <ul class="nav pull-right top-menu">
+                    <li><b class="wel"></b></li>
+                    <li><span id="user"></span></li>
+                    <li><a class="logout" href="/Login/LogOut">Logout</a></li>
+
+                </ul>
+            </div>
+        </header>
+        <!--sidebar start-->
+        <aside>
+            <div id="sidebar" class="nav-collapse ">
+                <!-- sidebar menu start-->
+                <ul class="sidebar-menu" id="nav-accordion">
+                    <li class="sub-menu active" role="presentation">
+                        <a href="#Collapse" class="nav-header collapsed " data-toggle="collapse" data-parent="#nav-accordion">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
+                            <span>夹具出入库登记</span>
+                        </a>
+                        <ul id="Collapse" class=" nav-list collapse in ">
+                            <li><a href="javascript:void(0);" class="left-menu" data-html="/OutRecord/Index">领用 ( 出库 )登记</a></li>
+                            <li><a href="javascript:void(0);" class="left-menu" data-html="/InRecord/Index">归还 ( 入库 )登记</a></li>
+                        </ul>
+                    </li>
+                    <li class="sub-menu ">
+                        <a href="javascript:;">
+                            <i class="fa fa-wrench" aria-hidden="true"></i>
+                            <span>夹具报修</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a href="javascript:;">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                            <span>夹具报废</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a href="javascript:;">
+                            <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                            <span>夹具采购入库</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a href="javascript:void(0);" class="left-menu" data-html="/Test/Index">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                            <span>Test</span>
+                        </a>
+                    </li>
+                </ul>
+                <!-- sidebar menu end-->
+            </div>
+        </aside>
+        <!--sidebar end-->
+        <section id="main-content">
+            <section class="wrapper">
+                <div id="right-container">
+                   
+                </div>
+            </section>
+        </section>
+    </section>
+    <script>
+        $(function () {
+            //修复collapse不能正常折叠的问题
+            $(".collapsed").click(function () {
+                var itemHref = $(this).attr("href");
+                var itemClass = $(itemHref).attr("class");
+                if (itemClass === "nav-list collapse") {
+                    $(itemHref).attr("class", "nav-list collapse in").css("height", "auto");
+                } else {
+                    $(itemHref).attr("class", "nav-list collapse").css("height", "0px");
+                }
+                return false;//停止运行bootstrap自带的函数
+            });
+        })
+        $(function () {
+          
+            if ($("#user").text() == "") {
+                $.ajax({
+                    url: "/Home/GetUserName",
+                    type: "get",
+                    success: function (data) {
+                        $(".wel").text("欢迎您");
+                        $("#user").text(data[0].userName);
+                    }
+                });
+            }
+            //$("#rigth-container").load("/Home/test");
+        })
+        $(function () {
+           
+            $(".left-menu").click(function (e) {
+                var url = $(this).attr('data-html');
+                $("#right-container").load(url);
+            })
+        })
+    </script>
 </body>
+
 </html>

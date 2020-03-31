@@ -12,6 +12,7 @@ namespace FixtureManagement.Controllers
     public class LoginController :Controller
     {
         UserContext context = new UserContext();
+
         [AllowAnonymous]
         public ActionResult Index()
         {
@@ -46,6 +47,14 @@ namespace FixtureManagement.Controllers
                 Session["CurrentUser"] = users.First();
                 return RedirectToAction("Index", "Home");
             }          
+        }
+
+        [HttpPost]    
+        [AllowAnonymous]
+        public ActionResult LogOut()
+        {
+            Session["CurrentUser"] = null;
+            return RedirectToAction("Index", "Login");
         }
     }
 }

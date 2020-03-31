@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -12,26 +13,12 @@
     <script src="~/Scripts/bootstrap.min.js"></script>
 
     <link href="~/Content/Layout.css" rel="stylesheet">
-    <script>
-        $(function () {
-            //修复collapse不能正常折叠的问题
-            $(".collapsed").click(function () {
-                var itemHref = $(this).attr("href");
-                var itemClass = $(itemHref).attr("class");
-                if (itemClass === "nav-list collapse") {
-                    $(itemHref).attr("class", "nav-list collapse in").css("height", "auto");
-                } else {
-                    $(itemHref).attr("class", "nav-list collapse").css("height", "0px");
-                }
-                return false;//停止运行bootstrap自带的函数
-            });
-        })
-    </script>
+
 
 </head>
 
 <body style="background-color:antiquewhite">
-    <section id="container" >
+    <section id="container">
         <!--header start-->
         <header class="header black-bg">
             <div class="sidebar-toggle-box">
@@ -72,9 +59,9 @@
             </div>
             <div class="top-menu">
                 <ul class="nav pull-right top-menu">
-                    <li><b class="wel">欢迎您</b></li>
-                    <li><span id="user">112312322</span></li>
-                    <li><a class="logout" href="/Login/Index">Logout</a></li>
+                    <li><b class="wel"></b></li>
+                    <li><span id="user"></span></li>
+                    <li><a class="logout" href="/Login/LogOut">Logout</a></li>
 
                 </ul>
             </div>
@@ -123,14 +110,43 @@
             </div>
         </aside>
         <!--sidebar end-->
-        <section id="main-content" >
-            <section class="wrapper" >
+        <section id="main-content">
+            <section class="wrapper">
                 <div id="right-container">
                     @RenderBody()
                 </div>
             </section>
         </section>
     </section>
+    <script>
+        $(function () {
+            //修复collapse不能正常折叠的问题
+            $(".collapsed").click(function () {
+                var itemHref = $(this).attr("href");
+                var itemClass = $(itemHref).attr("class");
+                if (itemClass === "nav-list collapse") {
+                    $(itemHref).attr("class", "nav-list collapse in").css("height", "auto");
+                } else {
+                    $(itemHref).attr("class", "nav-list collapse").css("height", "0px");
+                }
+                return false;//停止运行bootstrap自带的函数
+            });
+        })
+        $(function () {
+            alert($("#user").text());
+            if ($("#user").text() == "") {
+                $.ajax({
+                    url: "/Home/GetUserName",
+                    type: "get",
+                    success: function (data) {
+
+                        $(".wel").text("欢迎您");
+                        $("#user").text(data[0].userName);
+                    }
+                });
+            }
+        })
+    </script>
 </body>
 
 </html>

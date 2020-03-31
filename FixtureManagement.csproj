@@ -291,6 +291,7 @@
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\InRecord\Index.cshtml" />
     <Content Include="Views\OutRecord\Index.cshtml" />
+    <Content Include="Views\Home\test.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
