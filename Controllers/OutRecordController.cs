@@ -61,13 +61,18 @@ namespace FixtureManagement.Controllers
             //TODO try catch
             context.OutRecords.Add(outRecord);
             context.SaveChanges();
-            return Redirect("/OutRecord/Index");
+            //return Redirect("/OutRecord/Index");
+            var data = new
+            {
+                success = true,
+            };
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult DeleteOutRecords()
         {
-            var data = new object();
+            
             //TODO
             string jsonData = Request["ItemCodes"];
             JArray jArray = JArray.Parse(jsonData);
@@ -86,7 +91,11 @@ namespace FixtureManagement.Controllers
                 context.SaveChanges();
             }
             //return RedirectToAction("Index", "OutRecord");
-            return Redirect("/OutRecord/Index");
+            var data = new
+            {
+                success = true,
+            };
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
     }
 }

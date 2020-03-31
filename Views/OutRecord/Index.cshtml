@@ -55,7 +55,7 @@
                         <h4 class="modal-title" id="myModalLabel">添加记录</h4>
                     </div>
                     <div class="modal-body">
-                        <form action="/OutRecord/AddOutRecord" method="post">
+                        <form id="addform" action="##" method="post">
                             <span>夹具代码</span>
                             <input type="text" name="code" placeholder="请输入夹具代码" />
                             <br>
@@ -75,7 +75,7 @@
                             <input type="text" name="usedDate" placeholder="请输入夹具代码" id="date" />
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
-                                <button type="submit" class="btn btn-warning">提交</button>
+                                <button type="button" class="btn btn-warning" onclick="addOutRecord()">提交</button>
                             </div>
                         </form>
                     </div>
@@ -92,8 +92,25 @@
 
         });
 
-        function addOutRecord() {
-
+         function addOutRecord() {
+            $.ajax({
+                type: "POST",//方法类型
+                url: "/OutRecord/AddOutRecord" ,//url
+                data: $('#addform').serialize(),
+                success: function (result) {
+                    if (result.success) {
+                        $("#addOutRecordModal").modal('hide');
+                        alert('添加成功');                   
+                        $("#outRecordTable").bootstrapTable('refresh');
+                    }
+                    else {
+                        alert('添加失败');
+                    }
+                },
+                error: function (e) {
+                    alert('添加错误');
+                }
+            });
         }
         //获取要删除的code seqID 并转jsonstr
         function getJsonData() {
@@ -125,12 +142,21 @@
         })
 
         function deleteData(jsonData) {
-              $.ajax({
+               $.ajax({
                 url: "/OutRecord/DeleteOutRecords",
                 type: "post",
                 data: { "ItemCodes": jsonData },
-                  success: function () {
-                      $("#outRecordTable").bootstrapTable('refresh');
+                success: function (result) {
+                    if (result.success) {
+                        alert('删除成功');
+                        $("#outRecordTable").bootstrapTable('refresh');
+                    }
+                    else {
+                        alert('删除失败');
+                    }
+                },
+                error: function (e) {
+                    alert('删除错误');
                 }
             });
         }

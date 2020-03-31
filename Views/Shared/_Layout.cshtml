@@ -26,6 +26,22 @@
                 return false;//停止运行bootstrap自带的函数
             });
         })
+        $(function () {
+            if ($("#user").text() == "") {
+                alert(1);
+                $.ajax({
+                    url: "/Home/GetUserName",
+                    type: "posr",
+                    success: function (result) {
+                        alert(result.userName);
+                        $("#user").text(result.userName);
+                    },
+                    error: function (e) {
+                        alert(2);
+                    }
+                });
+            }
+        })
     </script>
 
 </head>
@@ -73,7 +89,7 @@
             <div class="top-menu">
                 <ul class="nav pull-right top-menu">
                     <li><b class="wel">欢迎您</b></li>
-                    <li><span id="user">112312322</span></li>
+                    <li><span id="user"></span></li>
                     <li><a class="logout" href="/Login/Index">Logout</a></li>
 
                 </ul>
