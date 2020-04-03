@@ -214,7 +214,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Common\ItemCode.cs" />
+    <Compile Include="Common\ItemID.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InRecordController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -226,6 +226,8 @@
     </Compile>
     <Compile Include="Models\FixtureEntity.cs" />
     <Compile Include="Models\FixtureEntityContext.cs" />
+    <Compile Include="Models\FixtureInRecord.cs" />
+    <Compile Include="Models\FixtureInRecordContext.cs" />
     <Compile Include="Models\FixtureOutRecord.cs" />
     <Compile Include="Models\FixtureOutRecordContext.cs" />
     <Compile Include="Models\User.cs" />
@@ -264,7 +266,6 @@
     <Content Include="Content\fonts\icomoon.woff" />
     <Content Include="App_Data\data.xls" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
-    <Content Include="Scripts\dcjq.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />

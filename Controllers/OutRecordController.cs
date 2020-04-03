@@ -27,7 +27,7 @@ namespace FixtureManagement.Controllers
         [HttpPost]
         public ActionResult ReadOutRecords()
         {
-            List<FixtureOutRecord> fixtureOutRecords = context.OutRecords.SqlQuery("select * from FixtureOutRecord").ToList();
+            List<FixtureOutRecord> fixtureOutRecords = context.OutRecords.SqlQuery("select * from FixtureOutRecord  ORDER BY ID ASC").ToList();
 
             return Json(fixtureOutRecords, JsonRequestBehavior.AllowGet);
         }
@@ -59,8 +59,19 @@ namespace FixtureManagement.Controllers
             //    new SqlParameter("@usedDate",UsedDate),
             //};
             //TODO try catch
-            context.OutRecords.Add(outRecord);
-            context.SaveChanges();
+            try
+            {
+                context.OutRecords.Add(outRecord);
+                context.SaveChanges();
+            }catch(Exception e)
+            {
+                var exception = new
+                {
+                    success = false,
+                    msg = "数据类型错误或不必配",
+                 };
+                return Json(exception, JsonRequestBehavior.AllowGet);
+            }
             //return Redirect("/OutRecord/Index");
             var data = new
             {
@@ -74,19 +85,18 @@ namespace FixtureManagement.Controllers
         {
             
             //TODO
-            string jsonData = Request["ItemCodes"];
+            string jsonData = Request["ItemIDs"];
             JArray jArray = JArray.Parse(jsonData);
             foreach (var item in jArray)
             {
                 JsonSerializer js = new JsonSerializer();
-                ItemCode obj = (ItemCode)js.Deserialize(item.CreateReader(), typeof(ItemCode));
+                ItemID obj = (ItemID)js.Deserialize(item.CreateReader(), typeof(ItemID));
                 SqlParameter[] parms = new SqlParameter[]
                 {
-                     new SqlParameter ("@code",obj.Code),
-                     new SqlParameter("@seqID",obj.SeqID)
+                     new SqlParameter ("@id",obj.ID),                 
                 };
                 //TODO try catch
-                FixtureOutRecord record= context.OutRecords.SqlQuery("select * from FixtureOutRecord where Code=@code and SeqID=@seqID",parms).Single();
+                FixtureOutRecord record= context.OutRecords.SqlQuery("select * from FixtureOutRecord where ID=@id",parms).Single();
                 context.OutRecords.Remove(record);
                 context.SaveChanges();
             }

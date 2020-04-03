@@ -10,44 +10,13 @@
     <link href="~/Content/fontawesome/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/Content/bootstrap.min.css">
     <script src="~/Scripts/bootstrap.min.js"></script>
-
     <link href="~/Content/Layout.css" rel="stylesheet">
-    <script>
-        $(function () {
-            //修复collapse不能正常折叠的问题
-            $(".collapsed").click(function () {
-                var itemHref = $(this).attr("href");
-                var itemClass = $(itemHref).attr("class");
-                if (itemClass === "nav-list collapse") {
-                    $(itemHref).attr("class", "nav-list collapse in").css("height", "auto");
-                } else {
-                    $(itemHref).attr("class", "nav-list collapse").css("height", "0px");
-                }
-                return false;//停止运行bootstrap自带的函数
-            });
-        })
-        $(function () {
-            if ($("#user").text() == "") {
-                alert(1);
-                $.ajax({
-                    url: "/Home/GetUserName",
-                    type: "posr",
-                    success: function (result) {
-                        alert(result.userName);
-                        $("#user").text(result.userName);
-                    },
-                    error: function (e) {
-                        alert(2);
-                    }
-                });
-            }
-        })
-    </script>
+   
 
 </head>
 
 <body style="background-color:antiquewhite">
-    <section id="container" >
+    <section id="container">
         <!--header start-->
         <header class="header black-bg">
             <div class="sidebar-toggle-box">
@@ -106,7 +75,7 @@
                             <span>夹具出入库登记</span>
                         </a>
                         <ul id="Collapse" class=" nav-list collapse in ">
-                            <li><a href="/OutRecord/Index">领用 ( 出库 )登记</a></li>
+                            <li><a href="/OutRecord/Index" >领用 ( 出库 )登记</a></li>
                             <li><a href="#">归还 ( 入库 )登记</a></li>
                         </ul>
                     </li>
@@ -139,14 +108,43 @@
             </div>
         </aside>
         <!--sidebar end-->
-        <section id="main-content" >
-            <section class="wrapper" >
+        <section id="main-content">
+            <section class="wrapper">
                 <div id="right-container">
                     @RenderBody()
                 </div>
             </section>
         </section>
     </section>
+    <script>
+      
+        $(function () {
+            //修复collapse不能正常折叠的问题
+            $(".collapsed").click(function () {
+                var itemHref = $(this).attr("href");
+                var itemClass = $(itemHref).attr("class");
+                if (itemClass === "nav-list collapse") {
+                    $(itemHref).attr("class", "nav-list collapse in").css("height", "auto");
+                } else {
+                    $(itemHref).attr("class", "nav-list collapse").css("height", "0px");
+                }
+                return false;//停止运行bootstrap自带的函数
+            });
+        })
+        $(function () {
+            
+            if ($("#user").text()=="") {
+                $.ajax({
+                    url: "/Home/GetUserName",
+                    type: "post",
+                    async: true,
+                    success: function (result) {                   
+                        $("#user").text(result.userName);                     
+                    }
+                });
+            }         
+        })     
+    </script>
 </body>
 
-</html>
+</html>                   
