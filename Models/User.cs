@@ -9,10 +9,11 @@ namespace FixtureManagement.Models
     [Serializable]
     public class User
     {
-        public int ID { get; set; }
+        
         [Key]
         public string Code { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
+        public int WorkCellID { get; set; }
     }
 }

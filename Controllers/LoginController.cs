@@ -30,7 +30,7 @@ namespace FixtureManagement.Controllers
                 new SqlParameter("@password",password)
             };
             //User user = context.users.Where(u => u.Code == code && u.Password == password).Single();
-            List<User> users = context.users.SqlQuery("select * from TestUser where Code =@code and Password=@password",parms).ToList();  
+            List<User> users = context.users.SqlQuery("select * from [User] where Code =@code and Password=@password",parms).ToList();  
             if (users.Count == 0)
             {
                 //var data = new List<object>();

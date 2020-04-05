@@ -31,8 +31,13 @@ namespace FixtureManagement.Controllers
         [HttpPost]
         public ActionResult ReadOutRecords()
         {
-            List<FixtureOutRecord> fixtureOutRecords = context.OutRecords.SqlQuery("select * from FixtureOutRecord  ORDER BY ID ASC").ToList();
-
+            User currentUser = (User)Session["CurrentUser"];
+            SqlParameter param = new SqlParameter("@workCellID", currentUser.WorkCellID);
+           
+            List<FixtureOutRecord> fixtureOutRecords = context.OutRecords.SqlQuery("select * from FixtureOutRecord as fr" +
+                " where ProdLineID in ( select ProdLineID from FixtureDefinition where WorkCellID=@workCellID and Code= fr.Code)" +
+                " ORDER BY ID ASC",param).ToList();
+             
             return Json(fixtureOutRecords, JsonRequestBehavior.AllowGet);
         }
 
@@ -47,14 +52,16 @@ namespace FixtureManagement.Controllers
             int SeqID = Convert.ToInt32(Request["seqID"]);
             string UsedByName = Request["usedByName"];
             string OperationByName = Request["operationByName"];
-            int ProLineID = Convert.ToInt32(Request["proLineID"]);
+            int ProdLineID = Convert.ToInt32(Request["prodLineID"]);
             DateTime UsedDate = Convert.ToDateTime(Request["usedDate"]);
+
+            // TODO 判断是否是本部门的夹具 不是则无法添加
             FixtureOutRecord outRecord = new FixtureOutRecord();
             outRecord.Code = Code;
             outRecord.SeqID = SeqID;
             outRecord.UsedByName = UsedByName;
             outRecord.OperationByName = OperationByName;
-            outRecord.ProLineID = ProLineID;
+            outRecord.ProdLineID = ProdLineID;
             outRecord.UsedDate = UsedDate;
             //SqlParameter[] parms = new SqlParameter[]
             //{

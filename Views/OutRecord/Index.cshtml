@@ -22,7 +22,7 @@
     <!-- 弹出框插件 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.js"></script>
-
+    
     <style>
 
         /*表头样式*/
@@ -52,6 +52,7 @@
                 <span>删除</span>
             </button>
         </div>
+
         <!-- <button type="button" id="download" style="margin-left:50px" id="btn_download" class="btn btn-primary" onClick ="$(‘#myTable‘).tableExport({ type: ‘excel‘, escape: ‘false‘ })">数据导出</button> -->
         <table id="outRecordTable" class="table-striped">
         </table>
@@ -90,9 +91,9 @@
                                 </div>
                             </div>
                             <div class=" form-group">
-                                <label class="col-md-2 control-label" for="proLineID">产线ID</label>
+                                <label class="col-md-2 control-label" for="prodLineID">产线ID</label>
                                 <div class="col-md-4">
-                                    <input class="form-control" name="proLineID" id="proLineID" type="text">
+                                    <input class="form-control" name="prodLineID" id="prodLineID" type="text">
                                 </div>
                             </div>
                             <div class=" form-group">
@@ -116,12 +117,12 @@
 
     <script type="text/javascript">
 
-
         $(function () {
             var itable = TableInit();//.初始化  Table
             itable.Init();
 
         });
+
 
         toastr.options = {
             closeButton: false,                                            // 是否显示关闭按钮，（提示框右上角关闭按钮）
@@ -138,24 +139,24 @@
             showMethod: "fadeIn",                                   //   显示时的动画方式
             hideMethod: "fadeOut"                                   //   消失时的动画方式
         };
-        //input 不能为空
-        function checkNull() { 
-            var pass=true;
+        //addform input 不能为空
+        function checkAddFormNull() {
+            var pass = true;
             var str = "";
             $("#addform input[type$='text']").each(function (n) {
                 if ($(this).val() == "") {
                     pass = false;
                     //获取关联label元素
-                    str +=$('label[for=' + $(this).attr('id') + ']').html() + "不能为空！\r\n";
+                    str += $('label[for=' + $(this).attr('id') + ']').html() + "不能为空！\r\n";
                     toastr.error(str);
                     return pass;
                 }
-            });            
+            });
             return pass;
         }
 
         function addOutRecord() {
-            if (checkNull()) {            
+            if (checkAddFormNull()) {
                 $.ajax({
                     type: "POST",//方法类型
                     url: "/OutRecord/AddOutRecord",//url
@@ -203,8 +204,17 @@
         $("#btn_remove").on("click", function () {
             //获取选中数据
             var jsonData = getJsonData();
-            var result;
+            if (jsonData == null) {
+                return
+            }
             //删除数据
+            confirmOrCancelDeleteData(jsonData);
+
+
+        })
+
+        // 确认是否删除数据
+        function confirmOrCancelDeleteData(jsonData) {
             swal.fire({
                 title: '确定删除吗？',
                 text: '你将无法恢复它！',
@@ -214,7 +224,7 @@
                 cancelButtonColor: '#d33',
                 confirmButtonText: '确定删除！',
                 cancelButtonText: '取消删除！',
-                confirmButtonClass: 'btn btn-success',
+                confirmButtonClass: 'btn btn-success ',
                 cancelButtonClass: 'btn btn-danger',
                 buttonsStyling: false
             }).then(function (isConfirm) {
@@ -224,6 +234,7 @@
                         '记录已被删除',
                         'success'
                     ).then(function () {
+                        //确认删除
                         deleteData(jsonData);
                     })
 
@@ -235,7 +246,7 @@
                     );
                 }
             })
-        })
+        }
         //删除数据
         function deleteData(jsonData) {
             $.ajax({
@@ -268,8 +279,7 @@
                 Item = new Object();
                 Item.ID = row.ID;
                 ItemIDs.push(Item);
-                console.log(JSON.stringify(ItemIDs));
-                deleteData(JSON.stringify(ItemIDs));
+                confirmOrCancelDeleteData(JSON.stringify(ItemIDs));
             }
         }
 
@@ -294,6 +304,7 @@
 
             }
         };
+
         //初始化
         var TableInit = function () {
             var outRecordTableInit = new Object();
@@ -304,7 +315,7 @@
                     method: 'post',
                     toolbar: '#toolbar',//工具列
                     rowStyle: rowStyle,
-                    theadClasses: "thead-blue",//设置thead-blue为表头样式
+                    theadClasses: "thead-blue",  //设置thead-blue为表头样式
                     cache: false, //禁用缓存
                     pagination: true,//关闭分页
                     showFooter: false,//是否显示列脚
@@ -317,7 +328,7 @@
                     showToggle: true,//显示详细视图和列表
                     showColumns: true,
                     showRefresh: true,//显示刷新按钮
-                    clickToSelect: true,//点击选中 checkbox
+                    clickToSelect: true, //点击选中 checkbox
                     pageNumber: 1, //初始化加载第一页，默认第一页
                     pageSize: 7,   //每页的记录行数
                     pageList: [3, 5, 7, 9, 'ALL'],   //可供选择的页面显示条数
@@ -357,7 +368,7 @@
                         title: '操作人',
                         visable: true
                     }, {
-                        field: 'ProLineID',
+                        field: 'ProdLineID',
                         title: '产线ID',
                         visable: true
                     }, {
@@ -374,7 +385,7 @@
                         formatter: function (value, row, index) {
                             return [
                                 '<div class="btn-group">',
-                                '<button id="btn_update" type="button" class="btn btn-warning"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i><span></span></button>',
+                                '<button id="btn_update" type="button" class="btn btn-warning" data-toggle="modal" data-target="#editOutRecordModal"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i><span></span></button>',
                                 '<button id="btn_delete" type="button" class="btn btn-danger" ><i class="glyphicon glyphicon-remove" aria-hidden="true"></i><span></span></button>',
                                 '</div>'
                             ].join(' ');

@@ -19,6 +19,6 @@ namespace FixtureManagement.Models
         public DateTime UsedDate { get; set; }
         public string UsedByName { get; set; }
         public string OperationByName { get; set; }
-        public int ProLineID { get; set; }           
+        public int ProdLineID { get; set; }           
     }
 }

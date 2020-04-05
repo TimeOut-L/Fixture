@@ -5,9 +5,396 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css" />
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
+    <!-- Latest compiled and minified Locales -->
+    <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.18.1/moment-with-locales.min.js" type="text/javascript"></script>
+    <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+    <script src="https://cdn.bootcss.com/bootbox.js/5.4.0/bootbox.min.js" type="text/javascript"></script>
+    <!-- 消息提示插件：toastr.js -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js "></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js "></script>
+    <!-- 弹出框插件 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.js"></script>
+
+    <style>
+
+        /*表头样式*/
+        .table .thead-blue th {
+            color: #fff;
+            background-color: #3195f1;
+            border-color: #0d7adf;
+        }
+        /*行 hover*/
+        .table-hover > tbody > tr:nth-child(odd):hover > td,
+        .table-hover > tbody > tr:nth-child(odd):hover > th,
+        .table-hover > tbody > tr:nth-child(even):hover > td,
+        .table-hover > tbody > tr:nth-child(even):hover > th {
+            background-color: aquamarine;
+        }
+    </style>
 </head>
 <body>
-    <div> 
+    <div class="panel-body" style="padding-bottom:0px;">
+        <div id="toolbar" class="btn-group">
+            <button id="btn_add" type="button" class="btn btn-success" data-toggle="modal" data-target="#addInRecordModal">
+                <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                <span>新增</span>
+            </button>
+            <button id="btn_remove" type="button" class="btn btn-danger">
+                <i class="glyphicon glyphicon-remove" aria-hidden="true"></i>
+                <span>删除</span>
+            </button>
+        </div>
+
+        <!-- <button type="button" id="download" style="margin-left:50px" id="btn_download" class="btn btn-primary" onClick ="$(‘#myTable‘).tableExport({ type: ‘excel‘, escape: ‘false‘ })">数据导出</button> -->
+        <table id="inRecordTable" class="table-striped">
+
+        </table>
+
+        <!-- 添加 modal-->
+        <div class="modal fade" id="addInRecordModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">添加记录</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addform" class="form-horizontal" action="##" method="post">
+                            <div class=" form-group">
+                                <label class="col-md-2 control-label" for="code">夹具代码</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" name="code" id="code" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="seqID">夹具序列号</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" name="seqID" id="seqID" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="retdByName">归还人</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" name="retByName" id="retByName" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="operationByName">操作人</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" name="operationByName" id="operationByName" type="text">
+                                </div>
+                            </div>
+                            <div class=" form-group">
+                                <label class="col-md-2 control-label" for="prodLineID">产线ID</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" name="prodLineID" id="prodLineID" type="text">
+                                </div>
+                            </div>
+                            <div class=" form-group">
+                                <label class="col-md-2 control-label" for="retDate">归还日期</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" name="retDate" id="retDate" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group modal-footer">
+                                <div class="col-md-6 col-md-offset-3">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
+                                    <button type="button" class="btn btn-warning" onclick="addInRecord()">提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script type="text/javascript">
+
+        $(function () {
+            var itable = TableInit();//.初始化  Table
+            itable.Init();
+
+        });
+
+        toastr.options = {
+            closeButton: false,                                            // 是否显示关闭按钮，（提示框右上角关闭按钮）
+            debug: false,                                                     // 是否使用deBug模式
+            progressBar: true,                                            // 是否显示进度条，（设置关闭的超时时间进度条）
+            positionClass: "toast-bottom-center",              // 设置提示款显示的位置
+            onclick: null,                                                     // 点击消息框自定义事件 
+            showDuration: "300",                                      // 显示动画的时间
+            hideDuration: "1000",                                     //  消失的动画时间
+            timeOut: "2000",                                              //  自动关闭超时时间 
+            extendedTimeOut: "1000",                              //  加长展示时间
+            showEasing: "swing",                                      //显示时的动画缓冲方式
+            hideEasing: "linear",                                       //   消失时的动画缓冲方式
+            showMethod: "fadeIn",                                   //   显示时的动画方式
+            hideMethod: "fadeOut"                                   //   消失时的动画方式
+        };
+        //input 不能为空
+        function checkNull() {
+            var pass=true;
+            var str = "";
+            $("#addform input[type$='text']").each(function (n) {
+                if ($(this).val() == "") {
+                    pass = false;
+                    //获取关联label元素
+                    str +=$('label[for=' + $(this).attr('id') + ']').html() + "不能为空！\r\n";
+                    toastr.error(str);
+                    return pass;
+                }
+            });
+            return pass;
+        }
+
+        function addInRecord() {
+            if (checkNull()) {
+                $.ajax({
+                    type: "POST",//方法类型
+                    url: "/InRecord/AddInRecord",//url
+                    data: $('#addform').serialize(),
+                    success: function (result) {
+                        if (result.success) {
+                            toastr.success('添加成功');
+                            $("#addInRecordModal").modal('hide');
+                            $("form")[0].reset(); //清除数据
+                            $("#inRecordTable").bootstrapTable('refresh');
+                        }
+                        else {
+                            toastr.warning(result.msg);
+                        }
+                    },
+                    error: function (e) {
+                        toastr.error('添加错误');
+                    }
+                });
+            }
+        }
+
+        //获取要删除的code seqID date 并转jsonstr
+        function getJsonData() {
+            var rows = $("#inRecordTable").bootstrapTable('getSelections');
+            //存储数据
+            var ItemIDs = new Array();
+            //console.log(rows);
+            if (rows.length == 0) {// rows 主要是为了判断是否选中，下面的else内容才是主要
+                toastr.warning("请先选择要删除的记录!");
+                return;
+            } else {
+                //  声明一个object 存储行某几列数据
+                $(rows).each(function () {
+                    var item = new Object();
+                    item.ID = this.ID;
+                    ItemIDs.push(item);
+
+                });
+            }
+            return JSON.stringify(ItemIDs);
+        }
+
+        //btn_remove 事件
+        $("#btn_remove").on("click", function () {
+            //获取选中数据
+            var jsonData = getJsonData();
+           
+           //删除数据
+            confirmOrCancelDeleteData(jsonData);
+          
+          
+        })
+
+        // 确认是否删除数据
+        function confirmOrCancelDeleteData(jsonData) {
+            swal.fire({
+                title: '确定删除吗？',
+                text: '你将无法恢复它！',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '确定删除！',
+                cancelButtonText: '取消删除！',
+                confirmButtonClass: 'btn btn-success ',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling:   false
+            }).then(function (isConfirm) {
+                if (isConfirm.value === true) {
+                    swal.fire(
+                        '已删除！',
+                        '记录已被删除',
+                        'success'
+                    ).then(function () {
+                        //确认删除
+                        deleteData(jsonData);
+                    })
+
+                } else if (isConfirm.dismiss == 'cancel') {
+                    swal.fire(
+                        '已取消！',
+                        '记录未被删除',
+                        'error'
+                    );
+                }
+            })
+        }
+      
+        //删除数据
+        function deleteData(jsonData) {
+            $.ajax({
+                url: "/InRecord/DeleteInRecords",
+                type: "post",
+                data: { "ItemIDs": jsonData },
+                success: function (result) {
+                    if (result.success) {
+                        $("#inRecordTable").bootstrapTable('refresh');
+                        toastr.success('删除成功');
+                    }
+                    else {
+                        toastr.warning('删除失败');
+                    }
+                },
+                error: function (e) {
+                    toastr.error('删除错误');
+                }
+            });
+        }
+        //操作列事情
+        window.operationEvents = {
+            //编辑事件
+            'click #btn_update': function (e, value, row, index) {
+
+            },
+            //删除事件
+            'click #btn_delete': function (e, value, row, index) {
+                var ItemIDs = new Array();
+                Item = new Object();
+                Item.ID = row.ID;
+                ItemIDs.push(Item);                
+                confirmOrCancelDeleteData(JSON.stringify(ItemIDs));
+            }
+        }
+
+        //行样式
+        function rowStyle(row, index) {
+            var classes = ['success', 'danger']
+            return { classes: classes[index % classes.length] };
+        }
+
+        //日期格式化
+        function changeDateFormat(cellval) {
+            if (cellval != null) {
+                var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+                var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+                var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+                var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+                var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+
+                var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+
+                return date.getFullYear() + "-" + month + "-" + currentDate + " " + hours + ":" + minutes + ":" + seconds;
+
+            }
+        };
+        //初始化
+        var TableInit = function () {
+            var inRecordTableInit = new Object();
+            //    初始化  Table
+            inRecordTableInit.Init = function () {
+                $("#inRecordTable").bootstrapTable({
+                    url: '/InRecord/ReadInRecords',
+                    method: 'post',
+                    toolbar: '#toolbar', //工具列
+                    rowStyle: rowStyle,
+                    theadClasses: "thead-blue",// 设置thead-blue为表头样式
+                    cache: false, //禁用缓存
+                    pagination: true,//关闭分页
+                    showFooter: false,//是否显示列脚
+                    showPaginationSwitch: false, //是否显示 数据条数选择框
+                    sortable: true,                     //是否启用排序
+                    sortOrder: "asc",                   //排序方式
+                    search: true, //启用搜索
+                    showSearchButton: true,   //
+                    showFullscreen: true,    // 全屏按钮
+                    showToggle: true,//显示详细视图和列表
+                    showColumns: true,
+                    showRefresh: true,//显示刷新按钮
+                    clickToSelect: true,  //点击选中 checkbox
+                    pageNumber: 1, //初始化加载第一页，默认第一页
+                    pageSize: 7,   //每页的记录行数
+                    pageList: [3, 5, 7, 9, 'ALL'],   //可供选择的页面显示条数
+                    maintainSelected: true,  //记住选中项即使翻页
+                    paginationPreText: "上一页",
+                    paginationNextText: "下一页",
+                    paginationFirstText: "First",
+                    paginationLastText: "Last",
+                    //clickToSelect: false ,
+
+                    Icons: 'glyphicon-export ',
+
+                    columns: [{
+                        title: "全选", field: "select", checkbox: true
+                    }, {
+                        field: 'ID',
+                        title: '编号',
+                        visable: true,
+                        sortable: true
+                    },
+                    {
+                        field: 'Code',
+                        title: '夹具代码',
+                        visable: true,
+                    }, {
+                        field: 'SeqID',
+                        title: '夹具序列号',
+                        visable: true,
+
+                    }, {
+                        field: 'RetByName',
+                        title: '领用人',
+                        visable: true,
+
+                    }, {
+                        field: 'OperationByName',
+                        title: '操作人',
+                        visable: true
+                    }, {
+                        field: 'ProdLineID',
+                        title: '产线ID',
+                        visable: true
+                    }, {
+                        field: 'RetDate',
+                        title: '领用日期',
+                        visable: true,
+                        formatter: function (value, row, index) {
+                            return changeDateFormat(value)
+                        }
+                    }, {
+                        field: 'Operation',
+                        title: '操作',
+                        events: operationEvents,
+                        formatter: function (value, row, index) {
+                            return [
+                                '<div class="btn-group">',
+                                '<button id="btn_update" type="button" class="btn btn-warning"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i><span></span></button>',
+                                '<button id="btn_delete" type="button" class="btn btn-danger" ><i class="glyphicon glyphicon-remove" aria-hidden="true"></i><span></span></button>',
+                                '</div>'
+                            ].join(' ');
+                        }
+                    },]
+                });
+            };
+            return inRecordTableInit;
+        }
+    </script>
+
 </body>
 </html>

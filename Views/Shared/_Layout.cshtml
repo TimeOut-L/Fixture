@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="~/Content/bootstrap.min.css">
     <script src="~/Scripts/bootstrap.min.js"></script>
     <link href="~/Content/Layout.css" rel="stylesheet">
-   
+
 
 </head>
 
@@ -75,8 +75,8 @@
                             <span>夹具出入库登记</span>
                         </a>
                         <ul id="Collapse" class=" nav-list collapse in ">
-                            <li><a href="/OutRecord/Index" >领用 ( 出库 )登记</a></li>
-                            <li><a href="#">归还 ( 入库 )登记</a></li>
+                            <li><a href="/OutRecord/Index">领用 ( 出库 )登记</a></li>
+                            <li><a href="/InRecord/Index">归还 ( 入库 )登记</a></li>
                         </ul>
                     </li>
                     <li class="sub-menu ">
@@ -117,7 +117,7 @@
         </section>
     </section>
     <script>
-      
+
         $(function () {
             //修复collapse不能正常折叠的问题
             $(".collapsed").click(function () {
@@ -132,18 +132,14 @@
             });
         })
         $(function () {
-            
-            if ($("#user").text()=="") {
-                $.ajax({
-                    url: "/Home/GetUserName",
-                    type: "post",
-                    async: true,
-                    success: function (result) {                   
-                        $("#user").text(result.userName);                     
-                    }
-                });
-            }         
-        })     
+            $.ajax({
+                type: "post",
+                url: "/Home/GetUserName",              
+                success: function (result) {
+                    $("#user").text(result.userName);
+                }
+            });
+        })
     </script>
 </body>
 
