@@ -18,12 +18,16 @@ namespace FixtureManagement.Controllers
     public class OutRecordController : Controller
     {
         FixtureOutRecordContext context = new FixtureOutRecordContext();
+        FixtureEntityContext entityContext = new FixtureEntityContext();
         // GET: OutRecord
         public ActionResult Index()
         {
             return View();
         }
-        // 返回领用记录（出库记录）
+        /// <summary>
+        /// 读取领用记录
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult ReadOutRecords()
         {
@@ -32,7 +36,10 @@ namespace FixtureManagement.Controllers
             return Json(fixtureOutRecords, JsonRequestBehavior.AllowGet);
         }
 
-        //添加领用记录
+        /// <summary>
+        /// 添加领用记录
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult AddOutRecord()
         {
@@ -62,28 +69,51 @@ namespace FixtureManagement.Controllers
             try
             {
                 context.OutRecords.Add(outRecord);
-                context.SaveChanges();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 var exception = new
                 {
                     success = false,
                     msg = "数据类型错误或不必配",
-                 };
+                };
                 return Json(exception, JsonRequestBehavior.AllowGet);
             }
-            //return Redirect("/OutRecord/Index");
             var data = new
             {
                 success = true,
             };
+            context.SaveChanges();
+            //领用记录添加成功
+            AddUsedCount(Code, SeqID);
+                   
             return Json(data, JsonRequestBehavior.AllowGet);
         }
-
+        /// <summary>
+        /// 夹具使用次数加一
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="seqID"></param>
+        public void AddUsedCount(string code, int seqID)
+        {
+            SqlParameter[] parms = new SqlParameter[]
+            {
+                new SqlParameter("@code",code),
+                new SqlParameter("@seqID",seqID),
+            };
+            FixtureEntity fixtureEntity = entityContext.fixtureEntities.Find(code,seqID);
+            fixtureEntity.UsedCount += 1;
+           // entityContext.fixtureEntities.SqlQuery("update FixtureEntity set UsedCount = UsedCount + 1 where Code=N@code and SeqID=@seqID");
+            entityContext.SaveChanges();
+        }
+        /// <summary>
+        ///  删除领用记录
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult DeleteOutRecords()
         {
-            
+
             //TODO
             string jsonData = Request["ItemIDs"];
             JArray jArray = JArray.Parse(jsonData);
@@ -93,11 +123,23 @@ namespace FixtureManagement.Controllers
                 ItemID obj = (ItemID)js.Deserialize(item.CreateReader(), typeof(ItemID));
                 SqlParameter[] parms = new SqlParameter[]
                 {
-                     new SqlParameter ("@id",obj.ID),                 
+                     new SqlParameter ("@id",obj.ID),
                 };
                 //TODO try catch
-                FixtureOutRecord record= context.OutRecords.SqlQuery("select * from FixtureOutRecord where ID=@id",parms).Single();
-                context.OutRecords.Remove(record);
+                FixtureOutRecord record = context.OutRecords.SqlQuery("select * from FixtureOutRecord where ID=@id", parms).Single();
+                try
+                {
+                    context.OutRecords.Remove(record);
+                }
+                catch (Exception e)
+                {
+                    var exception = new
+                    {
+                        success = false,
+                        msg = "没有该记录",
+                    };
+                    return Json(exception, JsonRequestBehavior.AllowGet);
+                }
                 context.SaveChanges();
             }
             //return RedirectToAction("Index", "OutRecord");

@@ -215,6 +215,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Common\ItemID.cs" />
+    <Compile Include="Controllers\FixtureEntityController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InRecordController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -293,7 +294,9 @@
     <Content Include="Views\InRecord\Index.cshtml" />
     <Content Include="Views\OutRecord\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\FixtureEntity\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

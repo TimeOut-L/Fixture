@@ -64,27 +64,48 @@
                         <h4 class="modal-title" id="myModalLabel">添加记录</h4>
                     </div>
                     <div class="modal-body">
-                        <form id="addform" action="##" method="post">
-                            <span>夹具代码</span>
-                            <input type="text" name="code" placeholder="请输入夹具代码" />
-                            <br>
-                            <span>夹具序列号</span>
-                            <input type="text" name="seqID" placeholder="请输入夹具代码" />
-                            <br>
-                            <span>领用人</span>
-                            <input type="text" name="usedByName" placeholder="请输入夹具代码" />
-                            <br>
-                            <span>操作人</span>
-                            <input type="text" name="operationByName" placeholder="请输入夹具代码" />
-                            <br>
-                            <span>产线ID</span>
-                            <input type="text" name="proLineID" placeholder="请输入夹具代码" />
-                            <br>
-                            <span>领用日期</span>
-                            <input type="text" name="usedDate" placeholder="请输入夹具代码" id="date" />
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
-                                <button type="button" class="btn btn-warning" onclick="addOutRecord()">提交</button>
+                        <form id="addform" class="form-horizontal" action="##" method="post">
+                            <div class=" form-group">
+                                <label class="col-md-2 control-label" for="code">夹具代码</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" name="code" id="code" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="seqID">夹具序列号</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" name="seqID" id="seqID" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="usedByName">领用人</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" name="usedByName" id="usedByName" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="operationByName">操作人</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" name="operationByName" id="operationByName" type="text">
+                                </div>
+                            </div>
+                            <div class=" form-group">
+                                <label class="col-md-2 control-label" for="proLineID">产线ID</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" name="proLineID" id="proLineID" type="text">
+                                </div>
+                            </div>
+                            <div class=" form-group">
+                                <label class="col-md-2 control-label" for="usedDate">领用日期</label>
+                                <div class="col-md-4">
+                                    <input class="form-control" name="usedDate" id="usedDate" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group modal-footer">
+                                <div class="col-md-6 col-md-offset-3">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
+                                    <button type="button" class="btn btn-warning" onclick="addOutRecord()">提交</button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -101,43 +122,60 @@
             itable.Init();
 
         });
+
         toastr.options = {
             closeButton: false,                                            // 是否显示关闭按钮，（提示框右上角关闭按钮）
-            debug: false,                                                    // 是否使用deBug模式
+            debug: false,                                                     // 是否使用deBug模式
             progressBar: true,                                            // 是否显示进度条，（设置关闭的超时时间进度条）
             positionClass: "toast-bottom-center",              // 设置提示款显示的位置
             onclick: null,                                                     // 点击消息框自定义事件 
             showDuration: "300",                                      // 显示动画的时间
             hideDuration: "1000",                                     //  消失的动画时间
-            timeOut: "2000",                                             //  自动关闭超时时间 
-            extendedTimeOut: "1000",                             //  加长展示时间
-            showEasing: "swing",                                     //  显示时的动画缓冲方式
+            timeOut: "2000",                                              //  自动关闭超时时间 
+            extendedTimeOut: "1000",                              //  加长展示时间
+            showEasing: "swing",                                      //显示时的动画缓冲方式
             hideEasing: "linear",                                       //   消失时的动画缓冲方式
             showMethod: "fadeIn",                                   //   显示时的动画方式
             hideMethod: "fadeOut"                                   //   消失时的动画方式
         };
+        //input 不能为空
+        function checkNull() { 
+            var pass=true;
+            var str = "";
+            $("#addform input[type$='text']").each(function (n) {
+                if ($(this).val() == "") {
+                    pass = false;
+                    //获取关联label元素
+                    str +=$('label[for=' + $(this).attr('id') + ']').html() + "不能为空！\r\n";
+                    toastr.error(str);
+                    return pass;
+                }
+            });            
+            return pass;
+        }
+
         function addOutRecord() {
-
-            $.ajax({
-                type: "POST",//方法类型
-                url: "/OutRecord/AddOutRecord",//url
-                data: $('#addform').serialize(),
-                success: function (result) {
-                    if (result.success) {
-                        toastr.success('添加成功');
-                        $("#addOutRecordModal").modal('hide');
-                        $("form")[0].reset(); //清除数据
-                        $("#outRecordTable").bootstrapTable('refresh');
-
+            if (checkNull()) {            
+                $.ajax({
+                    type: "POST",//方法类型
+                    url: "/OutRecord/AddOutRecord",//url
+                    data: $('#addform').serialize(),
+                    success: function (result) {
+                        if (result.success) {
+                            toastr.success('添加成功');
+                            $("#addOutRecordModal").modal('hide');
+                            $("form")[0].reset(); //清除数据
+                            $("#outRecordTable").bootstrapTable('refresh');
+                        }
+                        else {
+                            toastr.warning(result.msg);
+                        }
+                    },
+                    error: function (e) {
+                        toastr.error('添加错误');
                     }
-                    else {
-                        toastr.warning(result.msg);
-                    }
-                },
-                error: function (e) {
-                    toastr.error('添加错误');
-                    }
-            });
+                });
+            }
         }
 
         //获取要删除的code seqID date 并转jsonstr
@@ -186,9 +224,9 @@
                         '记录已被删除',
                         'success'
                     ).then(function () {
-                         deleteData(jsonData);
+                        deleteData(jsonData);
                     })
-                    
+
                 } else if (isConfirm.dismiss == 'cancel') {
                     swal.fire(
                         '已取消！',
@@ -198,7 +236,7 @@
                 }
             })
         })
-
+        //删除数据
         function deleteData(jsonData) {
             $.ajax({
                 url: "/OutRecord/DeleteOutRecords",
