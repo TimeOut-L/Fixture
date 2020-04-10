@@ -65,7 +65,7 @@ namespace FixtureManagement.Controllers
             {
                 context.InRecords.Add(inRecord);
             }
-            catch (Exception e)
+            catch (Exception e) 
             {
                 var exception = new
                 {
