@@ -42,14 +42,14 @@ namespace FixtureManagement.Controllers
             int SeqID = Convert.ToInt32(Request["seqID"]);
             string RetByName = Request["retByName"];
             string OperationByName = Request["operationByName"];
-            int ProLineID = Convert.ToInt32(Request["proLineID"]);
+            int ProdLineID = Convert.ToInt32(Request["prodLineID"]);
             DateTime RetDate = Convert.ToDateTime(Request["retDate"]);
             FixtureInRecord inRecord = new FixtureInRecord();
             inRecord.Code = Code;
             inRecord.SeqID = SeqID;
             inRecord.RetByName = RetByName;
             inRecord.OperationByName = OperationByName;
-            inRecord.ProdLineID = ProLineID;
+            inRecord.ProdLineID = ProdLineID;
             inRecord.RetDate = RetDate;
             //SqlParameter[] parms = new SqlParameter[]
             //{
