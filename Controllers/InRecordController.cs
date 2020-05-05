@@ -1,5 +1,6 @@
 ﻿using FixtureManagement.filter;
 using FixtureManagement.Models;
+using FixtureManagement.Models.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace FixtureManagement.Controllers
     //归还
     public class InRecordController : Controller
     {
-        FixtureInRecordContext context = new FixtureInRecordContext();
+        FixtureManagerContext context = new FixtureManagerContext();
         // GET: InRecord
         public ActionResult Index()
         {

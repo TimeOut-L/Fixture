@@ -22,7 +22,8 @@
     <!-- 弹出框插件 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.js"></script>
-
+    <script src="~/Scripts/common.form.validate.js"></script>
+    <script src="~/Scripts/common.bootstraptable.init.js"></script>
     <style>
 
         /*表头样式*/
@@ -55,7 +56,6 @@
 
         <!-- <button type="button" id="download" style="margin-left:50px" id="btn_download" class="btn btn-primary" onClick ="$(‘#myTable‘).tableExport({ type: ‘excel‘, escape: ‘false‘ })">数据导出</button> -->
         <table id="inRecordTable" class="table-striped">
-
         </table>
 
         <!-- 添加 modal-->
@@ -119,12 +119,6 @@
 
     <script type="text/javascript">
 
-        $(function () {
-            var itable = TableInit();//.初始化  Table
-            itable.Init();
-
-        });
-
         toastr.options = {
             closeButton: false,                                            // 是否显示关闭按钮，（提示框右上角关闭按钮）
             debug: false,                                                     // 是否使用deBug模式
@@ -142,20 +136,20 @@
         };
         //input 不能为空
         function checkNull() {
-            var pass=true;
+            var pass = true;
             var str = "";
             $("#addform input[type$='text']").each(function (n) {
-                if ($(this).val() == "") {
+                if ($(this).val() =="") {
                     pass = false;
                     //获取关联label元素
-                    str +=$('label[for=' + $(this).attr('id') + ']').html() + "不能为空！\r\n";
+                    str += $('label[for=' + $(this).attr('id') + ']').html() + "不能为空！\r\n";
                     toastr.error(str);
                     return pass;
                 }
             });
             return pass;
         }
-
+        
         function addInRecord() {
             if (checkNull()) {
                 $.ajax({
@@ -205,11 +199,11 @@
         $("#btn_remove").on("click", function () {
             //获取选中数据
             var jsonData = getJsonData();
-           
-           //删除数据
+
+            //删除数据
             confirmOrCancelDeleteData(jsonData);
-          
-          
+
+
         })
 
         // 确认是否删除数据
@@ -225,7 +219,7 @@
                 cancelButtonText: '取消删除！',
                 confirmButtonClass: 'btn btn-success ',
                 cancelButtonClass: 'btn btn-danger',
-                buttonsStyling:   false
+                buttonsStyling: false
             }).then(function (isConfirm) {
                 if (isConfirm.value === true) {
                     swal.fire(
@@ -246,7 +240,7 @@
                 }
             })
         }
-      
+
         //删除数据
         function deleteData(jsonData) {
             $.ajax({
@@ -278,7 +272,7 @@
                 var ItemIDs = new Array();
                 Item = new Object();
                 Item.ID = row.ID;
-                ItemIDs.push(Item);                
+                ItemIDs.push(Item);
                 confirmOrCancelDeleteData(JSON.stringify(ItemIDs));
             }
         }
@@ -304,83 +298,51 @@
 
             }
         };
-        //初始化
-        var TableInit = function () {
-            var inRecordTableInit = new Object();
-            //    初始化  Table
-            inRecordTableInit.Init = function () {
-                $("#inRecordTable").bootstrapTable({
-                    url: '/InRecord/ReadInRecords',
-                    method: 'post',
-                    toolbar: '#toolbar', //工具列
-                    rowStyle: rowStyle,
-                    theadClasses: "thead-blue",// 设置thead-blue为表头样式
-                    cache: false, //禁用缓存
-                    pagination: true,//关闭分页
-                    showFooter: false,//是否显示列脚
-                    showPaginationSwitch: false, //是否显示 数据条数选择框
-                    sortable: true,                     //是否启用排序
-                    sortOrder: "asc",                   //排序方式
-                    search: true, //启用搜索
-                    showSearchButton: true,   //
-                    showFullscreen: true,    // 全屏按钮
-                    showToggle: true,//显示详细视图和列表
-                    showColumns: true,
-                    showRefresh: true,//显示刷新按钮
-                    clickToSelect: true,  //点击选中 checkbox
-                    pageNumber: 1, //初始化加载第一页，默认第一页
-                    pageSize: 7,   //每页的记录行数
-                    pageList: [3, 5, 7, 9, 'ALL'],   //可供选择的页面显示条数
-                    maintainSelected: true,  //记住选中项即使翻页
-                    paginationPreText: "上一页",
-                    paginationNextText: "下一页",
-                    paginationFirstText: "First",
-                    paginationLastText: "Last",
-                    //clickToSelect: false ,
+                                      
+        /**
+         * 数据列
+         * */
+        var columns= [{
+            title: "全选", field: "select", checkbox: true
+        }, {
+            field: 'ID',
+            title: '编号',
+            visable: true,
+            sortable: true
+        },
+            {
+                field: 'Code',
+                title: '夹具代码',
+                visable: true,
+            }, {
+                field: 'SeqID',
+                title: '夹具序列号',
+                visable: true,
 
-                    Icons: 'glyphicon-export ',
+            }, {
+                field: 'RetByName',
+                title: '领用人',
+                visable: true,
 
-                    columns: [{
-                        title: "全选", field: "select", checkbox: true
-                    }, {
-                        field: 'ID',
-                        title: '编号',
-                        visable: true,
-                        sortable: true
-                    },
-                    {
-                        field: 'Code',
-                        title: '夹具代码',
-                        visable: true,
-                    }, {
-                        field: 'SeqID',
-                        title: '夹具序列号',
-                        visable: true,
-
-                    }, {
-                        field: 'RetByName',
-                        title: '领用人',
-                        visable: true,
-
-                    }, {
-                        field: 'OperationByName',
-                        title: '操作人',
-                        visable: true
-                    }, {
-                        field: 'ProdLineID',
-                        title: '产线ID',
-                        visable: true
-                    }, {
-                        field: 'RetDate',
-                        title: '领用日期',
-                        visable: true,
-                        formatter: function (value, row, index) {
-                            return changeDateFormat(value)
-                        }
-                    }, {
-                        field: 'Operation',
-                        title: '操作',
-                        events: operationEvents,
+            }, {
+                field: 'OperationByName',
+                title: '操作人',
+                visable: true
+            }, {
+                field: 'ProdLineID',
+                title: '产线ID',
+                visable: true
+            }, {
+                field: 'RetDate',
+                title: '领用日期',
+                visable: true,
+                formatter: function (value, row, index) {
+                    return changeDateFormat(value)
+                }
+            }, {
+            field: 'Operation',
+                title: '操作',
+                    events: operationEvents,
                         formatter: function (value, row, index) {
                             return [
                                 '<div class="btn-group">',
@@ -389,11 +351,20 @@
                                 '</div>'
                             ].join(' ');
                         }
-                    },]
-                });
-            };
-            return inRecordTableInit;
+        },]
+        /**
+            * table 初始化
+            * */
+        var TableInit = function () {
+            var inRecordTable= new Object();
+
+            inRecordTable= BoootstrapTableInit("inRecordTable", '/InRecord/ReadInRecords', columns)
+            return inRecordTable;
         }
+
+        $(function () {
+            var itable = TableInit();//.初始化  Table
+        });
     </script>
 
 </body>

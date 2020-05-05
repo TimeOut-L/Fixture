@@ -13,21 +13,72 @@
     <link rel="stylesheet" href="~/Content/bootstrap.min.css">
     <link href="~/Content/Login.css" type="text/css" rel="stylesheet">
     <link href="~/Content/style.css" rel="stylesheet" type="text/css" />
-   
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <!-- form 空值验证 -->
+    <script src="~/Scripts/common.form.validate.js"></script>
+    <!-- 消息提示插件：toastr.js -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js "></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js "></script>
+    <script>
+
+        //toastr 提示插件 设置
+        toastr.options = {
+            closeButton: false,                                            // 是否显示关闭按钮，（提示框右上角关闭按钮）
+            debug: false,                                                     // 是否使用deBug模式
+            progressBar: true,                                            // 是否显示进度条，（设置关闭的超时时间进度条）
+            positionClass: "toast-top-center",              // 设置提示显示的位置
+            onclick: null,                                                     // 点击消息框自定义事件 
+            showDuration: "300",                                          //显示动画的时间
+            hideDuration: "1000",                                             //  自动关闭超时时间 
+            extendedTimeOut: "1000",                                           //  加长展示时间
+            timeOut: "1000",
+            showEasing: "swing",                                      //显示时的动画缓冲方式
+            hideEasing: "linear",                                       //   消失时的动画缓冲方式
+            showMethod: "fadeIn",                                   //   显示时的动画方式
+            hideMethod: "fadeOut"                                   //   消失时的动画方式
+        };
+
+       
+        function login() {
+            if (CheckFormNull("loginform")) {
+                $.ajax({
+                    url: "/Login/DoLogin",
+                    type: "post",
+                    data: $('#loginform').serialize(),
+                    success: function (result) {
+                        if (!result.success) {
+                            toastr.warning(result.tips);
+                        }
+                        else {
+                            window.location.href = "/Home/Index";
+                        }
+                    },
+                    error: function (e) {
+                        toastr.error('登录错误');
+                    }
+                });
+            }
+        }
+    </script>
+
 </head>
- 
+
 <body>
 
     <div class="container wrap1" style="height:450px;">
         <h2 class="mg-b20 text-center">捷普公司</h2>
         <div class="col-sm-8 col-md-5 center-auto pd-sm-50 pd-xs-20 main_content">
             <p class="text-center font16">用户登录</p>
-            <form action="/Login/DoLogin" method="post">
+            <form id="loginform" onsubmit="return false;" action="##" method="post">
                 <div class="form-group mg-t20">
+                    <label for="code">用户名</label>
                     <i class="icon-user icon_font"></i>
                     <input type="text" class="login_input" name="code" id="code" placeholder="请输入用户代码" />
                 </div>
                 <div class="form-group mg-t20">
+                    <label for="password">密码</label>
                     <i class="icon-lock icon_font"></i>
                     <input type="password" class="login_input" name="password" id="password" placeholder="请输入密码" />
                 </div>
@@ -36,7 +87,7 @@
                         <input type="checkbox" />记住我的登录信息
                     </label>
                 </div>
-                <button type="submit" class="login_btn">登 录</button>
+                <button type="submit" class="login_btn" onclick="login()">登 录</button>
             </form>
         </div>
     </div>

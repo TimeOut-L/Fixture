@@ -1,6 +1,8 @@
 ﻿using FixtureManagement.Common;
 using FixtureManagement.filter;
 using FixtureManagement.Models;
+using FixtureManagement.Models.Context;
+using FixtureManagement.Service;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -14,12 +16,18 @@ using System.Web.Script.Serialization;
 namespace FixtureManagement.Controllers
 {
     [LoginCheckFilter]
+   
     //领用
     public class OutRecordController : Controller
     {
-        FixtureOutRecordContext context = new FixtureOutRecordContext();
-        FixtureEntityContext entityContext = new FixtureEntityContext();
+        public UserService userService { get; set; }
+        public OutRecordService outRecordService { get; set; }
+
+        FixtureManagerContext context = new FixtureManagerContext();
+
+
         // GET: OutRecord
+        [UserFilter]
         public ActionResult Index()
         {
             return View();
@@ -29,16 +37,14 @@ namespace FixtureManagement.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+       
+        [ValidateInput(true)]
         public ActionResult ReadOutRecords()
         {
-            User currentUser = (User)Session["CurrentUser"];
-            SqlParameter param = new SqlParameter("@workCellID", currentUser.WorkCellID);
-           
-            List<FixtureOutRecord> fixtureOutRecords = context.OutRecords.SqlQuery("select * from FixtureOutRecord as fr" +
-                " where ProdLineID in ( select ProdLineID from FixtureDefinition where WorkCellID=@workCellID and Code= fr.Code)" +
-                " ORDER BY ID ASC",param).ToList();
-             
-            return Json(fixtureOutRecords, JsonRequestBehavior.AllowGet);
+            string code  = (string)Session["CurrentUser"];
+            var _user = userService.GetUserByCode(code);
+            var list = outRecordService.GetAllOutRecordWithWorkCell(_user.WorkCellID);        
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -46,6 +52,8 @@ namespace FixtureManagement.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [UserFilter]
+        [ValidateInput(true)]
         public ActionResult AddOutRecord()
         {
             string Code = Request["code"];
@@ -56,6 +64,8 @@ namespace FixtureManagement.Controllers
             DateTime UsedDate = Convert.ToDateTime(Request["usedDate"]);
 
             // TODO 判断是否是本部门的夹具 不是则无法添加
+
+            //数据处理
             FixtureOutRecord outRecord = new FixtureOutRecord();
             outRecord.Code = Code;
             outRecord.SeqID = SeqID;
@@ -63,37 +73,23 @@ namespace FixtureManagement.Controllers
             outRecord.OperationByName = OperationByName;
             outRecord.ProdLineID = ProdLineID;
             outRecord.UsedDate = UsedDate;
-            //SqlParameter[] parms = new SqlParameter[]
-            //{
-            //    new SqlParameter ("@code",Code),
-            //    new SqlParameter("@seqID",SeqID),
-            //    new SqlParameter("@usedByName",UsedByName),
-            //    new SqlParameter("@operationByName",OperationByName),
-            //    new SqlParameter("@proLineID",ProLineID),
-            //    new SqlParameter("@usedDate",UsedDate),
-            //};
-            //TODO try catch
-            try
-            {
-                context.OutRecords.Add(outRecord);
-            }
-            catch (Exception e)
+            if (!outRecordService.Add(outRecord))
             {
                 var exception = new
                 {
                     success = false,
-                    msg = "数据类型错误或不必配",
+                    msg = "无法插入相同的数据",
                 };
                 return Json(exception, JsonRequestBehavior.AllowGet);
-            }
+            }          
             var data = new
             {
                 success = true,
             };
-            context.SaveChanges();
-            //领用记录添加成功
+            //    领用记录添加成功 增加使用记录 
+            //  ToDo 重构到 对应的服务中
             AddUsedCount(Code, SeqID);
-                   
+
             return Json(data, JsonRequestBehavior.AllowGet);
         }
         /// <summary>
@@ -108,10 +104,10 @@ namespace FixtureManagement.Controllers
                 new SqlParameter("@code",code),
                 new SqlParameter("@seqID",seqID),
             };
-            FixtureEntity fixtureEntity = entityContext.fixtureEntities.Find(code,seqID);
+            FixtureEntity fixtureEntity = context.FixtureEntities.Find(code,seqID);
             fixtureEntity.UsedCount += 1;
            // entityContext.fixtureEntities.SqlQuery("update FixtureEntity set UsedCount = UsedCount + 1 where Code=N@code and SeqID=@seqID");
-            entityContext.SaveChanges();
+            context.SaveChanges();
         }
         /// <summary>
         ///  删除领用记录

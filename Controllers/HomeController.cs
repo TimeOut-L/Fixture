@@ -14,16 +14,15 @@ namespace FixtureManagement.Controllers
             return View();
         }
 
-        [HttpPost]
-        public JsonResult GetUserName()
+        public ActionResult test()
         {
-            User currentUser = (User)Session["CurrentUser"];
-            var data = new
-            {
-                //result = true,
-                userName = currentUser.Name
-            };
-            return Json(data, JsonRequestBehavior.AllowGet);
+            return View();
         }
+
+        public ActionResult Error()
+        {
+            return View();
+        }
+       
     }
 }

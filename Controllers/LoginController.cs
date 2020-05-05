@@ -1,4 +1,5 @@
 ﻿using FixtureManagement.Models;
+using FixtureManagement.Service;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -11,39 +12,55 @@ namespace FixtureManagement.Controllers
     //登录控制器
     public class LoginController :Controller
     {
-        UserContext context = new UserContext();
+        public UserService userService {  get;  set; }
         [AllowAnonymous]
         public ActionResult Index()
         {
             return View();
         }
 
+        /// <summary>
+        /// 登录方法
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         public ActionResult DoLogin()
         {
             string code = Request["code"];
-            string password = Request["password"];           
-            //User user = context.users.Where(u => u.Code == code && u.Password == password).Single();
-            var _user = context.users.Find(code);
-            if (_user == null)           
+            string password = Request["password"];
+            string tipMsg = "";
+            
+            if (!userService.LoginValidate(code,password,out tipMsg))
             {
-                //var data = new List<object>();
-                //data.Add(new
-                //{
-                //    state = false,
-                //    msg="用户名或密码错误"
-                //}) ;
-                return Content("<script>alert('用户不存在');history.go(-1);</script>");
+                var retData = new
+                {
+                    success = false,
+                    tips = tipMsg
+                };
+                return Json(retData, JsonRequestBehavior.AllowGet);
             }
-            else if(_user.Password!=password){
-                return Content("<script>alert('密码错误');history.go(-1);</script>");
-            }
-            else{
-                //TODO 
-                Session["CurrentUser"] =_user;
-                return RedirectToAction("Index", "Home");
-            }          
+            else
+            {
+                var retData = new
+                {
+                    success = true,
+                    tips = tipMsg
+                };
+                Session["CurrentUser"] = code;
+                return Json(retData, JsonRequestBehavior.AllowGet);
+            }                           
+        }
+
+        public ActionResult DoLogout()
+        {
+            Session["CurrentUser"] = null;
+            var data = new
+            {
+                success = true,
+                tips = "您已退出本系统"
+            };
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
     }
 }
