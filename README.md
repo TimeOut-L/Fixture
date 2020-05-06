@@ -1,6 +1,6 @@
 # FixtureManagement
 
-使用MVC + Service +EF 
+使用MVC + Service +EF  boostraptable table 初始化请查看 script 下 common.bootstraptable.init.js
 
 项目 目录说明
 
