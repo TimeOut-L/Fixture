@@ -52,67 +52,76 @@ namespace FixtureManagement.Controllers
              * menuTree 实际上是多棵树
              */
             List<MenuTreeViewModel> menuTrees = new List<MenuTreeViewModel>();
-            foreach(var menu in menuList)
+            //foreach (var menu in menuList)
+            //{
+            //    /***
+            //     * ParentMenuID 为 -1 代表不是菜单节点 只是某个 controller 下的 action
+            //     */
+            //    if (menu.ParentMenuID != -1)
+            //    {
+            //        MenuTreeViewModel pNode = new MenuTreeViewModel();
+            //        pNode.id = menu.MenuID;
+            //        pNode.pId = menu.ParentMenuID;
+            //        pNode.name = menu.Name;
+            //        pNode.nodeIcon = menu.NodeIcon;
+            //        pNode.expandIcon = menu.ExpandIcon;
+            //        pNode.collapseIcon = menu.CollapseIcon;
+
+            //        if (string.IsNullOrWhiteSpace(menu.ControllerName) || string.IsNullOrWhiteSpace(menu.ControllerName))
+            //        {
+            //            pNode.url = "#";
+            //            pNode.open = true;
+            //        }
+            //        else
+            //        {
+            //            pNode.url = "/" + menu.ControllerName + "/" + menu.ActionName;
+            //            pNode.open = false;
+            //        }
+            //        pNode.target = "_self";
+            //        menuTrees.Add(pNode);
+            //    }
+            //}
+            int index = 0;
+            foreach (var menu in menuList)
             {
-                /***
-                 * ParentMenuID 为 -1 代表不是菜单节点 只是某个 controller 下的 action
-                 */
-                if (menu.ParentMenuID != -1)
+
+                //ParentMenuID=0 则为父亲节点 
+                if (menu.ParentMenuID == 0)
                 {
+                    index++;
                     MenuTreeViewModel pNode = new MenuTreeViewModel();
                     pNode.id = menu.MenuID;
                     pNode.pId = menu.ParentMenuID;
                     pNode.name = menu.Name;
-                    pNode.nodeIcon = menu.NodeIcon;
                     pNode.expandIcon = menu.ExpandIcon;
                     pNode.collapseIcon = menu.CollapseIcon;
-
-                    if (string.IsNullOrWhiteSpace(menu.ControllerName) || string.IsNullOrWhiteSpace(menu.ControllerName))
+                    pNode.nodeIcon = menu.NodeIcon;
+                    //bool isparent = false;    
+                    pNode.url = "#Collapse_" + index;
+                    foreach (var temp in menuList)
                     {
-                        pNode.url = "#";
-                        pNode.open = true;
-                    }
-                    else
-                    {
-                        pNode.url = "/" + menu.ControllerName + "/" + menu.ActionName;
-                        pNode.open = false;
-                    }
-                    pNode.target = "_self";
+                        if (temp.ParentMenuID == menu.MenuID)
+                        {
+                            MenuTreeViewModel lNode = new MenuTreeViewModel();
+                            lNode.id = menu.MenuID;
+                            lNode.pId = menu.ParentMenuID;
+                            lNode.name = temp.Name;
+                            lNode.expandIcon = menu.ExpandIcon;
+                            lNode.collapseIcon = menu.CollapseIcon;
+                            lNode.nodeIcon = menu.NodeIcon;
+                            if (string.IsNullOrWhiteSpace(temp.ControllerName) || string.IsNullOrWhiteSpace(temp.ControllerName))
+                            {
+                                index++;
+                                lNode.url = "#Collapse_" + index;
+                            }
+                            else
+                                lNode.url = "/" + temp.ControllerName + "/" + temp.ActionName;
+                            pNode.children.Add(lNode);
+                        }
+                    }              
                     menuTrees.Add(pNode);
                 }
             }
-            //foreach( var menu in menuList)
-            //{
-            //    if (menu.ParentMenuID == 0)
-            //    {
-            //        MenuTreeViewModel pNode = new MenuTreeViewModel();
-            //        pNode.name = menu.Name;
-            //        pNode.url = menu.Url;
-            //        bool isParent = false;
-            //        if (string.IsNullOrWhiteSpace(menu.ControllerName) || string.IsNullOrWhiteSpace(menu.ControllerName))
-            //            pNode.url = "#";
-            //        else
-            //            pNode.url = "/" + menu.ControllerName + "/" + menu.ActionName;
-            //        pNode.target = "_self";
-            //        //pNode.iconSkin = menu.NodeIcon;
-            //        foreach ( var temp in menuList)
-            //        {
-            //            if (temp.ParentMenuID == menu.MenuID)
-            //            {
-            //                MenuTreeViewModel lNode = new MenuTreeViewModel();
-            //                lNode.name = temp.Name;
-            //                //lNode.text = temp.Name;
-            //                isParent = true;
-            //                //lNode.iconSkin = temp.NodeIcon;
-            //                lNode.url = "/" + temp.ControllerName + "/" + temp.ActionName;
-            //                lNode.target = "_self";
-            //                pNode.children.Add(lNode);
-            //            }
-            //        }
-            //        pNode.isParent = isParent;
-            //        menuTrees.Add(pNode);
-            //    }
-            //}  
             return Json(menuTrees, JsonRequestBehavior.AllowGet);
         }
     }

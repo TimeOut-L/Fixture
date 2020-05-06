@@ -11,10 +11,6 @@
     <link rel="stylesheet" href="~/Content/bootstrap.min.css">
     <script src="~/Scripts/bootstrap.min.js"></script>
     <link href="~/Content/Layout.css" rel="stylesheet">
-    <link href="~/Content/bootstrap-treeview/bootstrap-treeview.min.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery.ztree.all.js" type="text/javascript"></script>
-    <link href="~/Content/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
-    <script src="~/Scripts/bootstrap-treeview.min.js"></script>
     <link href="~/Content/fontawesome/css/font-awesome.min.css" rel="stylesheet">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css" rel="stylesheet">
@@ -27,36 +23,11 @@
             background-color: #4ECDC4;
         }
 
-        div#menuTree, div#menuTree li ul {
-            margin-top: 5px;
-            margin-left: 5px;
-            padding: 0;
-        }
-
-            div#menuTree li ul li {
-                margin-top: 10px;
-            }
-
-        div#menuTree {
-            margin-top: 75px;
-        }
-
-        .ztree li span.node_name {
-            font-size: 18px;
-            line-height: 30px;
-        }
-
-        .fa-lg {
-            margin-top: 10px;
-            margin-left: 4px;
-            height: auto;
-            margin-bottom: 20px;
-        }
 
 
 
-        .ztree li a.level0 {
-            width: 85%;
+        #nav-accordion {
+            margin-top: 100px;
         }
     </style>
 </head>
@@ -114,12 +85,12 @@
         <aside>
             <div id="sidebar" class="nav-collapse ">
 
-                <div id="menuTree" class="ztree">
+                <ul class="sidebar-menu" id="nav-accordion">
+                </ul>
 
-                </div>
 
-                @*sidebar menu start
-                    <ul class="sidebar-menu" id="nav-accordion">
+                <!--sidebar menu start-->
+                @*<ul class="sidebar-menu" id="nav-accordion">
                         <li class="sub-menu active" role="presentation">
                             <a href="#Collapse" class="nav-header collapsed " data-toggle="collapse" data-parent="#nav-accordion">
                                 <i class="fa fa-edit" aria-hidden="true"></i>
@@ -169,34 +140,35 @@
     </section>
     <script>
         //自定义图标样式
-        function addDiyDom(treeId, treeNode, isExpand) {
-            var clasObj = $("#" + treeNode.tId + "_ico")
-            clasObj.removeClass();
-            //console.log(treeNode);
-            if (treeNode.nodeIcon)
-                clasObj.addClass(treeNode.nodeIcon);
+        //function addDiyDom(treeId, treeNode, isExpand) {
+        //    debugger;
+        //    var clasObj = $("#" + treeNode.tId + "_ico")
+        //    clasObj.removeClass();
+        //    //console.log(treeNode);
+        //    if (treeNode.nodeIcon)
+        //        clasObj.addClass(treeNode.nodeIcon);
 
-            if (treeNode.isParent) {
-                var classSwitch = $("#" + treeNode.tId + "_switch");
-                if (isExpand)
-                    classSwitch.removeClass().addClass(treeNode.collapseIcon);
-                else
-                    classSwitch.removeClass().addClass(treeNode.expandIcon);
-            }
+        //    if (treeNode.isParent) {
+        //        var classSwitch = $("#" + treeNode.tId + "_switch");
+        //        if (isExpand)
+        //            classSwitch.removeClass().addClass(treeNode.collapseIcon);
+        //        else
+        //            classSwitch.removeClass().addClass(treeNode.expandIcon);
+        //    }
 
-        }
-        //双击后 图标又会变回去
-        function zTreeOnDblClick(event, treeId, treeNode) {
-            alert(treeNode ? treeNode.tId + ", " + treeNode.name : "isRoot");
-        };
+        //}
+        ////双击后 图标又会变回去
+        //function zTreeOnDblClick(event, treeId, treeNode) {
+        //    alert(treeNode ? treeNode.tId + ", " + treeNode.name : "isRoot");
+        //};
 
-        function zTreeOnExpand(event, treeId, treeNode) {
-            addDiyDom(treeId, treeNode, false);
-        };
+        //function zTreeOnExpand(event, treeId, treeNode) {
+        //    addDiyDom(treeId, treeNode, false);
+        //};
 
-        function zTreeOnCollapse(event, treeId, treeNode) {
-            addDiyDom(treeId, treeNode, true);
-        };
+        //function zTreeOnCollapse(event, treeId, treeNode) {
+        //    addDiyDom(treeId, treeNode, true);
+        //};
 
         $('.logout').click(function () {
             swal.fire({
@@ -229,40 +201,77 @@
         })
         //得到菜单树
         $(function () {
-            var zNodes;
+            //var zNodes;
 
-            var setting = {
-                data: {
-                    key: {
-                        isParent: "isParent"
-                    },
-                    simpleData: {
-                        enable: true,
-                        idKey: "id",
-                        pIdKey: "pId",
-                        rootPId: null
-                    }
-                },
-                view: {
-                    showLine: false,
-                    addDiyDom: addDiyDom,
-                    onDblClick: zTreeOnDblClick
-                },
-                callback: {
-                    onExpand: zTreeOnExpand, //展开
-                    onCollapse: zTreeOnExpand, //折叠
-                },
-            };
+            //var setting = {
+            //    data: {
+            //        key: {
+            //            isParent: "isParent"
+            //        },
+            //        simpleData: {
+            //            enable: true,
+            //            idKey: "id",
+            //            pIdKey: "pId",
+            //            rootPId: null
+            //        }
+            //    },
+            //    view: {
+            //        showLine: false,
+            //        addDiyDom: addDiyDom,
+            //        onDblClick: zTreeOnDblClick
+            //    },
+            //    callback: {
+            //        onExpand: zTreeOnExpand, //展开
+            //        onCollapse: zTreeOnExpand, //折叠
+            //    },
+            //};
+            var treeNodes;
             $.ajax({
                 type: "post",
                 async: false,
                 url: "/User/GetMenuTree",
                 success: function (result) {
-                    zNodes = result;
-                    console.log(zNodes);
+                    treeNodes = result;
+                    console.log(treeNodes);
+                    // <li class="sub-menu active" role="presentation">
+                    //    <a href="#Collapse" class="nav-header collapsed " data-toggle="collapse" data-parent="#nav-accordion">
+                    //        <i class="fa fa-edit" aria-hidden="true"></i>
+                    //        <span>夹具出入库登记</span>
+                    //    </a>
+                    //    <ul id="Collapse" class=" nav-list collapse in ">
+                    //        <li><a href="/OutRecord/Index">领用 ( 出库 )登记</a></li>
+                    //        <li><a href="/InRecord/Index">归还 ( 入库 )登记</a></li>
+                    //    </ul>
+                    //</li>
+                    $.each(result, function (index, item) {
+                        var index = 1;
+                        var _li = "<li class=\"" + "sub-menu_" + index + " active\"" + " role=\"" + "presentation\"></li>";
+                        var _a = "<a href=\"" + item.url + "\""
+                            + "class=\"" + "nav-header collapsed \""
+                            + "data-toggle=\"collapse\" data-parent=\"#nav-accordion\"></a>";
+                        var _i = "<i class=\"" + item.expandIcon + "\"" + " aria-hidden=\"true\"></i>";
+                        var _span = "<span>" + item.name + "</span>";
+                        $(".sidebar-menu").append(_li);
+                        $(".sub-menu_" + index).append(_a);
+                        $(".sub-menu_" + index + ' a').append(_i, _span);
+                        var _ul = "<ul id=\"" + "Collapse_" + index + "\"" + "class=\" nav-list collapse in \"><ul>";
+
+                        if (item.children.length!=0) {
+                            var pos = 1;
+                            $(".sub-menu_" + index).append(_ul);
+                            for (var i = 0; i < item.children.length; i++) {
+                                var _ul_li = "<li id=\"" + pos + "\"></li>";
+                                var _ul_li_a = "<a href=\"" + item.children[i].url + "\">" +item.children[i].name + "</a>";
+                                $("ul#Collapse_" + index).append(_ul_li);
+                                $("ul#Collapse_" + index + " li#" + pos).append(_ul_li_a);
+                                pos++;
+                            }
+                        }
+                        index++;
+                    })
                 }
             })
-            $.fn.zTree.init($("#menuTree"), setting, zNodes);
+            //$.fn.zTree.init($("#menuTree"), setting, zNodes);
 
 
             //console.log(zNodes);

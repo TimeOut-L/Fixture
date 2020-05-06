@@ -18,13 +18,14 @@ namespace FixtureManagement.ViewModels
         public string name { get; set; }
         public string url { get; set; }
        
-        public string target { get; set; }
+        
         public string nodeIcon { get; set; }
         public string expandIcon { get; set; }
         public string collapseIcon { get; set; }
-        // public List<MenuTreeViewModel> children = new List<MenuTreeViewModel>();
 
-        public bool open { get; set; }
+        public List<MenuTreeViewModel> children = new List<MenuTreeViewModel>();
+        // public string target { get; set; }
+       // public bool open { get; set; }
 
     }
 }
