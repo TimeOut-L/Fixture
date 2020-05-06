@@ -317,8 +317,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Scripts\bootstrap-treeview.js" />
-    <Content Include="Scripts\bootstrap-treeview.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\fontawesome\fonts\fontawesome-webfont.eot" />
@@ -342,16 +340,6 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\jquery.ztree.all.js" />
-    <Content Include="Scripts\jquery.ztree.all.min.js" />
-    <Content Include="Scripts\jquery.ztree.core.js" />
-    <Content Include="Scripts\jquery.ztree.core.min.js" />
-    <Content Include="Scripts\jquery.ztree.excheck.js" />
-    <Content Include="Scripts\jquery.ztree.excheck.min.js" />
-    <Content Include="Scripts\jquery.ztree.exedit.js" />
-    <Content Include="Scripts\jquery.ztree.exedit.min.js" />
-    <Content Include="Scripts\jquery.ztree.exhide.js" />
-    <Content Include="Scripts\jquery.ztree.exhide.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

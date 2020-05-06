@@ -23,11 +23,8 @@
             background-color: #4ECDC4;
         }
 
-
-
-
         #nav-accordion {
-            margin-top: 100px;
+            margin-top: 75px;
         }
     </style>
 </head>
@@ -245,20 +242,20 @@
                     //</li>
                     $.each(result, function (index, item) {
                         var index = 1;
-                        var _li = "<li class=\"" + "sub-menu_" + index + " active\"" + " role=\"" + "presentation\"></li>";
+                        var _li = "<li class=\"" + "sub-menu " + index + " active\"" + " role=\"" + "presentation\"></li>";
                         var _a = "<a href=\"" + item.url + "\""
                             + "class=\"" + "nav-header collapsed \""
                             + "data-toggle=\"collapse\" data-parent=\"#nav-accordion\"></a>";
                         var _i = "<i class=\"" + item.expandIcon + "\"" + " aria-hidden=\"true\"></i>";
                         var _span = "<span>" + item.name + "</span>";
                         $(".sidebar-menu").append(_li);
-                        $(".sub-menu_" + index).append(_a);
-                        $(".sub-menu_" + index + ' a').append(_i, _span);
+                        $(".sub-menu." + index).append(_a);
+                        $(".sub-menu." + index + ' a').append(_i, _span);
                         var _ul = "<ul id=\"" + "Collapse_" + index + "\"" + "class=\" nav-list collapse in \"><ul>";
 
                         if (item.children.length!=0) {
                             var pos = 1;
-                            $(".sub-menu_" + index).append(_ul);
+                            $(".sub-menu." + index).append(_ul);
                             for (var i = 0; i < item.children.length; i++) {
                                 var _ul_li = "<li id=\"" + pos + "\"></li>";
                                 var _ul_li_a = "<a href=\"" + item.children[i].url + "\">" +item.children[i].name + "</a>";
