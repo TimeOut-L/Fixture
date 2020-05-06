@@ -1,7 +1,7 @@
 # FixtureManagement
 
 使用MVC + Service +EF  boostraptable table 初始化请查看 script 下 common.bootstraptable.init.js
-
+ common.bootstraptable.init.js 通用bootstraptable js : add delete ..
 项目 目录说明
 
 App_Data :sql 脚本 使用sqlserver 执行即可
