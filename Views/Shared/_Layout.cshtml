@@ -18,14 +18,7 @@
 
 
     <style>
-        ul.top-menu > li > .logout:visited, ul.top-menu > li > .logout:hover {
-            color: red;
-            background-color: #4ECDC4;
-        }
-
-        #nav-accordion {
-            margin-top: 75px;
-        }
+      
     </style>
 </head>
 
@@ -83,6 +76,7 @@
             <div id="sidebar" class="nav-collapse ">
 
                 <ul class="sidebar-menu" id="nav-accordion">
+
                 </ul>
 
 
@@ -136,36 +130,6 @@
         </section>
     </section>
     <script>
-        //自定义图标样式
-        //function addDiyDom(treeId, treeNode, isExpand) {
-        //    debugger;
-        //    var clasObj = $("#" + treeNode.tId + "_ico")
-        //    clasObj.removeClass();
-        //    //console.log(treeNode);
-        //    if (treeNode.nodeIcon)
-        //        clasObj.addClass(treeNode.nodeIcon);
-
-        //    if (treeNode.isParent) {
-        //        var classSwitch = $("#" + treeNode.tId + "_switch");
-        //        if (isExpand)
-        //            classSwitch.removeClass().addClass(treeNode.collapseIcon);
-        //        else
-        //            classSwitch.removeClass().addClass(treeNode.expandIcon);
-        //    }
-
-        //}
-        ////双击后 图标又会变回去
-        //function zTreeOnDblClick(event, treeId, treeNode) {
-        //    alert(treeNode ? treeNode.tId + ", " + treeNode.name : "isRoot");
-        //};
-
-        //function zTreeOnExpand(event, treeId, treeNode) {
-        //    addDiyDom(treeId, treeNode, false);
-        //};
-
-        //function zTreeOnCollapse(event, treeId, treeNode) {
-        //    addDiyDom(treeId, treeNode, true);
-        //};
 
         $('.logout').click(function () {
             swal.fire({
@@ -198,69 +162,39 @@
         })
         //得到菜单树
         $(function () {
-            //var zNodes;
-
-            //var setting = {
-            //    data: {
-            //        key: {
-            //            isParent: "isParent"
-            //        },
-            //        simpleData: {
-            //            enable: true,
-            //            idKey: "id",
-            //            pIdKey: "pId",
-            //            rootPId: null
-            //        }
-            //    },
-            //    view: {
-            //        showLine: false,
-            //        addDiyDom: addDiyDom,
-            //        onDblClick: zTreeOnDblClick
-            //    },
-            //    callback: {
-            //        onExpand: zTreeOnExpand, //展开
-            //        onCollapse: zTreeOnExpand, //折叠
-            //    },
-            //};
             var treeNodes;
             $.ajax({
                 type: "post",
-                async: false,
+                async: true,
                 url: "/User/GetMenuTree",
                 success: function (result) {
                     treeNodes = result;
-                    console.log(treeNodes);
-                    // <li class="sub-menu active" role="presentation">
-                    //    <a href="#Collapse" class="nav-header collapsed " data-toggle="collapse" data-parent="#nav-accordion">
-                    //        <i class="fa fa-edit" aria-hidden="true"></i>
-                    //        <span>夹具出入库登记</span>
-                    //    </a>
-                    //    <ul id="Collapse" class=" nav-list collapse in ">
-                    //        <li><a href="/OutRecord/Index">领用 ( 出库 )登记</a></li>
-                    //        <li><a href="/InRecord/Index">归还 ( 入库 )登记</a></li>
-                    //    </ul>
-                    //</li>
+                    //console.log(treeNodes);
                     $.each(result, function (index, item) {
+                        // 只考虑到二级菜单 需抽取为js 函数
                         var index = 1;
                         var _li = "<li class=\"" + "sub-menu " + index + " active\"" + " role=\"" + "presentation\"></li>";
                         var _a = "<a href=\"" + item.url + "\""
                             + "class=\"" + "nav-header collapsed \""
                             + "data-toggle=\"collapse\" data-parent=\"#nav-accordion\"></a>";
-                        var _i = "<i class=\"" + item.expandIcon + "\"" + " aria-hidden=\"true\"></i>";
+                        var _i = "<i class=\"" + item.nodeIcon + "\"" + " aria-hidden=\"true\"></i>";
                         var _span = "<span>" + item.name + "</span>";
                         $(".sidebar-menu").append(_li);
                         $(".sub-menu." + index).append(_a);
                         $(".sub-menu." + index + ' a').append(_i, _span);
                         var _ul = "<ul id=\"" + "Collapse_" + index + "\"" + "class=\" nav-list collapse in \"><ul>";
-
-                        if (item.children.length!=0) {
+                        if (item.children.length != 0) {
                             var pos = 1;
                             $(".sub-menu." + index).append(_ul);
                             for (var i = 0; i < item.children.length; i++) {
                                 var _ul_li = "<li id=\"" + pos + "\"></li>";
-                                var _ul_li_a = "<a href=\"" + item.children[i].url + "\">" +item.children[i].name + "</a>";
+                                var _ul_li_a = "<a href=\"" + item.children[i].url + "\"></a>";
+                                var _ul_li_a_i = "<i class=\"" + item.children[i].nodeIcon + "\"" + " aria-hidden=\"true\"></i>";
+                                var _ul_li_a_span = "<span>" +item.children[i].name + "</span>";
                                 $("ul#Collapse_" + index).append(_ul_li);
                                 $("ul#Collapse_" + index + " li#" + pos).append(_ul_li_a);
+                                $("ul#Collapse_" + index + " li#" + pos + " a").append(_ul_li_a_i);
+                                $("ul#Collapse_" + index + " li#" + pos +" a").append(_ul_li_a_span);
                                 pos++;
                             }
                         }
@@ -289,15 +223,22 @@
                 return false;//停止运行bootstrap自带的函数
             });
         })
+
         //获取用户姓名
         $(function () {
-            $.ajax({
-                type: "post",
-                url: "/User/GetCurrentUserName",
-                success: function (result) {
-                    $("#user").text(result.userName);
-                }
-            });
+            var name = window.sessionStorage.getItem("userName");         
+            if (name == null || name== "undefined") {
+                $.ajax({
+                    type: "post",
+                    async: false,
+                    url: "/User/GetCurrentUserName",
+                    success: function (result) {                        
+                        window.sessionStorage.setItem("userName", result.userName);                    
+                        name = window.sessionStorage.getItem("userName");                     
+                    }
+                });
+            }
+            $("#user").text(name);
         })
     </script>
 

@@ -24,6 +24,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.js"></script>
     <script src="~/Scripts/common.form.validate.js"></script>
     <script src="~/Scripts/common.bootstraptable.init.js"></script>
+    <script src="~/Scripts/common.toastr.init.js"></script>
     <style>
 
         /*表头样式*/
@@ -119,39 +120,8 @@
 
     <script type="text/javascript">
 
-        toastr.options = {
-            closeButton: false,                                            // 是否显示关闭按钮，（提示框右上角关闭按钮）
-            debug: false,                                                     // 是否使用deBug模式
-            progressBar: true,                                            // 是否显示进度条，（设置关闭的超时时间进度条）
-            positionClass: "toast-bottom-center",              // 设置提示款显示的位置
-            onclick: null,                                                     // 点击消息框自定义事件 
-            showDuration: "300",                                      // 显示动画的时间
-            hideDuration: "1000",                                     //  消失的动画时间
-            timeOut: "2000",                                              //  自动关闭超时时间 
-            extendedTimeOut: "1000",                              //  加长展示时间
-            showEasing: "swing",                                      //显示时的动画缓冲方式
-            hideEasing: "linear",                                       //   消失时的动画缓冲方式
-            showMethod: "fadeIn",                                   //   显示时的动画方式
-            hideMethod: "fadeOut"                                   //   消失时的动画方式
-        };
-        //input 不能为空
-        function checkNull() {
-            var pass = true;
-            var str = "";
-            $("#addform input[type$='text']").each(function (n) {
-                if ($(this).val() =="") {
-                    pass = false;
-                    //获取关联label元素
-                    str += $('label[for=' + $(this).attr('id') + ']').html() + "不能为空！\r\n";
-                    toastr.error(str);
-                    return pass;
-                }
-            });
-            return pass;
-        }
-        
         function addInRecord() {
-            if (checkNull()) {
+            if (CheckFormNull("addform")) {
                 $.ajax({
                     type: "POST",//方法类型
                     url: "/InRecord/AddInRecord",//url
@@ -226,10 +196,10 @@
                         '已删除！',
                         '记录已被删除',
                         'success'
-                    ).then(function () {
-                        //确认删除
-                        deleteData(jsonData);
-                    })
+                    )
+                    //确认删除
+                    return true;
+                    deleteData(jsonData);
 
                 } else if (isConfirm.dismiss == 'cancel') {
                     swal.fire(
@@ -237,6 +207,7 @@
                         '记录未被删除',
                         'error'
                     );
+                    return false;
                 }
             })
         }
@@ -283,26 +254,10 @@
             return { classes: classes[index % classes.length] };
         }
 
-        //日期格式化
-        function changeDateFormat(cellval) {
-            if (cellval != null) {
-                var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
-                var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
-                var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-                var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-                var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-
-                var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-
-                return date.getFullYear() + "-" + month + "-" + currentDate + " " + hours + ":" + minutes + ":" + seconds;
-
-            }
-        };
-                                      
         /**
          * 数据列
          * */
-        var columns= [{
+        var columns = [{
             title: "全选", field: "select", checkbox: true
         }, {
             field: 'ID',
@@ -310,55 +265,55 @@
             visable: true,
             sortable: true
         },
-            {
-                field: 'Code',
-                title: '夹具代码',
-                visable: true,
-            }, {
-                field: 'SeqID',
-                title: '夹具序列号',
-                visable: true,
+        {
+            field: 'Code',
+            title: '夹具代码',
+            visable: true,
+        }, {
+            field: 'SeqID',
+            title: '夹具序列号',
+            visable: true,
 
-            }, {
-                field: 'RetByName',
-                title: '领用人',
-                visable: true,
+        }, {
+            field: 'RetByName',
+            title: '领用人',
+            visable: true,
 
-            }, {
-                field: 'OperationByName',
-                title: '操作人',
-                visable: true
-            }, {
-                field: 'ProdLineID',
-                title: '产线ID',
-                visable: true
-            }, {
-                field: 'RetDate',
-                title: '领用日期',
-                visable: true,
-                formatter: function (value, row, index) {
-                    return changeDateFormat(value)
-                }
-            }, {
+        }, {
+            field: 'OperationByName',
+            title: '操作人',
+            visable: true
+        }, {
+            field: 'ProdLineID',
+            title: '产线ID',
+            visable: true
+        }, {
+            field: 'RetDate',
+            title: '领用日期',
+            visable: true,
+            formatter: function (value, row, index) {
+                return changeDateFormat(value)
+            }
+        }, {
             field: 'Operation',
-                title: '操作',
-                    events: operationEvents,
-                        formatter: function (value, row, index) {
-                            return [
-                                '<div class="btn-group">',
-                                '<button id="btn_update" type="button" class="btn btn-warning"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i><span></span></button>',
-                                '<button id="btn_delete" type="button" class="btn btn-danger" ><i class="glyphicon glyphicon-remove" aria-hidden="true"></i><span></span></button>',
-                                '</div>'
-                            ].join(' ');
-                        }
+            title: '操作',
+            events: operationEvents,
+            formatter: function (value, row, index) {
+                return [
+                    '<div class="btn-group">',
+                    '<button id="btn_update" type="button" class="btn btn-warning"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i><span></span></button>',
+                    '<button id="btn_delete" type="button" class="btn btn-danger" ><i class="glyphicon glyphicon-remove" aria-hidden="true"></i><span></span></button>',
+                    '</div>'
+                ].join(' ');
+            }
         },]
         /**
             * table 初始化
             * */
         var TableInit = function () {
-            var inRecordTable= new Object();
+            var inRecordTable = new Object();
 
-            inRecordTable= BoootstrapTableInit("inRecordTable", '/InRecord/ReadInRecords', columns)
+            inRecordTable = BoootstrapTableInit("inRecordTable", '/InRecord/ReadInRecords', rowStyle, columns)
             return inRecordTable;
         }
 

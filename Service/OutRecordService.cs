@@ -24,6 +24,12 @@ namespace FixtureManagement.Service
         bool Delete(int ID);
 
         /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <param name="IDs"></param>
+        /// <returns></returns>
+        bool Delete(List<int> IDs);
+        /// <summary>
         /// 修改记录
         /// </summary>
         /// <param name="outRecord"></param>

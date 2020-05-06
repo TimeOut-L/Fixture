@@ -103,12 +103,12 @@ namespace FixtureManagement.Controllers
                         if (temp.ParentMenuID == menu.MenuID)
                         {
                             MenuTreeViewModel lNode = new MenuTreeViewModel();
-                            lNode.id = menu.MenuID;
-                            lNode.pId = menu.ParentMenuID;
+                            lNode.id = temp.MenuID;
+                            lNode.pId = temp.ParentMenuID;
                             lNode.name = temp.Name;
-                            lNode.expandIcon = menu.ExpandIcon;
-                            lNode.collapseIcon = menu.CollapseIcon;
-                            lNode.nodeIcon = menu.NodeIcon;
+                            lNode.expandIcon = temp.ExpandIcon;
+                            lNode.collapseIcon = temp.CollapseIcon;
+                            lNode.nodeIcon = temp.NodeIcon;
                             if (string.IsNullOrWhiteSpace(temp.ControllerName) || string.IsNullOrWhiteSpace(temp.ControllerName))
                             {
                                 index++;

@@ -16,7 +16,7 @@ using System.Web.Script.Serialization;
 namespace FixtureManagement.Controllers
 {
     [LoginCheckFilter]
-   
+    [UserFilter]
     //领用
     public class OutRecordController : Controller
     {
@@ -27,7 +27,7 @@ namespace FixtureManagement.Controllers
 
 
         // GET: OutRecord
-        [UserFilter]
+
         public ActionResult Index()
         {
             return View();
@@ -37,13 +37,12 @@ namespace FixtureManagement.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-       
         [ValidateInput(true)]
         public ActionResult ReadOutRecords()
         {
-            string code  = (string)Session["CurrentUser"];
+            string code = (string)Session["CurrentUser"];
             var _user = userService.GetUserByCode(code);
-            var list = outRecordService.GetAllOutRecordWithWorkCell(_user.WorkCellID);        
+            var list = outRecordService.GetAllOutRecordWithWorkCell(_user.WorkCellID);
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
@@ -52,7 +51,7 @@ namespace FixtureManagement.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [UserFilter]
+
         [ValidateInput(true)]
         public ActionResult AddOutRecord()
         {
@@ -81,7 +80,7 @@ namespace FixtureManagement.Controllers
                     msg = "无法插入相同的数据",
                 };
                 return Json(exception, JsonRequestBehavior.AllowGet);
-            }          
+            }
             var data = new
             {
                 success = true,
@@ -104,9 +103,9 @@ namespace FixtureManagement.Controllers
                 new SqlParameter("@code",code),
                 new SqlParameter("@seqID",seqID),
             };
-            FixtureEntity fixtureEntity = context.FixtureEntities.Find(code,seqID);
+            FixtureEntity fixtureEntity = context.FixtureEntities.Find(code, seqID);
             fixtureEntity.UsedCount += 1;
-           // entityContext.fixtureEntities.SqlQuery("update FixtureEntity set UsedCount = UsedCount + 1 where Code=N@code and SeqID=@seqID");
+            // entityContext.fixtureEntities.SqlQuery("update FixtureEntity set UsedCount = UsedCount + 1 where Code=N@code and SeqID=@seqID");
             context.SaveChanges();
         }
         /// <summary>
@@ -116,36 +115,25 @@ namespace FixtureManagement.Controllers
         [HttpPost]
         public ActionResult DeleteOutRecords()
         {
-
             //TODO
             string jsonData = Request["ItemIDs"];
             JArray jArray = JArray.Parse(jsonData);
+            List<int> ids = new List<int>();
             foreach (var item in jArray)
             {
                 JsonSerializer js = new JsonSerializer();
                 ItemID obj = (ItemID)js.Deserialize(item.CreateReader(), typeof(ItemID));
-                SqlParameter[] parms = new SqlParameter[]
-                {
-                     new SqlParameter ("@id",obj.ID),
-                };
-                //TODO try catch
-                FixtureOutRecord record = context.OutRecords.SqlQuery("select * from FixtureOutRecord where ID=@id", parms).Single();
-                try
-                {
-                    context.OutRecords.Remove(record);
-                }
-                catch (Exception e)
-                {
-                    var exception = new
-                    {
-                        success = false,
-                        msg = "没有该记录",
-                    };
-                    return Json(exception, JsonRequestBehavior.AllowGet);
-                }
-                context.SaveChanges();
+                ids.Add(obj.ID);
             }
-            //return RedirectToAction("Index", "OutRecord");
+            if (!outRecordService.Delete(ids))
+            {
+                var exception = new
+                {
+                    success = false,
+                    msg = "可能有些记录不存在"
+                };
+                return Json(exception, JsonRequestBehavior.AllowGet);
+            }          
             var data = new
             {
                 success = true,

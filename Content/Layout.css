@@ -289,17 +289,21 @@ ul.sidebar-menu li {
 
 
 
-#nav-accordion{
-    margin-top:100px;
-}
 
 .nav-collapse.collapse {
     display: inline;
 }
 
 
+#nav-accordion {
+    margin-top: 75px;
+}
 
-   
+
+ul.top-menu > li > .logout:visited, ul.top-menu > li > .logout:hover {
+    color: red;
+    background-color: #4ECDC4;
+}
 
 
 

@@ -11,19 +11,20 @@
     <!-- Latest compiled and minified Locales -->
     <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/locale/bootstrap-table-zh-CN.min.js"></script>
     <script src="https://cdn.bootcss.com/moment.js/2.18.1/moment-with-locales.min.js" type="text/javascript"></script>
-    <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-    <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
     <script src="https://cdn.bootcss.com/bootbox.js/5.4.0/bootbox.min.js" type="text/javascript"></script>
+
     <!-- 消息提示插件：toastr.js -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js "></script>
     <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js "></script>
+    <script src="~/Scripts/common.toastr.init.js"></script>
     <!-- 弹出框插件 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.js"></script>
     <script src="~/Scripts/common.form.validate.js"></script>
     <script src="~/Scripts/common.bootstraptable.init.js"></script>
+
     <style>
 
         /*模态框 位置及大小修改*/
@@ -32,11 +33,11 @@
             width: 350px;
             height: 550px;
         }
-       .col-sm-2{
-            margin-left:1%;
-            
-           
+
+        .col-sm-2 {
+            margin-left: 1%;
         }
+
         div#query {
             border: 1px solid blue;
             margin-top: 15px;
@@ -169,113 +170,50 @@
         </div>
     </div>
     <script type="text/javascript">
-
+        //添加领用记录
         function addOutRecord() {
             if (CheckFormNull("addform")) {
                 AddRecord("addform", "/OutRecord/AddOutRecord", "addOutRecordModal", "outRecordTable");
             }
         }
+                  
 
-        //获取要删除的code seqID date 并转jsonstr
-        //function getJsonData() {
-        //    var rows = $("#outRecordTable").bootstrapTable('getSelections');
-        //    //存储数据
-        //    var ItemIDs = new Array();
-        //    //console.log(rows);
-        //    if (rows.length == 0) {// rows 主要是为了判断是否选中，下面的else内容才是主要
-        //        toastr.warning("请先选择要删除的记录!");
-        //        return;
-        //    } else {
-        //        //  声明一个object 存储行某几列数据
-        //        $(rows).each(function () {
-        //            var item = new Object();
-        //            item.ID = this.ID;
-        //            ItemIDs.push(item);
-
-        //        });
-        //    }
-        //    return JSON.stringify(ItemIDs);
-        //}
-
-        ////btn_remove 事件
-        //$("#btn_remove").on("click", function () {
-        //    //获取选中数据
-        //    var jsonData = getJsonData();
-        //    if (jsonData == null) {
-        //        return;
-        //    }
-        //    //删除数据
-        //    confirmOrCancelDeleteData(jsonData);
-
-
-        //})
-
-        //// 确认是否删除数据
-        //function confirmOrCancelDeleteData(jsonData) {
-        //    swal.fire({
-        //        title: '确定删除吗？',
-        //        text: '你将无法恢复它！ 这可能是非常重要的一条记录！',
-        //        type: 'warning',
-        //        showCancelButton: true,
-        //        confirmButtonColor: '#3085d6',
-        //        cancelButtonColor: '#d33',
-        //        confirmButtonText: '确定删除！',
-        //        cancelButtonText: '取消删除！',
-        //        confirmButtonClass: 'btn btn-success ',
-        //        cancelButtonClass: 'btn btn-danger',
-        //        buttonsStyling: false
-        //    }).then(function (isConfirm) {
-        //        if (isConfirm.value === true) {
-        //            swal.fire(
-        //                '已删除！',
-        //                '记录已被删除',
-        //                'success'
-        //            ).then(function () {
-        //                //确认删除
-        //                deleteData(jsonData);
-        //            })
-
-        //        } else if (isConfirm.dismiss == 'cancel') {
-        //            swal.fire(
-        //                '已取消！',
-        //                '记录未被删除',
-        //                'error'
-        //            );
-        //        }
-        //    })
-        //}
-        ////删除数据
-        //function deleteData(jsonData) {
-        //    $.ajax({
-        //        url: "/OutRecord/DeleteOutRecords",
-        //        type: "post",
-        //        data: { "ItemIDs": jsonData },
-        //        success: function (result) {
-        //            if (result.success) {
-        //                RefreshTable("outRecordTable");
-        //                toastr.success('删除成功');
-        //            }
-        //            else {
-        //                toastr.warning('删除失败');
-        //            }
-        //        },
-        //        error: function (e) {
-        //            toastr.error('删除错误');
-        //        }
-        //    });
-        //}
+        //btn_remove 事件
+        $("#btn_remove").on("click", function () {
+            //获取选中数据
+            var jsonData =  getSelectedData("outRecordTable");
+            if (jsonData == null) {
+                return;
+            }
+            //确认删除的话
+            if (confirmOrCancelDeleteData()) {
+                DeleteRecords("/OutRecord/DeleteOutRecords", "outRecordTable", jsonData);
+            }
+        })
+         
         //操作列事情
         window.operationEvents = {
             //编辑事件
             'click #btn_update': function (e, value, row, index) {
 
-            },                 
-        } 
-       // 行样式
+            },
+            'click #btn_delete': function (e, value, row, index) {
+                var ItemIDs = new Array();
+                Item = new Object();
+                Item.ID = row.ID;
+                ItemIDs.push(Item);
+                if (confirmOrCancelDeleteData()) {
+                    DeleteRecords("/OutRecord/DeleteOutRecords", "outRecordTable", jsonData)
+                }
+            }
+        }
+
+        // 行样式
         function rowStyle(row, index) {
             var classes = ['success', 'danger']
             return { classes: classes[index % classes.length] };
         }
+
         /**
          * 数据列
          * */
@@ -329,7 +267,7 @@
                     '<div class="btn-group">',
                     '<div class="btn-group">',
                     '<button id="btn_update" type="button" class="btn btn-warning" data-toggle="modal" data-target="#editOutRecordModal"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i><span></span></button>',
-                    //'<button id="btn_delete" type="button" class="btn btn-danger" ><i class="glyphicon glyphicon-remove" aria-hidden="true"></i><span></span></button>',
+                    '<button id="btn_delete" type="button" class="btn btn-danger" ><i class="glyphicon glyphicon-remove" aria-hidden="true"></i><span></span></button>',
                     '</div>'
                 ].join(' ');
             }
@@ -346,9 +284,11 @@
         }
 
         /**
-         * 调用 TableInit        
+         * 调用 TableInit
          * */
         $(function () {
+            $("#operationByName").attr("value", window.sessionStorage.getItem("userName"));          
+            $("#operationByName").attr("disabled","disabled");
             var itable = TableInit();//.初始化  Table
         });
     </script>
