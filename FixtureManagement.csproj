@@ -280,6 +280,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\data.sql" />
+    <Content Include="Content\bootstrap-editable.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -300,6 +301,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\bootstrap-editable.js" />
+    <Content Include="Scripts\bootstrap-editable.min.js" />
+    <Content Include="Scripts\bootstrap-table-editable.js" />
+    <Content Include="Scripts\bootstrap-table-editable.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\fontawesome\fonts\fontawesome-webfont.eot" />
@@ -311,10 +316,18 @@
     <Content Include="Content\fonts\icomoon.ttf" />
     <Content Include="Content\fonts\icomoon.woff" />
     <Content Include="Scripts\common.bootstraptable.init.js" />
+    <Content Include="Scripts\es6-promise.auto.map" />
+    <Content Include="Scripts\es6-promise.auto.min.map" />
+    <Content Include="Scripts\es6-promise.map" />
+    <Content Include="Scripts\es6-promise.min.map" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\common.form.validate.js" />
     <Content Include="Scripts\common.toastr.init.js" />
     <Content Include="Scripts\diy-treeview.js" />
+    <Content Include="Scripts\es6-promise.auto.js" />
+    <Content Include="Scripts\es6-promise.auto.min.js" />
+    <Content Include="Scripts\es6-promise.js" />
+    <Content Include="Scripts\es6-promise.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -325,6 +338,15 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\sweetalert2.all.js" />
+    <Content Include="Scripts\sweetalert2.all.min.js" />
+    <Content Include="Content\sweetalert2\sweetalert2.css" />
+    <Content Include="Scripts\sweetalert2.js" />
+    <Content Include="Content\sweetalert2\sweetalert2.min.css" />
+    <Content Include="Scripts\sweetalert2.min.js" />
+    <Content Include="Content\toastr\toastr.css" />
+    <Content Include="Content\toastr\toastr.min.css" />
+    <Content Include="Scripts\toastr.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -343,6 +365,7 @@
     <Content Include="Views\OutRecord\Index.cshtml" />
     <Content Include="Views\FixtureEntity\Index.cshtml" />
     <Content Include="Views\Home\Error.cshtml" />
+    <Content Include="Scripts\toastr.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />

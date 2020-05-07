@@ -39,8 +39,7 @@ namespace FixtureManagement.Service.impl
             var _record = context.OutRecords.Find(ID);
             if (_record != null)
             {
-                context.OutRecords.Remove(_record);
-                context.SaveChanges();
+                context.OutRecords.Remove(_record);                
                 return true;
             }
             return false;
@@ -58,6 +57,9 @@ namespace FixtureManagement.Service.impl
             {
                pass= Delete(i);
             }
+            //所有的都删除了 才保存
+            if(pass)
+                context.SaveChanges();
             return pass;
         }
         /// <summary>

@@ -23,11 +23,10 @@ namespace FixtureManagement.Controllers
         public UserService userService { get; set; }
         public OutRecordService outRecordService { get; set; }
 
+        //测试用 
         FixtureManagerContext context = new FixtureManagerContext();
 
-
-        // GET: OutRecord
-
+        //index 页面
         public ActionResult Index()
         {
             return View();
@@ -51,7 +50,6 @@ namespace FixtureManagement.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-
         [ValidateInput(true)]
         public ActionResult AddOutRecord()
         {
@@ -91,6 +89,7 @@ namespace FixtureManagement.Controllers
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }
+
         /// <summary>
         /// 夹具使用次数加一
         /// </summary>
@@ -108,11 +107,13 @@ namespace FixtureManagement.Controllers
             // entityContext.fixtureEntities.SqlQuery("update FixtureEntity set UsedCount = UsedCount + 1 where Code=N@code and SeqID=@seqID");
             context.SaveChanges();
         }
+
         /// <summary>
         ///  删除领用记录
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [ValidateInput(true)]
         public ActionResult DeleteOutRecords()
         {
             //TODO
@@ -125,6 +126,7 @@ namespace FixtureManagement.Controllers
                 ItemID obj = (ItemID)js.Deserialize(item.CreateReader(), typeof(ItemID));
                 ids.Add(obj.ID);
             }
+
             if (!outRecordService.Delete(ids))
             {
                 var exception = new
@@ -140,5 +142,32 @@ namespace FixtureManagement.Controllers
             };
             return Json(data, JsonRequestBehavior.AllowGet);
         }
+ 
+        public ActionResult QeuryOutRecords()
+        {
+            return null;
+        }
+
+        public ActionResult UpdateOutRecord()
+        {
+            return null;
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult GetFixtureCode()
+        {
+            string code = (string)Session["CurrentUser"];
+            var _user = userService.GetUserByCode(code);
+            var codes = from fd in context.FixtureDefinitions
+                        where fd.WorkCellID == _user.WorkCellID
+                        select new
+                        {
+                            id = fd.ID,
+                            code = fd.Code,
+                        };
+            return Json(codes,JsonRequestBehavior.AllowGet);
+        }
     }
+ 
 }

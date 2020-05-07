@@ -5,28 +5,30 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
+    <link href="~/Content/bootstrap-editable.css" />
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css" />
+    <script src="~/Scripts/bootstrap-editable.min.js"></script>
+    <!--行内编辑-->
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
     <!-- Latest compiled and minified Locales -->
     <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/locale/bootstrap-table-zh-CN.min.js"></script>
-    <script src="https://cdn.bootcss.com/moment.js/2.18.1/moment-with-locales.min.js" type="text/javascript"></script>
-    <script src="https://cdn.bootcss.com/bootbox.js/5.4.0/bootbox.min.js" type="text/javascript"></script>
-
-    <!-- 消息提示插件：toastr.js -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" type="text/javascript"></script>
-    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js "></script>
-    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js "></script>
-    <script src="~/Scripts/common.toastr.init.js"></script>
-    <!-- 弹出框插件 -->
+    <script src="~/Scripts/bootstrap-table-editable.min.js"></script>
+    <!--最新版本会有 warning -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.js"></script>
+
+    <!-- 消息提示插件：toastr.js -->
+    <link href="~/Content/toastr/toastr.min.css" rel="stylesheet" />
+    <script src="~/Scripts/toastr.min.js" type="text/javascript"></script>
+    <script src="~/Scripts//es6-promise.min.js "></script>
+    <script src="~/Scripts//es6-promise.auto.min.js "></script>
+
+    <script src="~/Scripts/common.toastr.init.js"></script>
     <script src="~/Scripts/common.form.validate.js"></script>
     <script src="~/Scripts/common.bootstraptable.init.js"></script>
 
     <style>
-
         /*模态框 位置及大小修改*/
         .modal-dialog {
             margin-top: 5%;
@@ -105,12 +107,15 @@
                     <i class="glyphicon glyphicon-remove" aria-hidden="true"></i>
                     <span>删除</span>
                 </button>
+                <button id="btn_edit" type="button" class="btn btn-warning">
+                    <i></i>
+                    <span>行内编辑</span>
+                </button>
             </div>
 
-            <!-- <button type="button" id="download" style="margin-left:50px" id="btn_download" class="btn btn-primary" onClick ="$(‘#myTable‘).tableExport({ type: ‘excel‘, escape: ‘false‘ })">数据导出</button> -->
             <table id="outRecordTable" class="table-striped">
             </table>
-            <!-- 添加 -->
+            <!-- 添加 modal 框-->
             <div class="modal fade" id="addOutRecordModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog ">
                     <div class="modal-content" sstyle="border-radius:5px">
@@ -176,21 +181,21 @@
                 AddRecord("addform", "/OutRecord/AddOutRecord", "addOutRecordModal", "outRecordTable");
             }
         }
-                  
+
+
 
         //btn_remove 事件
         $("#btn_remove").on("click", function () {
+
             //获取选中数据
-            var jsonData =  getSelectedData("outRecordTable");
+            var jsonData = getSelectedData("outRecordTable");
             if (jsonData == null) {
                 return;
             }
-            //确认删除的话
-            if (confirmOrCancelDeleteData()) {
-                DeleteRecords("/OutRecord/DeleteOutRecords", "outRecordTable", jsonData);
-            }
+            confirmOrCancelDeleteData("/OutRecord/DeleteOutRecords", "outRecordTable", jsonData);
+
         })
-         
+
         //操作列事情
         window.operationEvents = {
             //编辑事件
@@ -202,9 +207,8 @@
                 Item = new Object();
                 Item.ID = row.ID;
                 ItemIDs.push(Item);
-                if (confirmOrCancelDeleteData()) {
-                    DeleteRecords("/OutRecord/DeleteOutRecords", "outRecordTable", jsonData)
-                }
+                console.log(ItemIDs);
+                confirmOrCancelDeleteData("/OutRecord/DeleteOutRecords", "outRecordTable", ItemIDs)
             }
         }
 
@@ -225,16 +229,66 @@
             visable: true,
             sortable: true,
             align: 'center',
-        },
-        {
+        }, {
             field: 'Code',
             title: '夹具代码',
             visable: true,
+            editable: {
+                type: 'select',
+                title: '夹具代码',
+                validate: function (v) {
+                    if (!v) return '夹具代码不能为空';
+
+                },
+                source: function () {
+                    var result = [];
+                    $.ajax({
+                        url: '/OutRecord/GetFixtureCode',
+                        async: false,
+                        type: "get",
+                        data: {},
+                        success: function (data, status) {
+                            console.log(data);
+                            $.each(data, function (key, value) {
+                                result.push({ value: value.id, text: value.code });
+                            });
+                        }
+                    });
+                    console.log("2"+result);
+                    return result;
+                }
+            }
+            //editable: {
+            //    type: 'select',
+            //    title: '夹具代码',
+            //    source: function () {
+            //        var result = [];
+            //        $.ajax({
+            //            url: '/OutRecord/GetFixtureCode',
+            //            type: "get",
+            //            data: {},
+            //            success: function (data, status) {
+            //                console.log(data);
+            //                $.each(data, function (key, value) {
+
+            //                    result.push({ value: value.ID, text: value.Code });
+            //                });
+            //            }
+            //        });
+            //        return result;
+            //    }
         }, {
             field: 'SeqID',
             title: '夹具序列号',
             visable: true,
-            align: 'center'
+            align: 'center',
+            editable: {
+                type: 'text',
+                title: '夹具序列号',
+                validate: function (v) {
+                    if (!v) return '夹具序列号不能为空';
+                },
+            }
         }, {
             field: 'UsedByName',
             title: '领用人',
@@ -287,8 +341,8 @@
          * 调用 TableInit
          * */
         $(function () {
-            $("#operationByName").attr("value", window.sessionStorage.getItem("userName"));          
-            $("#operationByName").attr("disabled","disabled");
+            $("#operationByName").attr("value", window.sessionStorage.getItem("userName"));
+            $("#operationByName").attr("disabled", "disabled");
             var itable = TableInit();//.初始化  Table
         });
     </script>
