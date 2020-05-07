@@ -22,7 +22,7 @@ fonts:字体
 Model:实体类
 Model.Context :数据库上下文管理
 
-Scripts:js 脚本
+Scripts:  js 脚本
 
 Service :业务逻辑 服务层 接口 impl 实现类 
          将controller 中的业务逻辑抽离
@@ -31,4 +31,4 @@ ViewModels:视图模型 视图所需要的 数据类 不一定与实体类数据
 
 Views:视图文件
 
-使用js构造 动态菜单树 而不是固定菜单 正在探索中
+使用js构造 动态菜单树 而不是固定菜单 正在探索中ing...
