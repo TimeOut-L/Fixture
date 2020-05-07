@@ -8,6 +8,7 @@ using System.Web;
 
 namespace FixtureManagement.Models
 {
+    
     [Serializable]
     public class FixtureEntity
     {
