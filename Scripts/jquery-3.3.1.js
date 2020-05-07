@@ -8,7 +8,7 @@
  * Copyright JS Foundation and other contributors
  * Released under the MIT license
  * https://jquery.org/license
- *t
+ *
  * Date: 2018-01-20T17:24Z
  */
 ( function( global, factory ) {
