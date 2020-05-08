@@ -245,7 +245,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Common\ItemID.cs" />
+    <Compile Include="Controllers\ManagerFamilyController.cs" />
     <Compile Include="filter\UserFilter.cs" />
+    <Compile Include="Models\FixtureFamily.cs" />
     <Compile Include="ViewModels\MenuTreeViewModel.cs" />
     <Compile Include="Models\MenuNode.cs" />
     <Compile Include="Controllers\FixtureEntityController.cs" />
@@ -363,6 +365,7 @@
     <Content Include="Views\FixtureEntity\Index.cshtml" />
     <Content Include="Views\Home\Error.cshtml" />
     <Content Include="Scripts\toastr.js.map" />
+    <Content Include="Views\ManagerFamily\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />

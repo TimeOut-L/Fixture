@@ -48,7 +48,7 @@ namespace FixtureManagement.Service.impl
         /// <summary>
         /// 删除记录
         /// </summary>
-        /// <param name="ID"></param>
+        /// <param name="ids"></param>
         /// <returns></returns>
         public bool Delete(List<int> ids)
         {

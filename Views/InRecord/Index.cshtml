@@ -125,7 +125,8 @@
                 AddRecord("addform", "/InRecord/AddInRecord", "addInRecordModal", "inRecordTable");
             }
         }
-                  
+
+         // inRecord 功能暂未完善
         //btn_remove 事件
         $("#btn_remove").on("click", function () {
             //获取选中数据
@@ -134,9 +135,7 @@
                 return;
             }
             //确认删除的话
-            if (confirmOrCancelDeleteData()) {
-                DeleteRecords("/InRecord/DeleteInRecords", "inRecordTable", jsonData);
-            }
+            confirmOrCancelDeleteData("/InRecord/DeleteOutRecords", "iRecordTable", jsonData)
         })
 
         //操作列事情
@@ -151,7 +150,7 @@
                 Item = new Object();
                 Item.ID = row.ID;
                 ItemIDs.push(Item);
-                confirmOrCancelDeleteData(JSON.stringify(ItemIDs));
+                  confirmOrCancelDeleteData("/InRecord/DeleteOutRecords", "inRecordTable", ItemIDs)
             }
         }
 

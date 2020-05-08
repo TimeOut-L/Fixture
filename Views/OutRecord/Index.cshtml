@@ -183,7 +183,6 @@
         }
 
 
-
         //btn_remove 事件
         $("#btn_remove").on("click", function () {
 
@@ -218,6 +217,21 @@
             return { classes: classes[index % classes.length] };
         }
 
+        function getEditableSource(requestUrl, jsonData) {
+            var result = [];
+            $.ajax({
+                url: requestUrl,
+                async: false,
+                type: "get",
+                data: { "temp": jsonData },
+                success: function (data, status) {                    
+                    $.each(data, function (key, item) {
+                        result.push({ value: item.value, text: item.value });
+                    });
+                }
+            });
+            return result;
+        }
         /**
          * 数据列
          * */
@@ -236,58 +250,41 @@
             editable: {
                 type: 'select',
                 title: '夹具代码',
-                validate: function (v) {
-                    if (!v) return '夹具代码不能为空';
 
+                validate: function (value) {
+                    if (!value) return '夹具代码不能为空';
                 },
-                source: function () {
-                    var result = [];
-                    $.ajax({
-                        url: '/OutRecord/GetFixtureCode',
-                        async: false,
-                        type: "get",
-                        data: {},
-                        success: function (data, status) {
-                            console.log(data);
-                            $.each(data, function (key, value) {
-                                result.push({ value: value.id, text: value.code });
-                            });
-                        }
-                    });
-                    console.log("2"+result);
-                    return result;
+                noeditFormatter: function (value, row, index) {
+                    return diyFormatter(value, 'Code');
+                },
+                source: function (value, row, index) {                  
+                    return getEditableSource("/OutRecord/GetFixtureCode", null)
                 }
             }
-            //editable: {
-            //    type: 'select',
-            //    title: '夹具代码',
-            //    source: function () {
-            //        var result = [];
-            //        $.ajax({
-            //            url: '/OutRecord/GetFixtureCode',
-            //            type: "get",
-            //            data: {},
-            //            success: function (data, status) {
-            //                console.log(data);
-            //                $.each(data, function (key, value) {
-
-            //                    result.push({ value: value.ID, text: value.Code });
-            //                });
-            //            }
-            //        });
-            //        return result;
-            //    }
         }, {
             field: 'SeqID',
             title: '夹具序列号',
             visable: true,
             align: 'center',
             editable: {
-                type: 'text',
+                type: 'select',
                 title: '夹具序列号',
-                validate: function (v) {
-                    if (!v) return '夹具序列号不能为空';
+                noeditFormatter: function (value, row, index) {
+                    return diyFormatter(value, 'SeqID');
                 },
+                validate: function (value) {
+                    if (!value) return '夹具序列号不能为空';
+                },
+                source: function (value, row, index) {                  
+                    var data = $("#outRecordTable").bootstrapTable('getData');                
+                    //2.获取所在的索引
+                    var index = $(this).parents('tr').data('index');               
+                    //获取当前行数据
+                    var datas = data[index];                  
+                    //获取当前行的某个数据
+                    var _code = datas.Code;                
+                    return getEditableSource("/OutRecord/GetFixtureSeqIDByCode", _code);
+                }
             }
         }, {
             field: 'UsedByName',

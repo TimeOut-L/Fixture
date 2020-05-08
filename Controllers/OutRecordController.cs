@@ -9,9 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
 
 namespace FixtureManagement.Controllers
 {
@@ -153,6 +151,7 @@ namespace FixtureManagement.Controllers
             return null;
         }
 
+        //重构到对应服务 FixtureDefinitions 定义
         [HttpGet]
         [AllowAnonymous]
         public ActionResult GetFixtureCode()
@@ -164,10 +163,26 @@ namespace FixtureManagement.Controllers
                         select new
                         {
                             id = fd.ID,
-                            code = fd.Code,
+                            value = fd.Code,
                         };
             return Json(codes,JsonRequestBehavior.AllowGet);
         }
+        //重构到对应服务 FixtureEnitities 定义
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult GetFixtureSeqIDByCode()
+        {
+            string _code = Request["temp"];
+           
+            var seqIDs = from fe in context.FixtureEntities
+                        where fe.Code ==_code
+                        select new
+                        {                           
+                            value =fe.SeqID,
+                        };
+            var list = seqIDs.ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
     }
- 
+
 }

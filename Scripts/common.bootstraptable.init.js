@@ -43,6 +43,16 @@ function BoootstrapTableInit(tableId, requestUrl, rowStyle, dataColumns, ) {
 }
 
 /**
+ * editable 编辑格式
+ * @param {any} value  value
+ * @param {any} name   data-name
+ */
+function diyFormatter(value, name) {
+    var _a = "<a hre=\"javascript:void(0);\"" + "data-name=\"" + name + "\" data-value=\"" + value + "\" class=\" editable editable-click\">" + value + "</a>";
+    return _a;
+}
+
+/**
  * 日期格式化
  * @param {any} cellval  时间点
  */

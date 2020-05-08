@@ -7,14 +7,16 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using FixtureManagement.Models;
+using FixtureManagement.Models.Context;
 
 namespace FixtureManagement.Controllers
 {
     public class ManagerFamilyController : Controller
     {
-        private FixtureFamilyContext context = new FixtureFamilyContext();
 
-       
+        //测试用 
+        FixtureManagerContext context = new FixtureManagerContext();
+
         public ActionResult Index()
         {
             return View();
@@ -23,9 +25,9 @@ namespace FixtureManagement.Controllers
 
         //查询所有的类别
         [HttpPost]
-        public ActionResult ReadFamily()
+        public ActionResult ReadFamilyRecord()
         {
-            List<FixtureFamily> fixtureFamily = context.Family.SqlQuery("select * from FixtureFamily").ToList();
+            List<FixtureFamily> fixtureFamily = context.Familys.SqlQuery("select * from FixtureFamily").ToList();
 
             return Json(fixtureFamily, JsonRequestBehavior.AllowGet);
         }
@@ -33,7 +35,7 @@ namespace FixtureManagement.Controllers
 
 
         //修改工夹具的类别
-        public ActionResult Edit()
+        public ActionResult EditFamilyRecord()
         {
             int FamilyID = Convert.ToInt32(Request["FamilyID"]);
             string FamilyName = Request["FamilyName"];
@@ -52,14 +54,14 @@ namespace FixtureManagement.Controllers
         }
 
         //创建工夹具的类别
-        public ActionResult Add()
+        public ActionResult AddFamilyRecord()
         {
             int FamilyID = Convert.ToInt32(Request["FamilyID"]);
             string FamilyName = Request["FamilyName"];
             FixtureFamily family = new FixtureFamily();
             family.FamilyID = FamilyID;
             family.FamilyName = FamilyName;
-            context.Family.Add(family);
+            context.Familys.Add(family);
             context.SaveChanges();
 
             var data = new
@@ -70,6 +72,8 @@ namespace FixtureManagement.Controllers
 
         }
 
-
+        public ActionResult DeleteFamilyRecord() {
+            return null;
+        }
     }
 }
