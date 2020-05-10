@@ -9,6 +9,6 @@ namespace FixtureManagement.Models
     {
         public int ID { get; set; }
         public int RoleID { get; set; }
-        public int MenuID { get; set; }
+        public string MenuID { get; set; }
     }
 }

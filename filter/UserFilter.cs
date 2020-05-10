@@ -1,4 +1,5 @@
-﻿using FixtureManagement.Service;
+﻿using FixtureManagement.Common;
+using FixtureManagement.Service;
 using FixtureManagement.Service.impl;
 using System;
 using System.Collections.Generic;
@@ -16,36 +17,37 @@ namespace FixtureManagement.filter
         //action执行前
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            //string _userCode = (string)filterContext.HttpContext.Session["CurrentUser"];
-            //var _userMenu = userService.GetMenuNodesByCode(_userCode);
-            //string controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
-            //string actionName = filterContext.ActionDescriptor.ActionName;
-            //var bAjax = filterContext.HttpContext.Request.IsAjaxRequest();
-            //if (filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), true))
-            ////判断是否Action判断是否跳过授权过滤器
-            //{
-            //    return;
-            //}
-            //foreach (var _menu in _userMenu)
-            //{
-            //    if (_menu.ControllerName == controllerName && _menu.ActionName == actionName)
-            //    {
-            //        return;
-            //    }
-            //}
-            //if (!bAjax)
-            //    filterContext.Result = new RedirectResult("../Home/Index");
-            //else
-            //{
-            //    var result = new
-            //    {
-            //        success = false,
-            //        msg = "尊敬的用户,你没有该权限"
-            //    };
-            //    JsonResult jsonResult = new JsonResult();
-            //    jsonResult.Data = result;
-            //    filterContext.Result = jsonResult;
-            //}
+            var user=(CurrentUserWorkCell)filterContext.HttpContext.Session["CurrentUser"];
+            string _userCode = user.code;
+            var _userMenu = userService.GetMenuNodesByCode(_userCode,user.workCell);
+            string controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
+            string actionName = filterContext.ActionDescriptor.ActionName;
+            var bAjax = filterContext.HttpContext.Request.IsAjaxRequest();
+            if (filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), true))
+            //判断是否Action判断是否跳过授权过滤器
+            {
+                return;
+            }
+            foreach (var _menu in _userMenu)
+            {
+                if (_menu.ControllerName == controllerName && _menu.ActionName == actionName)
+                {
+                    return;
+                }
+            }
+            if (!bAjax)
+                filterContext.Result = new RedirectResult("../Home/Index");
+            else
+            {
+                var result = new
+                {
+                    success = false,
+                    msg = "尊敬的用户,你没有该权限"
+                };
+                JsonResult jsonResult = new JsonResult();
+                jsonResult.Data = result;
+                filterContext.Result = jsonResult;
+            }
             base.OnActionExecuting(filterContext);
         }
         //action 执行后

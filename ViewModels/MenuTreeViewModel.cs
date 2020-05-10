@@ -13,8 +13,8 @@ namespace FixtureManagement.ViewModels
 
         //public List<MenuTreeViewModel> nodes = new List<MenuTreeViewModel>();
        
-        public int id { get; set; }
-        public int pId { get; set; }
+        public string id { get; set; }
+        public string pId { get; set; }
         public string name { get; set; }
         public string url { get; set; }
        

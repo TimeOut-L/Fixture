@@ -123,7 +123,7 @@ function getSelectedData(tableId) {
  * @param {any} ItemIDs  待删除的 数据 id
  */
 function confirmOrCancelDeleteData(requestUrl, tableId, ItemIDs) {
-   swal.fire({
+    swal.fire({
         title: '确定删除吗？',
         text: ' 这可能是非常重要的记录！',
         type: 'warning',
@@ -134,20 +134,20 @@ function confirmOrCancelDeleteData(requestUrl, tableId, ItemIDs) {
         cancelButtonText: '取消删除！',
         confirmButtonClass: 'btn btn-success ',
         cancelButtonClass: 'btn btn-danger',
-       buttonsStyling: false
-   }).then(function (isConfirm) {
-       if (isConfirm.value == true) {
-           DeleteRecords(requestUrl, tableId, ItemIDs);
-       } else if (isConfirm.dismiss == 'cancel'){
-           swal.fire({
-               title: '已取消',
-               text: '这会是一个聪明的决定',
-           })
-       }
+        buttonsStyling: false
+    }).then(function (isConfirm) {
+        if (isConfirm.value == true) {
+            DeleteRecords(requestUrl, tableId, ItemIDs);
+        } else if (isConfirm.dismiss == 'cancel') {
+            swal.fire({
+                title: '已取消',
+                text: '这会是一个聪明的决定',
+            })
+        }
         //console.log(isConfirm.value);
         //console.log(isConfirm.dismiss);
-        
-    }) 
+
+    })
 }
 
 /**
@@ -186,10 +186,13 @@ function AddRecord(formId, requestUrl, modalIdOfForm, tableId) {
  * @param {any} ItemIDs  待删除的 数据 id
  */
 function DeleteRecords(requestUrl, tableId, ItemIDs) {
+    console.log(ItemIDs);
     $.ajax({
         url: requestUrl,
         type: "post",
         data: { "ItemIDs": ItemIDs },
+        dataType: "json",
+        traditional: false,
         success: function (result) {
             if (result.success) {
                 RefreshTable(tableId);
@@ -207,32 +210,28 @@ function DeleteRecords(requestUrl, tableId, ItemIDs) {
 }
 
 /**
- * 修改一条记录 
- * @param {any} formId  修改记录表单 的 id
- * @param {any} requestUrl 请求  url
- * @param {any} modalIdOfForm  表单所在模态框
- * @param {any} tableId   记录 所在表格的 table id
+ *  更新记录
+ * @param {any} requestUrl 请求url
+ * @param {any} jsonData    json 数据
  */
-function UpdateRecord(formId, requestUrl, modalIdOfForm, tableId) {
+function UpdateRecord(requestUrl, jsonData) {
     $.ajax({
-        type: "POST",//方法类型
-        url: requestUrl,//url
-        data: $('#' + formId).serialize(),
+        url: requestUrl,
+        type: 'post',
+        data: { "record": jsonData },
+        dataType: "json",
+        traditional: false,
         success: function (result) {
             if (result.success) {
-                $("#" + modalIdOfForm).modal('hide');
-                ResetForm(formId);
-                RefreshTable(tableId);
-                toastr.success('记录修改成功');
-            }
-            else {
+                toastr.success("编辑已保存");
+            } else {
                 toastr.warning(result.msg);
             }
         },
         error: function (e) {
-            toastr.error('记录修改错误');
+            toastr.error("错误");
         }
-    });
+    })
 }
 
 

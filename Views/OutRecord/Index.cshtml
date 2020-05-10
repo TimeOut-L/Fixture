@@ -7,6 +7,7 @@
     <title>Index</title>
     <link href="~/Content/bootstrap-editable.css" />
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css" />
+    <link href="~/Content/diy-bootstraptable.css" rel="stylesheet" />
     <script src="~/Scripts/bootstrap-editable.min.js"></script>
     <!--行内编辑-->
     <!-- Latest compiled and minified JavaScript -->
@@ -28,38 +29,6 @@
     <script src="~/Scripts/common.form.validate.js"></script>
     <script src="~/Scripts/common.bootstraptable.init.js"></script>
 
-    <style>
-        /*模态框 位置及大小修改*/
-        .modal-dialog {
-            margin-top: 5%;
-            width: 350px;
-            height: 550px;
-        }
-
-        .col-sm-2 {
-            margin-left: 1%;
-        }
-
-        div#query {
-            border: 1px solid blue;
-            margin-top: 15px;
-            margin-bottom: 10px;
-            padding-top: 10px;
-        }
-        /*表头样式*/
-        .table .thead-blue th {
-            color: #fff;
-            background-color: #3195f1;
-            border-color: #0d7adf;
-        }
-        /*行 hover*/
-        .table-hover > tbody > tr:nth-child(odd):hover > td,
-        .table-hover > tbody > tr:nth-child(odd):hover > th,
-        .table-hover > tbody > tr:nth-child(even):hover > td,
-        .table-hover > tbody > tr:nth-child(even):hover > th {
-            background-color: aquamarine;
-        }
-    </style>
 </head>
 <body>
     <div class="panel-body" style="padding-bottom:0px;">
@@ -182,7 +151,6 @@
             }
         }
 
-
         //btn_remove 事件
         $("#btn_remove").on("click", function () {
 
@@ -210,32 +178,15 @@
                 Item.Date = row.UsedDate;
                 record.push(Item);
                 console.log(record);
-                $.ajax({
-                    url: "/OutRecord/UpdateOutRecord",
-                    type: 'post',
-                    data: { "record": JSON.stringify(record)},
-                    dataType: "json",
-                    traditional: false,
-                    success: function (result) {
-                        if (result.success) {
-                            toastr.success("编辑已保存");
-                        } else {
-                            toastr.warning(result.msg);
-                        }
-                    },
-                    error: function (e) {
-                        toastr.error("错误");
-                    }
-                })
-
-
+                UpdateRecord("/OutRecord/UpdateOutRecord", JSON.stringify(record));
             },
             'click #btn_delete': function (e, value, row, index) {
                 var ItemIDs = new Array();
-                Item = new Object();
+                var Item = new Object();
                 Item.ID = row.ID;
                 ItemIDs.push(Item);
-                confirmOrCancelDeleteData("/OutRecord/DeleteOutRecords", "outRecordTable", ItemIDs)
+                console.log(ItemIDs);
+                confirmOrCancelDeleteData("/OutRecord/DeleteOutRecords", "outRecordTable", JSON.stringify(ItemIDs));
             }
         }
 
@@ -356,7 +307,7 @@
         $(function () {
             //添加记录表单  设置操作人的值 且不可修改
             $("#operationByName").attr("value", window.sessionStorage.getItem("userName"));
-            $("#operationByName").attr("disabled", "disabled");
+            $("#operationByName").attr("readonly", "readonly");
             var itable = TableInit();//.初始化  Table
         });
     </script>

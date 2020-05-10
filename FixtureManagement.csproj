@@ -252,6 +252,8 @@
     <Compile Include="Models\FixtureFamily.cs" />
     <Compile Include="Models\UserWorkCell.cs" />
     <Compile Include="Models\WorkCell.cs" />
+    <Compile Include="Service\InRecordService.cs" />
+    <Compile Include="Service\impl\InRecordServiceImpl.cs" />
     <Compile Include="ViewModels\MenuTreeViewModel.cs" />
     <Compile Include="Models\MenuNode.cs" />
     <Compile Include="Controllers\FixtureEntityController.cs" />
@@ -290,6 +292,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap-treeview\bootstrap-treeview.css" />
     <Content Include="Content\bootstrap-treeview\bootstrap-treeview.min.css" />
+    <Content Include="Content\diy-bootstraptable.css" />
     <Content Include="Content\fontawesome\css\font-awesome.css" />
     <Content Include="Content\fontawesome\css\font-awesome.min.css" />
     <Content Include="Content\fontawesome\fonts\fontawesome-webfont.svg" />

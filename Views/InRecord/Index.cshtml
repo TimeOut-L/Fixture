@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css" />
+    <link href="~/Content/diy-bootstraptable.css" rel="stylesheet" />
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
     <!-- Latest compiled and minified Locales -->
@@ -24,22 +25,8 @@
     <script src="~/Scripts/common.form.validate.js"></script>
     <script src="~/Scripts/common.bootstraptable.init.js"></script>
     <script src="~/Scripts/common.toastr.init.js"></script>
-    <style>
 
-        /*表头样式*/
-        .table .thead-blue th {
-            color: #fff;
-            background-color: #3195f1;
-            border-color: #0d7adf;
-        }
-        /*行 hover*/
-        .table-hover > tbody > tr:nth-child(odd):hover > td,
-        .table-hover > tbody > tr:nth-child(odd):hover > th,
-        .table-hover > tbody > tr:nth-child(even):hover > td,
-        .table-hover > tbody > tr:nth-child(even):hover > th {
-            background-color: aquamarine;
-        }
-    </style>
+
 </head>
 <body>
     <div class="panel-body" style="padding-bottom:0px;">
@@ -69,43 +56,43 @@
                     <div class="modal-body">
                         <form id="addform" class="form-horizontal" action="##" method="post">
                             <div class=" form-group">
-                                <label class="col-md-2 control-label" for="code">夹具代码</label>
-                                <div class="col-md-4">
+                                <label class="col-xs-4 control-label" for="code">夹具代码</label>
+                                <div class="col-xs-6">
                                     <input class="form-control" name="code" id="code" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label" for="seqID">夹具序列号</label>
-                                <div class="col-md-4">
+                                <label class="col-xs-4  control-label" for="seqID">夹具序列号</label>
+                                <div class="col-xs-6">
                                     <input class="form-control" name="seqID" id="seqID" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label" for="retdByName">归还人</label>
-                                <div class="col-md-4">
+                                <label class="col-xs-4  control-label" for="retByName">归还人</label>
+                                <div class="col-xs-6">
                                     <input class="form-control" name="retByName" id="retByName" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2 control-label" for="operationByName">操作人</label>
-                                <div class="col-md-4">
+                                <label class="col-xs-4 control-label" for="operationByName">操作人</label>
+                                <div class="col-xs-6">
                                     <input class="form-control" name="operationByName" id="operationByName" type="text">
                                 </div>
                             </div>
                             <div class=" form-group">
-                                <label class="col-md-2 control-label" for="prodLineID">产线ID</label>
-                                <div class="col-md-4">
+                                <label class="col-xs-4 control-label" for="prodLineID">产线ID</label>
+                                <div class="col-xs-6">
                                     <input class="form-control" name="prodLineID" id="prodLineID" type="text">
                                 </div>
                             </div>
                             <div class=" form-group">
-                                <label class="col-md-2 control-label" for="retDate">归还日期</label>
-                                <div class="col-md-4">
+                                <label class="col-xs-4 control-label" for="retDate">归还日期</label>
+                                <div class="col-xs-6">
                                     <input class="form-control" name="retDate" id="retDate" type="text">
                                 </div>
                             </div>
                             <div class="form-group modal-footer">
-                                <div class="col-md-6 col-md-offset-3">
+                                <div class="col-xs-6 col-xs-offset-4">
                                     <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
                                     <button type="button" class="btn btn-warning" onclick="addInRecord()">提交</button>
                                 </div>
@@ -119,18 +106,18 @@
 
     <script type="text/javascript">
 
-         //添加g归还记录
+        //添加g归还记录
         function addInRecord() {
             if (CheckFormNull("addform")) {
                 AddRecord("addform", "/InRecord/AddInRecord", "addInRecordModal", "inRecordTable");
             }
         }
 
-         // inRecord 功能暂未完善
+        // inRecord 功能暂未完善
         //btn_remove 事件
         $("#btn_remove").on("click", function () {
             //获取选中数据
-            var jsonData =  getSelectedData("inRecordTable");
+            var jsonData = getSelectedData("inRecordTable");
             if (jsonData == null) {
                 return;
             }
@@ -142,7 +129,18 @@
         window.operationEvents = {
             //编辑事件
             'click #btn_update': function (e, value, row, index) {
-
+                var record = new Array();
+                var Item = new Object();
+                Item.ID = row.ID;
+                Item.Code = row.Code;
+                Item.SeqID = row.SeqID;
+                Item.ByName = row.RetByName;
+                Item.OperationByName = row.OperationByName;
+                Item.ProdLineID = row.ProdLineID;
+                Item.Date = row.RetDate;
+                record.push(Item);
+                console.log(record);
+                UpdateRecord("/InRecord/UpdateInRecord", JSON.stringify(record));
             },
             //删除事件
             'click #btn_delete': function (e, value, row, index) {
@@ -150,7 +148,7 @@
                 Item = new Object();
                 Item.ID = row.ID;
                 ItemIDs.push(Item);
-                  confirmOrCancelDeleteData("/InRecord/DeleteOutRecords", "inRecordTable", ItemIDs)
+                confirmOrCancelDeleteData("/InRecord/DeleteOutRecords", "inRecordTable", ItemIDs)
             }
         }
 
@@ -182,7 +180,7 @@
 
         }, {
             field: 'RetByName',
-            title: '领用人',
+            title: '归还人',
             visable: true,
 
         }, {
@@ -195,7 +193,7 @@
             visable: true
         }, {
             field: 'RetDate',
-            title: '领用日期',
+            title: '归还日期',
             visable: true,
             formatter: function (value, row, index) {
                 return changeDateFormat(value)
@@ -214,16 +212,20 @@
             }
         },]
         /**
-            * table 初始化
-            * */
+         * table 初始化
+         * */
         var TableInit = function () {
-            var inRecordTable = new Object();
-
+            var inRecordTable = new Object();           
             inRecordTable = BoootstrapTableInit("inRecordTable", '/InRecord/ReadInRecords', rowStyle, columns)
             return inRecordTable;
         }
-
+        /**
+         * 调用 table init
+         */
         $(function () {
+            //添加记录表单  设置操作人的值 且不可修改
+            $("#operationByName").attr("value", window.sessionStorage.getItem("userName"));
+            $("#operationByName").attr("readonly", "readonly");
             var itable = TableInit();//.初始化  Table
         });
     </script>

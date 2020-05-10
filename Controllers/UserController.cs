@@ -70,7 +70,7 @@ namespace FixtureManagement.Controllers
             {
 
                 //ParentMenuID=0 则为父亲节点 
-                if (menu.ParentMenuID == 0)
+                if (menu.ParentMenuID.Equals("0"))
                 {
                     index++;
                     MenuTreeViewModel pNode = new MenuTreeViewModel();
