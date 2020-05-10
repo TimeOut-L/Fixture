@@ -244,10 +244,14 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Common\CurrentUserWorkCell.cs" />
+    <Compile Include="Common\InOutEditRecord.cs" />
     <Compile Include="Common\ItemID.cs" />
     <Compile Include="Controllers\ManagerFamilyController.cs" />
     <Compile Include="filter\UserFilter.cs" />
     <Compile Include="Models\FixtureFamily.cs" />
+    <Compile Include="Models\UserWorkCell.cs" />
+    <Compile Include="Models\WorkCell.cs" />
     <Compile Include="ViewModels\MenuTreeViewModel.cs" />
     <Compile Include="Models\MenuNode.cs" />
     <Compile Include="Controllers\FixtureEntityController.cs" />

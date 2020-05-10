@@ -51,6 +51,26 @@ function diyFormatter(value, name) {
     var _a = "<a hre=\"javascript:void(0);\"" + "data-name=\"" + name + "\" data-value=\"" + value + "\" class=\" editable editable-click\">" + value + "</a>";
     return _a;
 }
+/**
+ * 设置select source 
+ * @param {any} requestUrl 请求url
+ * @param {any} jsonData   部分需要数据
+ */
+function getEditableSource(requestUrl, jsonData) {
+    var result = [];
+    $.ajax({
+        url: requestUrl,
+        async: false,
+        type: "get",
+        data: { "_Code": jsonData },
+        success: function (data, status) {
+            $.each(data, function (key, item) {
+                result.push({ value: item.value, text: item.value });
+            });
+        }
+    });
+    return result;
+}
 
 /**
  * 日期格式化

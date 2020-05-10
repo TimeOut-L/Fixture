@@ -1,4 +1,5 @@
-﻿using FixtureManagement.Service;
+﻿using FixtureManagement.Common;
+using FixtureManagement.Service;
 using FixtureManagement.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -25,12 +26,21 @@ namespace FixtureManagement.Controllers
         [ValidateInput(true)]
         public JsonResult GetCurrentUserName()
         {
-            string code = (string)Session["CurrentUser"];
-            string _userName = userService.GetCurrentUserName(code);
+            var user = (CurrentUserWorkCell)Session["CurrentUser"];
+            var _user= userService.GetUserByCode(user.code);
+            if (_user == null)
+            {
+                var error = new
+                {
+                    success = false,
+                    msg = "用户不存在"
+                };
+                return Json(error, JsonRequestBehavior.AllowGet);
+            }
             var data = new
             {
-                //result = true,
-                userName = _userName
+                success = true,
+                userName = _user.Name
             };
             return Json(data, JsonRequestBehavior.AllowGet);
         }
@@ -46,41 +56,15 @@ namespace FixtureManagement.Controllers
         [ValidateInput(true)]
         public ActionResult GetMenuTree()
         {
-            string code = (string)Session["CurrentUser"];
-            var menuList = userService.GetMenuNodesByCode(code);
+            var user = (CurrentUserWorkCell)Session["CurrentUser"];
+            string _code = user.code;
+            string _workCell = user.workCell;
+            var menuList = userService.GetMenuNodesByCode(_code,_workCell);
             /***
              * menuTree 实际上是多棵树
              */
             List<MenuTreeViewModel> menuTrees = new List<MenuTreeViewModel>();
-            //foreach (var menu in menuList)
-            //{
-            //    /***
-            //     * ParentMenuID 为 -1 代表不是菜单节点 只是某个 controller 下的 action
-            //     */
-            //    if (menu.ParentMenuID != -1)
-            //    {
-            //        MenuTreeViewModel pNode = new MenuTreeViewModel();
-            //        pNode.id = menu.MenuID;
-            //        pNode.pId = menu.ParentMenuID;
-            //        pNode.name = menu.Name;
-            //        pNode.nodeIcon = menu.NodeIcon;
-            //        pNode.expandIcon = menu.ExpandIcon;
-            //        pNode.collapseIcon = menu.CollapseIcon;
-
-            //        if (string.IsNullOrWhiteSpace(menu.ControllerName) || string.IsNullOrWhiteSpace(menu.ControllerName))
-            //        {
-            //            pNode.url = "#";
-            //            pNode.open = true;
-            //        }
-            //        else
-            //        {
-            //            pNode.url = "/" + menu.ControllerName + "/" + menu.ActionName;
-            //            pNode.open = false;
-            //        }
-            //        pNode.target = "_self";
-            //        menuTrees.Add(pNode);
-            //    }
-            //}
+                  
             int index = 0;
             foreach (var menu in menuList)
             {
@@ -118,11 +102,11 @@ namespace FixtureManagement.Controllers
                                 lNode.url = "/" + temp.ControllerName + "/" + temp.ActionName;
                             pNode.children.Add(lNode);
                         }
-                    }              
+                    }
                     menuTrees.Add(pNode);
                 }
             }
-            return Json(menuTrees, JsonRequestBehavior.AllowGet);
+            return Json(menuTrees, JsonRequestBehavior.AllowGet);          
         }
     }
 }

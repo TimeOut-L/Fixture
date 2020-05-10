@@ -1,4 +1,5 @@
-﻿using FixtureManagement.Models;
+﻿using FixtureManagement.Common;
+using FixtureManagement.Models;
 using FixtureManagement.Service;
 using System;
 using System.Collections.Generic;
@@ -29,9 +30,10 @@ namespace FixtureManagement.Controllers
         {
             string code = Request["code"];
             string password = Request["password"];
+            string workCell = Request["workCell"].Trim();
             string tipMsg = "";
             
-            if (!userService.LoginValidate(code,password,out tipMsg))
+            if (!userService.LoginValidate(code,password,workCell,out tipMsg))
             {
                 var retData = new
                 {
@@ -47,7 +49,10 @@ namespace FixtureManagement.Controllers
                     success = true,
                     tips = tipMsg
                 };
-                Session["CurrentUser"] = code;
+                CurrentUserWorkCell _user = new CurrentUserWorkCell();
+                _user.code = code;
+                _user.workCell = workCell;
+                Session["CurrentUser"] = _user;
                 return Json(retData, JsonRequestBehavior.AllowGet);
             }                           
         }

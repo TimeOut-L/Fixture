@@ -199,6 +199,35 @@
         window.operationEvents = {
             //编辑事件
             'click #btn_update': function (e, value, row, index) {
+                var record = new Array();
+                var Item = new Object();
+                Item.ID = row.ID;
+                Item.Code = row.Code;
+                Item.SeqID = row.SeqID;
+                Item.ByName = row.UsedByName;
+                Item.OperationByName = row.OperationByName;
+                Item.ProdLineID = row.ProdLineID;
+                Item.Date = row.UsedDate;
+                record.push(Item);
+                console.log(record);
+                $.ajax({
+                    url: "/OutRecord/UpdateOutRecord",
+                    type: 'post',
+                    data: { "record": JSON.stringify(record)},
+                    dataType: "json",
+                    traditional: false,
+                    success: function (result) {
+                        if (result.success) {
+                            toastr.success("编辑已保存");
+                        } else {
+                            toastr.warning(result.msg);
+                        }
+                    },
+                    error: function (e) {
+                        toastr.error("错误");
+                    }
+                })
+
 
             },
             'click #btn_delete': function (e, value, row, index) {
@@ -206,7 +235,6 @@
                 Item = new Object();
                 Item.ID = row.ID;
                 ItemIDs.push(Item);
-                console.log(ItemIDs);
                 confirmOrCancelDeleteData("/OutRecord/DeleteOutRecords", "outRecordTable", ItemIDs)
             }
         }
@@ -217,21 +245,7 @@
             return { classes: classes[index % classes.length] };
         }
 
-        function getEditableSource(requestUrl, jsonData) {
-            var result = [];
-            $.ajax({
-                url: requestUrl,
-                async: false,
-                type: "get",
-                data: { "temp": jsonData },
-                success: function (data, status) {                    
-                    $.each(data, function (key, item) {
-                        result.push({ value: item.value, text: item.value });
-                    });
-                }
-            });
-            return result;
-        }
+
         /**
          * 数据列
          * */
@@ -247,6 +261,7 @@
             field: 'Code',
             title: '夹具代码',
             visable: true,
+            // editable 初始化
             editable: {
                 type: 'select',
                 title: '夹具代码',
@@ -257,7 +272,7 @@
                 noeditFormatter: function (value, row, index) {
                     return diyFormatter(value, 'Code');
                 },
-                source: function (value, row, index) {                  
+                source: function (value, row, index) {
                     return getEditableSource("/OutRecord/GetFixtureCode", null)
                 }
             }
@@ -266,6 +281,7 @@
             title: '夹具序列号',
             visable: true,
             align: 'center',
+            // editable 初始化
             editable: {
                 type: 'select',
                 title: '夹具序列号',
@@ -275,14 +291,14 @@
                 validate: function (value) {
                     if (!value) return '夹具序列号不能为空';
                 },
-                source: function (value, row, index) {                  
-                    var data = $("#outRecordTable").bootstrapTable('getData');                
+                source: function (value, row, index) {
+                    var data = $("#outRecordTable").bootstrapTable('getData');
                     //2.获取所在的索引
-                    var index = $(this).parents('tr').data('index');               
+                    var index = $(this).parents('tr').data('index');
                     //获取当前行数据
-                    var datas = data[index];                  
+                    var datas = data[index];
                     //获取当前行的某个数据
-                    var _code = datas.Code;                
+                    var _code = datas.Code;
                     return getEditableSource("/OutRecord/GetFixtureSeqIDByCode", _code);
                 }
             }
@@ -338,6 +354,7 @@
          * 调用 TableInit
          * */
         $(function () {
+            //添加记录表单  设置操作人的值 且不可修改
             $("#operationByName").attr("value", window.sessionStorage.getItem("userName"));
             $("#operationByName").attr("disabled", "disabled");
             var itable = TableInit();//.初始化  Table

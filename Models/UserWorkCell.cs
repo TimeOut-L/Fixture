@@ -5,11 +5,11 @@ using System.Web;
 
 namespace FixtureManagement.Models
 {
-    public class UserRole
+    public class UserWorkCell
     {
         public int ID { get; set; }
-        public string UserCode { get; set; }
-        public int RoleID { get; set;}
-        public string WorkCell { get; set; }
+        public string Code { get; set; }
+        public int WorkCellID { get; set; }
+
     }
 }

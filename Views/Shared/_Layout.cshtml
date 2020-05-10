@@ -228,9 +228,17 @@
                     type: "post",
                     async: false,
                     url: "/User/GetCurrentUserName",
-                    success: function (result) {                        
-                        window.sessionStorage.setItem("userName", result.userName);                    
-                        name = window.sessionStorage.getItem("userName");                     
+                    success: function (result) {
+                        if (result.success) {
+                            window.sessionStorage.setItem("userName", result.userName);
+                            name = window.sessionStorage.getItem("userName");
+                        }
+                        else {
+                            toastr.warning(result.msg);
+                        }
+                    },
+                    error: function (e) {
+                        toastr.error("请求错误");
                     }
                 });
             }

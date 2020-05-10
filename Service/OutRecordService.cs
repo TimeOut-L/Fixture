@@ -40,6 +40,9 @@ namespace FixtureManagement.Service
         /// 获取所有记录
         /// </summary>
         /// <returns></returns>
-        List<FixtureOutRecord> GetAllOutRecordWithWorkCell(int _workCellID);
+        List<FixtureOutRecord> GetAllOutRecordWithWorkCell(string _workCell);
+
+        FixtureOutRecord FindByID(int ID);
+        List<FixtureOutRecord> QueryOutRecord();
     }
 }
