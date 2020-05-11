@@ -51,8 +51,9 @@ function diyFormatter(value, name) {
     var _a = "<a hre=\"javascript:void(0);\"" + "data-name=\"" + name + "\" data-value=\"" + value + "\" class=\" editable editable-click\">" + value + "</a>";
     return _a;
 }
+
 /**
- * 设置select source 
+ * 获取select source  数据 及 data list 数据
  * @param {any} requestUrl 请求url
  * @param {any} jsonData   部分需要数据
  */
@@ -69,8 +70,26 @@ function getEditableSource(requestUrl, jsonData) {
             });
         }
     });
+    //console.log(result);
     return result;
 }
+
+/**
+ * 初始化 datalist 对象 可进一步扩展为动态加载暂未实现
+ * @param {any} requestUrl  数据源 url
+ * @param {any} jsonData    可选参数 可为空
+ * @param {any} dataListID   datalist id
+ */
+function InitDataList(requestUrl, jsonData, dataListID) {
+    var result = getEditableSource(requestUrl, jsonData);
+   // console.log(result);
+    $("#" + dataListID).empty();
+    $.each(result, function (index, item) {
+        var option = "<option label=\"" + item.text + "\"value=\"" + item.value + "\"</option>";
+        $("#" + dataListID).append(option);
+    })
+}
+
 
 /**
  * 日期格式化
@@ -101,7 +120,7 @@ function getSelectedData(tableId) {
     //存储数据
     var ItemIDs = new Array();
     //console.log(rows);
-    if (rows.length == 0) {// rows 主要是为了判断是否选中，下面的else内容才是主要
+    if (rows.length == 0) {  // rows 主要是为了判断是否选中，下面的 else 内容才是主要
         toastr.warning("请先选择要删除的记录!");
         return;
     } else {
@@ -114,6 +133,7 @@ function getSelectedData(tableId) {
     }
     return JSON.stringify(ItemIDs);
 }
+
 
 /**
  * 删除确认框  可扩展为 通用弹出框 设置参数 传入对应值即可
