@@ -82,7 +82,7 @@ function getEditableSource(requestUrl, jsonData) {
  */
 function InitDataList(requestUrl, jsonData, dataListID) {
     var result = getEditableSource(requestUrl, jsonData);
-   // console.log(result);
+    // console.log(result);
     $("#" + dataListID).empty();
     $.each(result, function (index, item) {
         var option = "<option label=\"" + item.text + "\"value=\"" + item.value + "\"</option>";
@@ -146,14 +146,16 @@ function confirmOrCancelDeleteData(requestUrl, tableId, ItemIDs) {
     swal.fire({
         title: '确定删除吗？',
         text: ' 这可能是非常重要的记录！',
-        type: 'warning',
+        icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: '确定删除！',
         cancelButtonText: '取消删除！',
-        confirmButtonClass: 'btn btn-success ',
-        cancelButtonClass: 'btn btn-danger',
+        customClass: {
+            confirmButton: 'btn btn-success ',
+            cancelButton: 'btn btn-danger',
+        },
         buttonsStyling: false
     }).then(function (isConfirm) {
         if (isConfirm.value == true) {

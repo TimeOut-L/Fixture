@@ -6,25 +6,25 @@
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
 
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css" />
+    <link rel="stylesheet" href="~/Content/bootstrap-table.min.css" />
     <link href="~/Content/diy-bootstraptable.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-editable.css" />
     <script src="~/Scripts/bootstrap-editable.min.js"></script>
     <!--行内编辑-->
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
+    <script src="~/Scripts/bootstrap-table.min.js"></script>
     <!-- Latest compiled and minified Locales -->
-    <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="~/Scripts/bootstrap-table-zh-CN.min.js"></script>
     <script src="~/Scripts/bootstrap-table-editable.min.js"></script>
-    <!--最新版本会有 warning -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.js"></script>
-
+    <!-- 弹出框插件-->
+    <script src="~/Scripts/sweetalert2.min.js"></script>
     <!-- 消息提示插件：toastr.js -->
     <link href="~/Content/toastr/toastr.min.css" rel="stylesheet" />
     <script src="~/Scripts/toastr.min.js" type="text/javascript"></script>
-    <script src="~/Scripts//es6-promise.min.js "></script>
-    <script src="~/Scripts//es6-promise.auto.min.js "></script>
+    <script src="~/Scripts/es6-promise.min.js "></script>
+    <script src="~/Scripts/es6-promise.auto.min.js "></script>
+    <!-- 图表插件 echarts -->
+    <script src="~/Scripts/echarts/echarts.min.js"></script>
 
     <script src="~/Scripts/common.toastr.init.js"></script>
     <script src="~/Scripts/common.form.validate.js"></script>
@@ -81,10 +81,19 @@
                     <i></i>
                     <span>蓝色可编辑</span>
                 </button>
+                <button id="btn_chart" type="button" class="btn btn-primary">
+                    <i class="fa fa-bar-chart-o" aria-hidden="true"></i>
+                    <span>图表</span>
+                </button>
             </div>
 
             <table id="outRecordTable" class="table-striped">
             </table>
+
+            <!--图表界面-->
+            <div id="outRecordChart">
+
+            </div>
             <!-- 添加 modal 框-->
             <div class="modal fade" id="addOutRecordModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog ">
@@ -160,12 +169,12 @@
             }
         }
 
-        //datalist 对象
+        //datalist codeList 对象
         $(function () {
              InitDataList("/OutRecord/GetFixtureCode", null,"codeList");
         })
 
-
+        //根据code 初始化 seqIDList
         $("#code").change(function () {
             var _code = $("#code").val();
             if (_code == null) {
@@ -174,6 +183,8 @@
             }
             InitDataList("/OutRecord/GetFixtureSeqIDByCode", _code ,"seqIDList");
         })
+
+
         //btn_remove 事件
         $("#btn_remove").on("click", function () {
 

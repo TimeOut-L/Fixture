@@ -11,6 +11,7 @@ namespace FixtureManagement.Controllers
     [LoginCheckFilter]
     public class HomeController:Controller
     {
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View();

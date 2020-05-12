@@ -311,6 +311,12 @@
     <Content Include="Scripts\bootstrap-editable.min.js" />
     <Content Include="Scripts\bootstrap-table-editable.js" />
     <Content Include="Scripts\bootstrap-table-editable.min.js" />
+    <Content Include="Content\bootstrap-table.css" />
+    <Content Include="Scripts\bootstrap-table-zh-CN.js" />
+    <Content Include="Scripts\bootstrap-table-zh-CN.min.js" />
+    <Content Include="Scripts\bootstrap-table.js" />
+    <Content Include="Content\bootstrap-table.min.css" />
+    <Content Include="Scripts\bootstrap-table.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\fontawesome\fonts\fontawesome-webfont.eot" />
@@ -322,10 +328,20 @@
     <Content Include="Content\fonts\icomoon.ttf" />
     <Content Include="Content\fonts\icomoon.woff" />
     <Content Include="Scripts\common.bootstraptable.init.js" />
+    <Content Include="Scripts\echarts\echarts.common.js" />
+    <Content Include="Scripts\echarts\echarts.common.min.js" />
+    <Content Include="Scripts\echarts\echarts.js" />
+    <Content Include="Scripts\echarts\echarts.min.js" />
+    <Content Include="Scripts\echarts\echarts.simple.js" />
+    <Content Include="Scripts\echarts\echarts.simple.min.js" />
     <Content Include="Scripts\es6-promise.auto.map" />
     <Content Include="Scripts\es6-promise.auto.min.map" />
     <Content Include="Scripts\es6-promise.map" />
     <Content Include="Scripts\es6-promise.min.map" />
+    <Content Include="Scripts\echarts\echarts.js.map" />
+    <Content Include="Scripts\echarts\extension\bmap.js.map" />
+    <Content Include="Scripts\echarts\extension\dataTool.js.map" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\common.form.validate.js" />
     <Content Include="Scripts\common.toastr.init.js" />
@@ -334,6 +350,10 @@
     <Content Include="Scripts\es6-promise.auto.min.js" />
     <Content Include="Scripts\es6-promise.js" />
     <Content Include="Scripts\es6-promise.min.js" />
+    <Content Include="Scripts\echarts\extension\bmap.js" />
+    <Content Include="Scripts\echarts\extension\bmap.min.js" />
+    <Content Include="Scripts\echarts\extension\dataTool.js" />
+    <Content Include="Scripts\echarts\extension\dataTool.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -375,7 +395,6 @@
     <Content Include="Views\ManagerFamily\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>

@@ -12,7 +12,9 @@
     <script src="~/Scripts/bootstrap.min.js"></script>
     <link href="~/Content/Layout.css" rel="stylesheet">
     <link href="~/Content/fontawesome/css/font-awesome.min.css" rel="stylesheet">
-   
+    <link href="~/Content/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <!--弹出框插件-->
+    <script src="~/Scripts/sweetalert2.min.js"></script>
 
     <style>
     </style>
@@ -72,7 +74,6 @@
             <div id="sidebar" class="nav-collapse ">
 
                 <ul class="sidebar-menu" id="nav-accordion">
-
                 </ul>
 
 
@@ -131,14 +132,16 @@
             swal.fire({
                 title: '确定退出吗？',
                 text: '您将退出此网站,我们会通过邮箱的方式给您发送最新消息',
-                type: 'warning',
+                icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: '确定退出',
                 cancelButtonText: '取消退出',
-                confirmButtonClass: 'btn btn-success ',
-                cancelButtonClass: 'btn btn-danger',
+                customClass: {
+                    confirmButton: 'btn btn-success ',
+                    cancelButton: 'btn btn-danger',
+                },
                 buttonsStyling: false
             }).then(function (isConfirm) {
                 if (isConfirm.value === true) {
@@ -186,11 +189,11 @@
                                 var _ul_li = "<li id=\"" + pos + "\"></li>";
                                 var _ul_li_a = "<a href=\"" + item.children[i].url + "\"></a>";
                                 var _ul_li_a_i = "<i class=\"" + item.children[i].nodeIcon + "\"" + " aria-hidden=\"true\"></i>";
-                                var _ul_li_a_span = "<span>" +item.children[i].name + "</span>";
+                                var _ul_li_a_span = "<span>" + item.children[i].name + "</span>";
                                 $("ul#Collapse_" + index).append(_ul_li);
                                 $("ul#Collapse_" + index + " li#" + pos).append(_ul_li_a);
                                 $("ul#Collapse_" + index + " li#" + pos + " a").append(_ul_li_a_i);
-                                $("ul#Collapse_" + index + " li#" + pos +" a").append(_ul_li_a_span);
+                                $("ul#Collapse_" + index + " li#" + pos + " a").append(_ul_li_a_span);
                                 pos++;
                             }
                         }
@@ -222,8 +225,8 @@
 
         //获取用户姓名
         $(function () {
-            var name = window.sessionStorage.getItem("userName");         
-            if (name == null || name== "undefined") {
+            var name = window.sessionStorage.getItem("userName");
+            if (name == null || name == "undefined") {
                 $.ajax({
                     type: "post",
                     async: false,
