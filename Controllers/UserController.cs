@@ -1,4 +1,5 @@
 ﻿using FixtureManagement.Common;
+using FixtureManagement.filter;
 using FixtureManagement.Service;
 using FixtureManagement.ViewModels;
 using System;
@@ -9,10 +10,12 @@ using System.Web.Mvc;
 
 namespace FixtureManagement.Controllers
 {
+    [LoginCheckFilter]
+    [UserFilter]
     public class UserController : Controller
     {
         public UserService userService { get; set; }
-        // GET: User
+        // GET: 用户管理
         public ActionResult Index()
         {
             return View();
@@ -45,12 +48,14 @@ namespace FixtureManagement.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
+
         [HttpPost]
         [ValidateInput(true)]
-        public ActionResult GetUser()
+        public ActionResult GetAllUserWithWorkCell()
         {
             return null;
         }
+
 
         [HttpPost]
         [ValidateInput(true)]

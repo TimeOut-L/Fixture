@@ -41,6 +41,8 @@ namespace FixtureManagement.Controllers
             string code = user.code;
             //var _user = userService.GetUserByCode(code);
             var list = outRecordService.GetAllOutRecordWithWorkCell(user.workCell);
+            
+           
             return Json(list, JsonRequestBehavior.AllowGet);        
        }
 

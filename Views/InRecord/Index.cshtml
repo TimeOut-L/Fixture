@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
+    <title>归还记录管理</title>
 
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css" />
     <link href="~/Content/diy-bootstraptable.css" rel="stylesheet" />
@@ -81,10 +81,14 @@
             </button>
         </div>
 
-        <!-- <button type="button" id="download" style="margin-left:50px" id="btn_download" class="btn btn-primary" onClick ="$(‘#myTable‘).tableExport({ type: ‘excel‘, escape: ‘false‘ })">数据导出</button> -->
+        <!-- 归还记录 表格 -->
         <table id="inRecordTable" class="table-striped">
         </table>
 
+        <!-- 归还数据图 -->
+        <div id="inRecordChart">
+
+        </div>
         <!-- 添加 modal-->
         <div class="modal fade" id="addInRecordModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">

@@ -393,10 +393,9 @@
     <Content Include="Views\Home\Error.cshtml" />
     <Content Include="Scripts\toastr.js.map" />
     <Content Include="Views\ManagerFamily\Index.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\User\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -4,8 +4,9 @@
  * @param {any} tableId  table id
  * @param {any} requestUrl  初始化 url
  * @param {any} dataColumns  数据列
+ * @param {any} queryParams  查询参数
  */
-function BoootstrapTableInit(tableId, requestUrl, rowStyle, dataColumns, ) {
+function BoootstrapTableInit(tableId, requestUrl, rowStyle, dataColumns) {
     $("#" + tableId).bootstrapTable({
         url: requestUrl,
         method: 'post',
@@ -13,21 +14,22 @@ function BoootstrapTableInit(tableId, requestUrl, rowStyle, dataColumns, ) {
         rowStyle: rowStyle, //行样式
         theadClasses: "thead-blue",  //设置thead-blue为表头样式
         cache: false, //禁用缓存
-        pagination: true,//关闭分页
+        pagination: true, //是否显示分页
         showFooter: false,//是否显示列脚
-        showPaginationSwitch: false, //是否显示 数据条数选择框
+        showPaginationSwitch: true,  //  是否显 示  数据条数选择框
         sortable: true,                      //是否启用排序
-        sortOrder: "asc",                    //排序方式
+        sortOrder: "asc",                 //排序方式
+        sidePagination: "client",        // 分页方式：client客户端分页，server服务端分页（*）
         search: true, //启用搜索
         showSearchButton: true,  //
         showFullscreen: true,    // 全屏按钮
-        showToggle: true,//显示详细视图和列表
+        showToggle: true, //显示详细视图和列表
         showColumns: true,
         showRefresh: true, //显示刷新按钮
-        clickToSelect: true,  //点击选中 checkbox
+        clickToSelect: true,   //点击选中 checkbox
         pageNumber: 1,  //初始化加载第一页，默认第一页
         pageSize: 7,    //每页的记录行数
-        pageList: [3, 5, 7, 9, 'ALL'],   //可供选择的页面显示条数
+        pageList: [1, 3, 5, 7, 9, 'ALL'],    //可供选择的页面显示条数
         maintainSelected: true,  //记住选中项即使翻页
         paginationPreText: "上一页",
         paginationNextText: "下一页",
@@ -39,6 +41,7 @@ function BoootstrapTableInit(tableId, requestUrl, rowStyle, dataColumns, ) {
         //onDblClickCell: function (field, value, row, $element) {
         //    alert(value);
         //}
+        //queryParams: queryParams
     });
 }
 
