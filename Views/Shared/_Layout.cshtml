@@ -16,8 +16,13 @@
     <!--弹出框插件-->
     <script src="~/Scripts/sweetalert2.min.js"></script>
 
-    <style>
-    </style>
+
+    <link href="~/Content/toastr/toastr.min.css" rel="stylesheet" />
+    <script src="~/Scripts/toastr.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/es6-promise.min.js "></script>
+    <script src="~/Scripts/es6-promise.auto.min.js "></script>
+    <script src="~/Scripts/common.toastr.init.js"></script>
+   
 </head>
 
 <body style="background-color:antiquewhite">
@@ -151,6 +156,7 @@
                         success: function (result) {
                             if (result.success) {
                                 alert(result.tips);
+                                window.sessionStorage.removeItem("userName");
                                 window.location.href = "/Login/Index";
                             }
                         }
@@ -168,7 +174,7 @@
                 url: "/User/GetMenuTree",
                 success: function (result) {
                     treeNodes = result;
-                    //console.log(treeNodes);
+                    console.log(treeNodes);
                     $.each(result, function (index, item) {
                         // 只考虑到二级菜单 需抽取为js 函数
                         var index = 1;

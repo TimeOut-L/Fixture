@@ -10,8 +10,8 @@ function BoootstrapTableInit(tableId, requestUrl, rowStyle, dataColumns) {
     $("#" + tableId).bootstrapTable({
         url: requestUrl,
         method: 'post',
-        toolbar: '#toolbar',//工具列
-        rowStyle: rowStyle, //行样式
+        toolbar: '#toolbar', //工具列
+        rowStyle: rowStyle,  //行样式
         theadClasses: "thead-blue",  //设置thead-blue为表头样式
         cache: false, //禁用缓存
         pagination: true, //是否显示分页
@@ -19,7 +19,7 @@ function BoootstrapTableInit(tableId, requestUrl, rowStyle, dataColumns) {
         showPaginationSwitch: true,  //  是否显 示  数据条数选择框
         sortable: true,                      //是否启用排序
         sortOrder: "asc",                 //排序方式
-        sidePagination: "client",        // 分页方式：client客户端分页，server服务端分页（*）
+        sidePagination: "client",         // 分页方式：client客户端分页，server服务端分页（*）
         search: true, //启用搜索
         showSearchButton: true,  //
         showFullscreen: true,    // 全屏按钮

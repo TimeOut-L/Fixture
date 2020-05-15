@@ -16,6 +16,7 @@ namespace FixtureManagement.Controllers
     {
         public UserService userService { get; set; }
         // GET: 用户管理
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View();
@@ -27,6 +28,7 @@ namespace FixtureManagement.Controllers
         /// <returns>当前登录用户名</returns>
         [HttpPost]
         [ValidateInput(true)]
+        [AllowAnonymous]
         public JsonResult GetCurrentUserName()
         {
             var user = (CurrentUserWorkCell)Session["CurrentUser"];
@@ -49,16 +51,29 @@ namespace FixtureManagement.Controllers
         }
 
 
+        /// <summary>
+        ///Admin 管理该部门用户
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [ValidateInput(true)]
-        public ActionResult GetAllUserWithWorkCell()
+        [AllowAnonymous]
+        public ActionResult ReadUsers()
         {
-            return null;
+            var _user = (CurrentUserWorkCell)Session["CurrentUser"];
+            var list = userService.GetAllUserWithWorkCell(_user.workCell);
+            return Json(list,JsonRequestBehavior.AllowGet);
         }
 
 
+        /// <summary>
+        /// 得到用户菜单树
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [ValidateInput(true)]
+        [AllowAnonymous]
         public ActionResult GetMenuTree()
         {
             var user = (CurrentUserWorkCell)Session["CurrentUser"];

@@ -33,7 +33,7 @@ namespace FixtureManagement.Controllers
         /// 读取归还记录
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         public ActionResult ReadInRecords()
         {
             var user = (CurrentUserWorkCell)Session["CurrentUser"];

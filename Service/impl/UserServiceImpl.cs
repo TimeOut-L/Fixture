@@ -1,5 +1,6 @@
 ﻿using FixtureManagement.Models;
 using FixtureManagement.Models.Context;
+using FixtureManagement.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,9 @@ namespace FixtureManagement.Service.impl
         public bool LoginValidate(string code, string password, string workCell, out string msg)
         {
             var _user = context.Users.Find(code);
-            var _workList = from w in context.WorkCells
-                            where (from uw in context.UserWorkCells where uw.Code == code select uw.WorkCellID)
-                            .Contains(w.WorkCellID)
-                            select w.WorkCellName;
+            var _workList = from ur in context.UserRoles
+                            where ur.UserCode == code
+                            select ur.WorkCell;                                                     
             if (_user == null)
             {
                 msg = "用户不存在!";
@@ -55,13 +55,45 @@ namespace FixtureManagement.Service.impl
         public List<MenuNode> GetMenuNodesByCode(string code, string workCell)
         {
             var menuList = from mn in context.MenuNodes
-                           where(from rm in context.RoleMenus
-                                 where(from ur in context.UserRoles
-                                       where ur.UserCode == code && ur.WorkCell==workCell select ur.RoleID)
-                                        .Contains(rm.RoleID)select rm.MenuID)
+                           where (from rm in context.RoleMenus
+                                  where (from ur in context.UserRoles
+                                         where ur.UserCode == code && ur.WorkCell == workCell
+                                         select ur.RoleID)
+                                         .Contains(rm.RoleID)
+                                  select rm.MenuID)
                                         .Contains(mn.MenuID)
                            select mn;
             return menuList.ToList();
+        }
+
+        public List<UserViewModel> GetAllUserWithWorkCell(string workCell)
+        {
+            var list = from u in context.Users
+                       join ur in context.UserRoles on u.Code equals (ur.UserCode)
+                       join r in context.Roles on ur.RoleID equals (r.RoleID)
+                       where ur.WorkCell==workCell
+                       select new
+                       {
+                           ID = ur.ID,
+                           Code = ur.UserCode,
+                           Password = u.Password,
+                           Name = u.Name,
+                           RoleName = r.RoleName,
+                           WorkCell = ur.WorkCell,
+                       };
+            List<UserViewModel> userViews = new List<UserViewModel>();
+            foreach (var item in list)
+            {
+                UserViewModel user = new UserViewModel();
+                user.ID = item.ID;
+                user.Code = item.Code;
+                user.Password = item.Password;
+                user.Name = item.Name;
+                user.RoleName = item.RoleName;
+                user.WorkCell = item.WorkCell;
+                userViews.Add(user);
+            }
+            return userViews;
         }
     }
 }

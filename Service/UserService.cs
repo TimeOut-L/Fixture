@@ -1,4 +1,5 @@
 ﻿using FixtureManagement.Models;
+using FixtureManagement.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,12 @@ namespace FixtureManagement.Service
         List<MenuNode> GetMenuNodesByCode(string code,string workCell);
         //List<string> GetRoleByCode(string code);
 
-        //List<Ro>
+        
+        /// <summary>
+        ///  读取用户相关信息
+        /// </summary>
+        /// <param name="workCell">admin 所在部门</param>
+        /// <returns></returns>
+        List<UserViewModel> GetAllUserWithWorkCell(string workCell);
     }
 }

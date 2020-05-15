@@ -250,7 +250,6 @@
     <Compile Include="Controllers\ManagerFamilyController.cs" />
     <Compile Include="filter\UserFilter.cs" />
     <Compile Include="Models\FixtureFamily.cs" />
-    <Compile Include="Models\UserWorkCell.cs" />
     <Compile Include="Models\WorkCell.cs" />
     <Compile Include="Service\InRecordService.cs" />
     <Compile Include="Service\impl\InRecordServiceImpl.cs" />
@@ -282,6 +281,7 @@
     <Compile Include="Service\impl\UserServiceImpl.cs" />
     <Compile Include="Service\OutRecordService.cs" />
     <Compile Include="Service\UserService.cs" />
+    <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\data.sql" />
