@@ -175,9 +175,9 @@
                 success: function (result) {
                     treeNodes = result;
                     console.log(treeNodes);
-                    $.each(result, function (index, item) {
+                    $.each(result, function (index,item) {
                         // 只考虑到二级菜单 需抽取为js 函数
-                        var index = 1;
+                        var index = index+1;
                         var _li = "<li class=\"" + "sub-menu " + index + " active\"" + " role=\"" + "presentation\"></li>";
                         var _a = "<a href=\"" + item.url + "\""
                             + "class=\"" + "nav-header collapsed \""
@@ -192,18 +192,25 @@
                             var pos = 1;
                             $(".sub-menu." + index).append(_ul);
                             for (var i = 0; i < item.children.length; i++) {
-                                var _ul_li = "<li id=\"" + pos + "\"></li>";
+                                var _ul_li = "<li class=\"" + pos + "\"></li>";
+                                console.log(_ul_li);
                                 var _ul_li_a = "<a href=\"" + item.children[i].url + "\"></a>";
+                                 console.log(_ul_li_a);
                                 var _ul_li_a_i = "<i class=\"" + item.children[i].nodeIcon + "\"" + " aria-hidden=\"true\"></i>";
+                                  console.log(_ul_li_a_i);
                                 var _ul_li_a_span = "<span>" + item.children[i].name + "</span>";
+                                console.log(_ul_li_a_span);
+                                console.log(index);
                                 $("ul#Collapse_" + index).append(_ul_li);
-                                $("ul#Collapse_" + index + " li#" + pos).append(_ul_li_a);
-                                $("ul#Collapse_" + index + " li#" + pos + " a").append(_ul_li_a_i);
-                                $("ul#Collapse_" + index + " li#" + pos + " a").append(_ul_li_a_span);
+                                
+                                $("ul#Collapse_" + index + " li." + pos).append(_ul_li_a);
+                                $("ul#Collapse_" + index + " li." + pos + " a").append(_ul_li_a_i);
+                                $("ul#Collapse_" + index + " li." + pos + " a").append(_ul_li_a_span);
+                                
                                 pos++;
                             }
                         }
-                        index++;
+                       
                     })
                 }
             })

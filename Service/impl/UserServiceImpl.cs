@@ -71,7 +71,7 @@ namespace FixtureManagement.Service.impl
             var list = from u in context.Users
                        join ur in context.UserRoles on u.Code equals (ur.UserCode)
                        join r in context.Roles on ur.RoleID equals (r.RoleID)
-                       where ur.WorkCell==workCell
+                       where ur.WorkCell == workCell
                        select new
                        {
                            ID = ur.ID,
@@ -81,6 +81,7 @@ namespace FixtureManagement.Service.impl
                            RoleName = r.RoleName,
                            WorkCell = ur.WorkCell,
                        };
+            list = list.Distinct();
             List<UserViewModel> userViews = new List<UserViewModel>();
             foreach (var item in list)
             {
@@ -91,7 +92,10 @@ namespace FixtureManagement.Service.impl
                 user.Name = item.Name;
                 user.RoleName = item.RoleName;
                 user.WorkCell = item.WorkCell;
-                userViews.Add(user);
+                if (!userViews.Contains(user))
+                {
+                    userViews.Add(user);
+                }
             }
             return userViews;
         }

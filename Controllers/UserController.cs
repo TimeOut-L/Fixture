@@ -88,7 +88,6 @@ namespace FixtureManagement.Controllers
             int index = 0;
             foreach (var menu in menuList)
             {
-
                 //ParentMenuID=0 则为父亲节点 
                 if (menu.ParentMenuID.Equals("0"))
                 {

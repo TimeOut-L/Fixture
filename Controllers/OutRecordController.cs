@@ -212,7 +212,7 @@ namespace FixtureManagement.Controllers
             string code = user.code;
             var _user = userService.GetUserByCode(code);
             var codes = from fd in context.FixtureDefinitions
-                        where (from w in context.WorkCells where w.WorkCellName== user.workCell select w.WorkCellID).Contains(fd.WorkCellID)
+                        where (from w in context.WorkCells where w.WorkCellName == user.workCell select w.WorkCellID).Contains(fd.WorkCellID)
                         select new
                         {
                             id = fd.ID,
