@@ -92,10 +92,9 @@ namespace FixtureManagement.Service.impl
                 user.Name = item.Name;
                 user.RoleName = item.RoleName;
                 user.WorkCell = item.WorkCell;
-                if (!userViews.Contains(user))
-                {
-                    userViews.Add(user);
-                }
+                
+                userViews.Add(user);
+               
             }
             return userViews;
         }
