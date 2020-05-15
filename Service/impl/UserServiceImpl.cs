@@ -51,7 +51,6 @@ namespace FixtureManagement.Service.impl
             return _user;
         }
 
-
         public List<MenuNode> GetMenuNodesByCode(string code, string workCell)
         {
             var menuList = from mn in context.MenuNodes
@@ -97,6 +96,81 @@ namespace FixtureManagement.Service.impl
                
             }
             return userViews;
+        }
+
+        public bool Add(string code, string password, string name, string roleName, string workCell)
+        {
+            User user = new User();
+            var _user = context.Users.Find(code);
+            if (_user!=null)
+            {
+                return false;
+            }
+            var _workCell = context.WorkCells.Where(w => w.WorkCellName == workCell);
+            user.Code = code;
+            user.Password = password;
+            user.Name = name;
+            user.WorkCellID = _workCell.FirstOrDefault().WorkCellID;
+        
+            var list = from r in context.Roles where r.RoleName == roleName select r.RoleID;
+            if (list.Count()==0)
+            {
+                return false;
+            }
+            int RoleID = list.FirstOrDefault();
+            UserRole userRole = new UserRole();
+            userRole.RoleID = RoleID;
+            userRole.UserCode = code;
+            userRole.WorkCell = workCell;
+
+            context.Users.Add(user);
+            context.UserRoles.Add(userRole);
+            context.SaveChanges();
+            return true;
+        }
+
+        public bool Delete(UserViewModel userView)
+        {
+            User user = new User();
+            var _user = context.Users.Find(userView.Code);
+            if (_user == null)
+            {
+                return false;
+            }
+            var _workCell = context.WorkCells.Where(w => w.WorkCellName == userView.WorkCell);
+            user.Code = userView.Code;
+            user.Password = userView.Password;
+            user.Name = userView.Name;
+            user.WorkCellID = _workCell.FirstOrDefault().WorkCellID;
+
+            var list = from r in context.Roles where r.RoleName == userView.RoleName select r.RoleID;
+            if (list.Count() == 0)
+            {
+                return false;
+            }
+            int RoleID = list.FirstOrDefault();
+            UserRole userRole = new UserRole();
+            userRole.RoleID = RoleID;
+            userRole.UserCode = userView.Code;
+            userRole.WorkCell = userView.WorkCell;
+
+            context.Users.Remove(user);
+            context.UserRoles.Remove(userRole);
+            
+            return true;
+        }
+
+        public bool Delete(List<UserViewModel> userViews)
+        {
+            bool pass = false;
+            foreach (var item in userViews)
+            {
+                pass = Delete(item);
+            }
+            //所有的都删除了 才保存
+            if (pass)
+                context.SaveChanges();
+            return pass;
         }
     }
 }

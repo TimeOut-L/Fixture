@@ -193,14 +193,13 @@
                             $(".sub-menu." + index).append(_ul);
                             for (var i = 0; i < item.children.length; i++) {
                                 var _ul_li = "<li class=\"" + pos + "\"></li>";
-                                console.log(_ul_li);
+                               
                                 var _ul_li_a = "<a href=\"" + item.children[i].url + "\"></a>";
-                                 console.log(_ul_li_a);
+                               
                                 var _ul_li_a_i = "<i class=\"" + item.children[i].nodeIcon + "\"" + " aria-hidden=\"true\"></i>";
-                                  console.log(_ul_li_a_i);
+                                  
                                 var _ul_li_a_span = "<span>" + item.children[i].name + "</span>";
-                                console.log(_ul_li_a_span);
-                                console.log(index);
+                              
                                 $("ul#Collapse_" + index).append(_ul_li);
                                 
                                 $("ul#Collapse_" + index + " li." + pos).append(_ul_li_a);

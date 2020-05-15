@@ -18,6 +18,10 @@ namespace FixtureManagement.filter
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var user=(CurrentUserWorkCell)filterContext.HttpContext.Session["CurrentUser"];
+            if (user == null)
+            {
+                filterContext.Result = new RedirectResult("../Login/Index");
+            }
             string _userCode = user.code;
             var _userMenu = userService.GetMenuNodesByCode(_userCode,user.workCell);
             string controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;

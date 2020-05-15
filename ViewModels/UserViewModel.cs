@@ -5,6 +5,7 @@ using System.Web;
 
 namespace FixtureManagement.ViewModels
 {
+    [Serializable]
     public class UserViewModel
     {
         public int ID { get; set; }

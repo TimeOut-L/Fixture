@@ -39,5 +39,10 @@ namespace FixtureManagement.Service
         /// <param name="workCell">admin 所在部门</param>
         /// <returns></returns>
         List<UserViewModel> GetAllUserWithWorkCell(string workCell);
+
+        bool Add(string code, string password, string name , string roleName,string workCell);
+
+        bool Delete(UserViewModel userView);
+        bool Delete(List<UserViewModel> userViews);
     }
 }

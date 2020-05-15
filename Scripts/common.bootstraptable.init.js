@@ -188,6 +188,7 @@ function AddRecord(formId, requestUrl, modalIdOfForm, tableId) {
         url: requestUrl,//url
         data: $('#' + formId).serialize(),
         success: function (result) {
+            
             if (result.success) {
                 $("#" + modalIdOfForm).modal('hide');
                 ResetForm(formId);

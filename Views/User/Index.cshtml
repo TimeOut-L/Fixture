@@ -34,7 +34,7 @@
         <div>
             <!-- 工具栏 -->
             <div id="toolbar" class="btn-group">
-                <button id="btn_add" type="button" class="btn btn-success" data-toggle="modal" data-target="#addOutRecordModal">
+                <button id="btn_add" type="button" class="btn btn-success" data-toggle="modal" data-target="#addUserModal">
                     <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
                     <span>新增</span>
                 </button>
@@ -47,11 +47,71 @@
             <table id="userTable" class="table-striped">
             </table>
 
+            <!-- 添加 modal 框-->
+            <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog ">
+                    <div class="modal-content" sstyle="border-radius:5px">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">添加用户</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addform" class="form-horizontal" action="##" method="post">
+                                <div class=" form-group">
+                                    <label class="col-xs-4 control-label" for="code">账户</label>
+                                    <div class="col-xs-6">
+                                        <input class="form-control" name="code" id="code" type="text" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 control-label" for="password">密码</label>
+                                    <div class="col-xs-6">
+                                        <input class="form-control" name="password" id="password" type="password">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 control-label" for="name">姓名</label>
+                                    <div class="col-xs-6">
+                                        <input class="form-control" name="name" id="name" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 control-label" for="roleName">角色</label>
+                                    <div class="col-xs-6">
+                                        <input class="form-control" name="roleName" id="roleName" type="text" list="roleList">
+                                        <datalist id="roleList">
+                                        </datalist>
+                                    </div>
+                                </div>
+                                <!-- <div class=" form-group">
+                                    <label class="col-xs-4 control-label" for="workCell">部门</label>
+                                    <div class="col-xs-6">
+                                        <input class="form-control" name="workCell" id="workCell" type="text">
+                                    </div>
+                                </div>
+                                   -->
+
+                                <div class="form-group modal-footer">
+                                    <div class="col-xs-6 col-xs-offset-4">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
+                                        <button type="button" class="btn btn-warning" onclick="addUser()">提交</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
     <script type="text/javascript">
 
+        function addUser() {
+            if (CheckFormNull("addform")) {
+                AddRecord("addform", "/User/AddUser", "addUserModal", "userTable");
+            }
+        }
 
         // 行样式
         function rowStyle(row, index) {
@@ -59,7 +119,34 @@
             return { classes: classes[index % classes.length] };
         }
 
-
+        //操作列事情
+        window.operationEvents = {
+            //编辑事件
+            'click #btn_update': function (e, value, row, index) {
+                var record = new Array();
+                var Item = new Object();
+                Item.ID = row.ID;
+                Item.Code = row.Code;
+                Item.Password = row.Password;
+                Item.Name = row.Name;
+                Item.RoleName = row.RoleName;
+                Item.WorkCell = row.WorkCell;
+                record.push(Item);
+                UpdateRecord("/User/UpdateUser", JSON.stringify(record));
+            },
+            'click #btn_delete': function (e, value, row, index) {
+                var record = new Array();
+                var Item = new Object();
+                Item.ID = row.ID;
+                Item.Code = row.Code;
+                Item.Password = row.Password;
+                Item.Name = row.Name;
+                Item.RoleName = row.RoleName;
+                Item.WorkCell = row.WorkCell;
+                record.push(Item);
+                confirmOrCancelDeleteData("/User/DeleteUser", "userTable", JSON.stringify(ItemIDs));
+            }
+        }
 
         /**
          * 数据列
@@ -92,7 +179,21 @@
             field: 'RoleName',
             title: '角色',
             visable: true,
-            align: 'center'
+            align: 'center',
+            editable: {
+                type: 'select',
+                title: '角色',
+
+                validate: function (value) {
+                    if (!value) return '角色不能为空';
+                },
+                noeditFormatter: function (value, row, index) {
+                    return diyFormatter(value, 'RoleName');
+                },
+                source: function (value, row, index) {
+                    return getEditableSource("/User/GetRoles", null)
+                }
+            }
         }, {
             field: 'WorkCell',
             title: '部门',
@@ -127,10 +228,10 @@
          * 调用 TableInit
          * */
         $(function () {
-            //添加记录表单  设置操作人的值 且不可修改
-            $("#operationByName").attr("value", window.sessionStorage.getItem("userName"));
-            $("#operationByName").attr("readonly", "readonly");
+
             var itable = TableInit();//.初始化  Table
+            InitDataList("/User/GetRoles", null, "roleList");
+
         });
     </script>
 </body>
