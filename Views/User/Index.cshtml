@@ -132,7 +132,7 @@
                 Item.RoleName = row.RoleName;
                 Item.WorkCell = row.WorkCell;
                 record.push(Item);
-                UpdateRecord("/User/UpdateUser", JSON.stringify(record));
+                UpdateRecord("/User/UpdateUser","userTable",JSON.stringify(record));
             },
             'click #btn_delete': function (e, value, row, index) {
                 var record = new Array();

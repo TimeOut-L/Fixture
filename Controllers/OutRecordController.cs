@@ -118,7 +118,7 @@ namespace FixtureManagement.Controllers
         public ActionResult DeleteOutRecords()
         {
             //TODO
-            string jsonData = Request["ItemIDs"];
+            string jsonData = Request["record"];
             JArray jArray = JArray.Parse(jsonData);
             List<int> ids = new List<int>();
             foreach (var item in jArray)
