@@ -123,21 +123,28 @@ namespace FixtureManagement.Service.impl
                 return false;
             }
             var RoleID = list.FirstOrDefault();
+            // 无法添加相同的userRole 且 一个用户在一个部门只能拥有一个角色
             UserRole userRole = new UserRole();
-            var _userRole = context.UserRoles.Where(ur => ur.UserCode == code && ur.RoleID == RoleID && ur.WorkCell == workCell);
-            if (_userRole != null)
+            var _userRole = context.UserRoles.Where(ur => ur.UserCode == code && ur.WorkCell == workCell);
+
+            if (_userRole.Count() != 0)
             {
                 return false;
             }
             userRole.RoleID = RoleID;
             userRole.UserCode = code;
             userRole.WorkCell = workCell;
-            
+
             context.UserRoles.Add(userRole);
             context.SaveChanges();
             return true;
         }
 
+        /// <summary>
+        ///  删除当前部门用户 ,用户可能在其他部门拥有角色
+        /// </summary>
+        /// <param name="userView"></param>
+        /// <returns></returns>
         public bool Delete(UserViewModel userView)
         {
             var _user = context.Users.Find(userView.Code);
@@ -151,11 +158,16 @@ namespace FixtureManagement.Service.impl
                 return false;
             }
             int RoleID = list.FirstOrDefault();
-            var _userRoles = context.UserRoles.Where(ur => ur.RoleID == RoleID && ur.UserCode == userView.Code);
-            var _userRole = _userRoles.FirstOrDefault();
-
+            //获取 code 的 所有userRole 记录
+            var _userRoles = context.UserRoles.Where(ur => ur.UserCode == userView.Code);
+            // 筛选当前部门记录
+            var _userRole = _userRoles.FirstOrDefault(ur => ur.WorkCell == userView.WorkCell);
+            //删除记录
+            _userRoles.ToList().Remove(_userRole);
             context.UserRoles.Remove(_userRole);
-            context.Users.Remove(_user);
+            //如果 删除后 没有记录了 删除该用户
+            if (_userRoles.Count() == 0)
+                context.Users.Remove(_user);
             return true;
         }
 

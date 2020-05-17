@@ -144,7 +144,7 @@
                 Item.RoleName = row.RoleName;
                 Item.WorkCell = row.WorkCell;
                 record.push(Item);
-                confirmOrCancelDeleteData("/User/DeleteUsers", "userTable", JSON.stringify(ItemIDs));
+                confirmOrCancelDeleteData("/User/DeleteUsers", "userTable", JSON.stringify(record));
             }
         }
 

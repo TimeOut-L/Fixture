@@ -66,19 +66,25 @@ namespace FixtureManagement.Controllers
         {
             var _user = (CurrentUserWorkCell)Session["CurrentUser"];
             var list = userService.GetAllUserWithWorkCell(_user.workCell);
+
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// 添加用户
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
-       
+
         public ActionResult AddUser()
         {
             string code = Request["code"];
             string password = Request["password"];
             string name = Request["name"];
             string roleName = Request["roleName"];
-            
+
             var _user = (CurrentUserWorkCell)Session["CurrentUser"];
+
             if (!userService.Add(code, password, name, roleName, _user.workCell))
             {
                 var error = new
@@ -99,15 +105,26 @@ namespace FixtureManagement.Controllers
         /// 暂时不能使用请注意 功能未完善
         /// </summary>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult DeleteUsers()
         {
             string jsonData = Request["record"];
             JArray jArray = JArray.Parse(jsonData);
             List<UserViewModel> userViews = new List<UserViewModel>();
+            var _user = (CurrentUserWorkCell)Session["CurrentUser"];
             foreach (var item in jArray)
             {
                 JsonSerializer js = new JsonSerializer();
                 UserViewModel obj = (UserViewModel)js.Deserialize(item.CreateReader(), typeof(UserViewModel));
+                if (obj.Code == _user.code)
+                {
+                    var error = new
+                    {
+                        success = false,
+                        msg = "请注意无法删除自己的账号,删除未执行",
+                    };
+                    return Json(error, JsonRequestBehavior.AllowGet);
+                }
                 userViews.Add(obj);
             }
             if (!userService.Delete(userViews))
@@ -193,7 +210,7 @@ namespace FixtureManagement.Controllers
             var roles = from r in context.Roles
                         select new
                         {
-                            value=r.RoleName
+                            value = r.RoleName
                         };
             return Json(roles, JsonRequestBehavior.AllowGet);
         }

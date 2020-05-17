@@ -216,7 +216,7 @@ function DeleteRecords(requestUrl, tableId, ItemIDs) {
     $.ajax({
         url: requestUrl,
         type: "post",
-        data: { "ItemIDs": ItemIDs },
+        data: { "record": ItemIDs },
         dataType: "json",
         traditional: false,
         success: function (result) {
