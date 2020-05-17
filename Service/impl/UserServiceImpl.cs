@@ -17,7 +17,7 @@ namespace FixtureManagement.Service.impl
             var _user = context.Users.Find(code);
             var _workList = from ur in context.UserRoles
                             where ur.UserCode == code
-                            select ur.WorkCell;                                                     
+                            select ur.WorkCell;
             if (_user == null)
             {
                 msg = "用户不存在!";
@@ -91,9 +91,9 @@ namespace FixtureManagement.Service.impl
                 user.Name = item.Name;
                 user.RoleName = item.RoleName;
                 user.WorkCell = item.WorkCell;
-                
+
                 userViews.Add(user);
-               
+
             }
             return userViews;
         }
@@ -102,28 +102,37 @@ namespace FixtureManagement.Service.impl
         {
             User user = new User();
             var _user = context.Users.Find(code);
-            if (_user!=null)
+            // 如果 user 表里存在该用户 则在userRole 添加 相应权限记录
+            if (_user != null)
             {
-                return false;
+                user = _user;
             }
-            var _workCell = context.WorkCells.Where(w => w.WorkCellName == workCell);
-            user.Code = code;
-            user.Password = password;
-            user.Name = name;
-            user.WorkCellID = _workCell.FirstOrDefault().WorkCellID;
-        
+            // 不存在 则新增该用户 然后再userRole 添加 相应权限记录
+            else
+            {
+                var _workCell = context.WorkCells.Where(w => w.WorkCellName == workCell);
+                user.Code = code;
+                user.Password = password;
+                user.Name = name;
+                user.WorkCellID = _workCell.FirstOrDefault().WorkCellID;
+                context.Users.Add(user);
+            }
             var list = from r in context.Roles where r.RoleName == roleName select r.RoleID;
-            if (list.Count()==0)
+            if (list.Count() == 0)
             {
                 return false;
             }
-            int RoleID = list.FirstOrDefault();
+            var RoleID = list.FirstOrDefault();
             UserRole userRole = new UserRole();
+            var _userRole = context.UserRoles.Where(ur => ur.UserCode == code && ur.RoleID == RoleID && ur.WorkCell == workCell);
+            if (_userRole != null)
+            {
+                return false;
+            }
             userRole.RoleID = RoleID;
             userRole.UserCode = code;
             userRole.WorkCell = workCell;
-
-            context.Users.Add(user);
+            
             context.UserRoles.Add(userRole);
             context.SaveChanges();
             return true;
@@ -131,32 +140,22 @@ namespace FixtureManagement.Service.impl
 
         public bool Delete(UserViewModel userView)
         {
-            User user = new User();
             var _user = context.Users.Find(userView.Code);
             if (_user == null)
             {
                 return false;
             }
-            var _workCell = context.WorkCells.Where(w => w.WorkCellName == userView.WorkCell);
-            user.Code = userView.Code;
-            user.Password = userView.Password;
-            user.Name = userView.Name;
-            user.WorkCellID = _workCell.FirstOrDefault().WorkCellID;
-
             var list = from r in context.Roles where r.RoleName == userView.RoleName select r.RoleID;
             if (list.Count() == 0)
             {
                 return false;
             }
             int RoleID = list.FirstOrDefault();
-            UserRole userRole = new UserRole();
-            userRole.RoleID = RoleID;
-            userRole.UserCode = userView.Code;
-            userRole.WorkCell = userView.WorkCell;
+            var _userRoles = context.UserRoles.Where(ur => ur.RoleID == RoleID && ur.UserCode == userView.Code);
+            var _userRole = _userRoles.FirstOrDefault();
 
-            context.Users.Remove(user);
-            context.UserRoles.Remove(userRole);
-            
+            context.UserRoles.Remove(_userRole);
+            context.Users.Remove(_user);
             return true;
         }
 
