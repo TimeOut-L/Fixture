@@ -102,7 +102,7 @@ namespace FixtureManagement.Controllers
         }
 
         /// <summary>
-        /// 暂时不能使用请注意 功能未完善
+        ///  删除用户
         /// </summary>
         /// <returns></returns>
         [HttpPost]
