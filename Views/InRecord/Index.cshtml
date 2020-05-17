@@ -190,7 +190,7 @@
                 return;
             }
             //确认删除的话
-            confirmOrCancelDeleteData("/InRecord/DeleteOutRecords", "iRecordTable", jsonData)
+            confirmOrCancelDeleteData("/InRecord/DeleteInRecords", "inRecordTable", jsonData)
         })
 
         //操作列事情
@@ -208,7 +208,7 @@
                 Item.Date = row.RetDate;
                 record.push(Item);
                 console.log(record);
-                UpdateRecord("/InRecord/UpdateInRecord", JSON.stringify(record));
+                UpdateRecord("/InRecord/UpdateInRecord","inRecordTable", JSON.stringify(record));
             },
             //删除事件
             'click #btn_delete': function (e, value, row, index) {
@@ -216,7 +216,7 @@
                 Item = new Object();
                 Item.ID = row.ID;
                 ItemIDs.push(Item);
-                confirmOrCancelDeleteData("/InRecord/DeleteOutRecords", "inRecordTable", ItemIDs)
+                confirmOrCancelDeleteData("/InRecord/DeleteInRecords", "inRecordTable", ItemIDs)
             }
         }
 

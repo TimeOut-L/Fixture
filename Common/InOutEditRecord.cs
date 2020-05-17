@@ -5,6 +5,7 @@ using System.Web;
 
 namespace FixtureManagement.Common
 {
+    [Serializable]
     public class InOutEditRecord
     {
         public int ID { set; get; }

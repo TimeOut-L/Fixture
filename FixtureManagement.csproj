@@ -246,6 +246,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Common\CurrentUserWorkCell.cs" />
     <Compile Include="Common\InOutEditRecord.cs" />
+    <Compile Include="Common\InOutQueryRecord.cs" />
     <Compile Include="Common\ItemID.cs" />
     <Compile Include="Controllers\ManagerFamilyController.cs" />
     <Compile Include="filter\UserFilter.cs" />
@@ -285,6 +286,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\data.sql" />
+    <Content Include="Content\bootstrap-datetimepicker.css" />
+    <Content Include="Content\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\bootstrap-editable.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -307,6 +310,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\bootstrap-datetimepicker.fr.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.zh-CN.js" />
     <Content Include="Scripts\bootstrap-editable.js" />
     <Content Include="Scripts\bootstrap-editable.min.js" />
     <Content Include="Scripts\bootstrap-table-editable.js" />

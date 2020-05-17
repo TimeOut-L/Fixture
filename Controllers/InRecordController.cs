@@ -127,6 +127,7 @@ namespace FixtureManagement.Controllers
         [ValidateInput(true)]
         public ActionResult QeuryOutRecords()
         {
+
             return null;
         }
 

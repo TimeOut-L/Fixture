@@ -5,6 +5,7 @@ using System.Web;
 
 namespace FixtureManagement.Common
 {
+    [Serializable]
     public class CurrentUserWorkCell
     {
         public string code { get; set; }

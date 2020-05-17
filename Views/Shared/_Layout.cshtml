@@ -174,7 +174,7 @@
                 url: "/User/GetMenuTree",
                 success: function (result) {
                     treeNodes = result;
-                    console.log(treeNodes);
+                    //console.log(treeNodes);
                     $.each(result, function (index,item) {
                         // 只考虑到二级菜单 需抽取为js 函数
                         var index = index+1;

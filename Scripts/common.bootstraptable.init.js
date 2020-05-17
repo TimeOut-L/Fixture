@@ -208,7 +208,7 @@ function AddRecord(formId, requestUrl, modalIdOfForm, tableId) {
 /**
  * 删除记录
  * @param {any} reuestUrl 请求url
- * @param {any} tableId s表格 id
+ * @param {any} tableId 表格 id
  * @param {any} ItemIDs  待删除的 数据 id
  */
 function DeleteRecords(requestUrl, tableId, ItemIDs) {
@@ -238,9 +238,10 @@ function DeleteRecords(requestUrl, tableId, ItemIDs) {
 /**
  *  更新记录
  * @param {any} requestUrl 请求url
+ * @param {any} tableId 表格 id
  * @param {any} jsonData    json 数据
  */
-function UpdateRecord(requestUrl, jsonData) {
+function UpdateRecord(requestUrl, tableId,jsonData) {
     $.ajax({
         url: requestUrl,
         type: 'post',
@@ -251,10 +252,12 @@ function UpdateRecord(requestUrl, jsonData) {
             if (result.success) {
                 toastr.success("编辑已保存");
             } else {
+                RefreshTable(tableId);
                 toastr.warning(result.msg);
-            }
+            }           
         },
         error: function (e) {
+            RefreshTable(tableId);
             toastr.error("错误");
         }
     })
