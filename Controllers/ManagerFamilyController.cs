@@ -21,13 +21,13 @@ namespace FixtureManagement.Controllers
     public class ManagerFamilyController : Controller
     {   
         FixtureManagerContext context = new FixtureManagerContext();
-        [AllowAnonymous]
+        
         public ActionResult Index()
         {
             return View();
         }
 
-        [AllowAnonymous]
+      
         //查询所有的类别
         [HttpPost]
         public ActionResult ReadFamilyRecord()
@@ -39,7 +39,7 @@ namespace FixtureManagement.Controllers
 
 
         [HttpPost]
-        [AllowAnonymous]
+        
         //修改工夹具的类别
         public ActionResult EditFamilyRecord()
         {
@@ -61,7 +61,7 @@ namespace FixtureManagement.Controllers
         }
         [HttpPost]
         //创建工夹具的类别
-        [AllowAnonymous]
+       
         public ActionResult AddFamilyRecord()
         {
             int FamilyID = 0;
@@ -80,7 +80,7 @@ namespace FixtureManagement.Controllers
 
         }
         [HttpPost]
-        [AllowAnonymous]
+        
         public ActionResult DeleteFamilyRecord() {
             string jsonData = Request["record"];
             string[]  arr = jsonData.Split(';');
@@ -97,7 +97,7 @@ namespace FixtureManagement.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+      
         public ActionResult DeleteFamilyRecords()
         {
             string datastring = Request["record"];
