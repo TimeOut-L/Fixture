@@ -37,14 +37,14 @@ namespace FixtureManagement.Controllers
         [ValidateInput(true)]
         public ActionResult ReadOutRecords()
         {
-            var user= (CurrentUserWorkCell)Session["CurrentUser"];
+            var user = (CurrentUserWorkCell)Session["CurrentUser"];
             string code = user.code;
             //var _user = userService.GetUserByCode(code);
             var list = outRecordService.GetAllOutRecordWithWorkCell(user.workCell);
-            
-           
-            return Json(list, JsonRequestBehavior.AllowGet);        
-       }
+
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
 
         /// <summary>
         /// 添加领用记录
@@ -136,7 +136,7 @@ namespace FixtureManagement.Controllers
                     msg = "可能有些记录不存在"
                 };
                 return Json(exception, JsonRequestBehavior.AllowGet);
-            }          
+            }
             var data = new
             {
                 success = true,
@@ -145,14 +145,26 @@ namespace FixtureManagement.Controllers
         }
 
         /// <summary>
-        ///  查询记录
+        ///  查询记录 
         /// </summary>
         /// <returns></returns>
         [HttpPost]
         [ValidateInput(true)]
+        [AllowAnonymous]
         public ActionResult QeuryOutRecords()
         {
-            return null;
+            string Code = Request["queryCode"];
+            string Name = Request["queryName"];
+            
+            DateTime StartDate = Convert.ToDateTime(Request["StartDate"]);
+            DateTime StopDate = Convert.ToDateTime(Request["StopDate"]);
+            var result = new
+            {
+                success = true,
+                msg = "成功"
+
+            };
+            return Json(result,JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -165,14 +177,15 @@ namespace FixtureManagement.Controllers
         {
             string jsonData = Request["record"];
             JArray jArray = JArray.Parse(jsonData);
-            
+
             //实际只有一条记录 传的是对象数组
             foreach (var item in jArray)
             {
                 JsonSerializer js = new JsonSerializer();
                 InOutEditRecord obj = (InOutEditRecord)js.Deserialize(item.CreateReader(), typeof(InOutEditRecord));
                 var _record = outRecordService.FindByID(obj.ID);
-                if (_record==null){
+                if (_record == null)
+                {
                     var error = new
                     {
                         succes = false,
@@ -219,7 +232,7 @@ namespace FixtureManagement.Controllers
                             value = fd.Code,
                         };
             return Json(codes, JsonRequestBehavior.AllowGet);
-           
+
         }
 
 
@@ -229,13 +242,13 @@ namespace FixtureManagement.Controllers
         public ActionResult GetFixtureSeqIDByCode()
         {
             string _code = Request["_Code"];
-           
+
             var seqIDs = from fe in context.FixtureEntities
-                        where fe.Code ==_code
-                        select new
-                        {                           
-                            value =fe.SeqID,
-                        };
+                         where fe.Code == _code
+                         select new
+                         {
+                             value = fe.SeqID,
+                         };
             var list = seqIDs.ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
         }

@@ -39,6 +39,8 @@
 <body>
     <div class="panel-body" style="padding-bottom:0px;">
         <button class="btn btn-info " data-toggle="collapse" data-target="#query"> 查询项</button>
+        <!--文件excell 批量-->
+        <!--<input type="file" />-->
         <!-- 条件查询框 -->
         <div id="query" class="collapse">
             <div class="row">
@@ -165,19 +167,28 @@
         </div>
     </div>
     <script type="text/javascript">
-   
+
         //添加领用记录
         function addOutRecord() {
             if (CheckFormNull("addform")) {
                 AddRecord("addform", "/OutRecord/AddOutRecord", "addOutRecordModal", "outRecordTable");
             }
         }
-       
+       //待完善
         function query() {
-            var queryCode = $("#queryCode").val();
-            var queryName = $("#queryName").val();
-            var StartDate = $("#StartDate").val();
-            var StopDate = $("#StopDate").val();
+             toastr.success("暂时不能使用");
+            return;
+            console.log($("#queryform").serialize());
+            $.ajax({
+                url: '/OutRecord/QeuryOutRecords',
+                type: 'post',
+                data: $("#queryform").serialize(),
+                success: function (result) {
+                    toastr.success(result.msg);
+                    $("#outRecordTable").bootstrapTable('load', result);
+                }
+            })
+           
         }
         //datalist codeList 对象
         $(function () {
@@ -185,8 +196,8 @@
         })
 
         //初始化datetimpick 控件
-        $(function (){
-            InitDatetimepicker("datetimepick","top-right")
+        $(function () {
+            InitDatetimepicker("datetimepick", "top-right")
             InitDatetimepicker("query_datetimepick", "bottom-right");
         })
 

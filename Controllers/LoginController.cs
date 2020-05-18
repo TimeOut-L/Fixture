@@ -11,6 +11,7 @@ using System.Web.Mvc;
 namespace FixtureManagement.Controllers
 {
     //登录控制器
+    
     public class LoginController :Controller
     {
         public UserService userService {  get;  set; }
