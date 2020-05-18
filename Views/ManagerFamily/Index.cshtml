@@ -120,7 +120,7 @@
                 Item.FamilyID = row.FamilyID;
                 Item.FamilyName = row.FamilyName;       
                 record.push(Item);
-                UpdateRecord("/ManagerFamily/EditFamilyRecord", JSON.stringify(record));
+                UpdateRecord("/ManagerFamily/EditFamilyRecord", "FamilyTable".JSON.stringify(record));
             },
             'click #btn_delete': function (e, value, row, index) {
                 console.log(111);
@@ -129,7 +129,7 @@
                 Item.FamilyID = row.FamilyID;
                 Item.FamilyName = row.FamilyName;
                 record.push(Item);
-                confirmOrCancelDeleteData("/ManagerFamily/DeleteFamilyRecord", "FamilyTable", JSON.stringify(record));
+                confirmOrCancelDeleteData("/ManagerFamily/DeleteFamilyRecords", "FamilyTable", JSON.stringify(record));
             }
         }
 
@@ -179,8 +179,11 @@
          
             FamilyID = obj.parentNode.parentNode.parentNode.previousSibling.previousSibling.innerHTML;
             FamilyName = obj.parentNode.parentNode.parentNode.previousSibling.firstChild.text;
-            var record = FamilyID + ";" + FamilyName;
-            confirmOrCancelDeleteData("/ManagerFamily/DeleteFamilyRecord", "FamilyTable", record);
+            var id = []  ;
+            id[0] = FamilyID;
+            var ids = id.join(';');
+           
+            confirmOrCancelDeleteData("/ManagerFamily/DeleteFamilyRecords", "FamilyTable",ids);
             
         }
 
@@ -188,6 +191,7 @@
             FamilyID = obj.parentNode.parentNode.parentNode.previousSibling.previousSibling.innerHTML;
             FamilyName = obj.parentNode.parentNode.parentNode.previousSibling.firstChild.text;
             var record = FamilyID + ";" + FamilyName;
+            c
             UpdateRecord("/ManagerFamily/EditFamilyRecord","FamilyTable", record);
         }
 

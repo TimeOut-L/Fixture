@@ -101,7 +101,7 @@ namespace FixtureManagement.Controllers
         public ActionResult DeleteFamilyRecords()
         {
             string datastring = Request["record"];
-            string[] ids = datastring.Split(';');
+            string[] ids = datastring.Split(':');
             foreach (string id in ids)
             {
               
