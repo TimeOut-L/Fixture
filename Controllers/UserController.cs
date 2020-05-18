@@ -132,7 +132,7 @@ namespace FixtureManagement.Controllers
                 var exception = new
                 {
                     success = false,
-                    msg = "可能有些记录不存在"
+                    msg = "可能有些记录不存在,删除未执行"
                 };
                 return Json(exception, JsonRequestBehavior.AllowGet);
             }

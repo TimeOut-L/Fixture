@@ -4,7 +4,7 @@
  * @param {any} tableId  table id
  * @param {any} requestUrl  初始化 url
  * @param {any} dataColumns  数据列
- * @param {any} queryParams  查询参数
+ * @param {any} rowStyle  行样式
  */
 function BoootstrapTableInit(tableId, requestUrl, rowStyle, dataColumns) {
     $("#" + tableId).bootstrapTable({
@@ -113,6 +113,24 @@ function changeDateFormat(cellval) {
     }
 }
 
+/**
+ * datetimepick 初始化 dateClass 使用datetimepick 的 类选择
+ * positionClass 位置
+ */
+
+function InitDatetimepicker(dateClass,positionClass) {
+    $("." + dateClass).datetimepicker({
+        language: 'zh-CN',
+        pickerPosition: positionClass,
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    })
+}
 /**
  * 获取表格选中数据的 ID
  * 并转化为json 串

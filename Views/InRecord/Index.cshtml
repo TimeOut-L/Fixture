@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css" />
     <link href="~/Content/diy-bootstraptable.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-editable.css" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <script src="~/Scripts/bootstrap-editable.min.js"></script>
     <!--行内编辑-->
     <!-- Latest compiled and minified JavaScript -->
@@ -19,7 +20,10 @@
     <!--最新版本会有 warning -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.js"></script>
-
+    <!--datetimepicker 日期选择插件-->
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.fr.js"></script>
     <!-- 消息提示插件：toastr.js -->
     <link href="~/Content/toastr/toastr.min.css" rel="stylesheet" />
     <script src="~/Scripts/toastr.min.js" type="text/javascript"></script>
@@ -52,11 +56,11 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="StartDate">开始日期</label>
                             <div class="col-sm-3">
-                                <input class="form-control" id="StartDate" type="text" name="StartDate" />
+                                <input class="form-control query_datetimepick" id="StartDate" type="text" name="StartDate" />
                             </div>
                             <label class="col-sm-2 control-label " for="StopDate">终止日期</label>
                             <div class="col-sm-3">
-                                <input class="form-control" id="StopDate" type="text" name="StopDate" />
+                                <input class="form-control query_datetimepick" id="StopDate" type="text" name="StopDate" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -138,7 +142,7 @@
                             <div class=" form-group">
                                 <label class="col-xs-4 control-label" for="retDate">归还日期</label>
                                 <div class="col-xs-6">
-                                    <input class="form-control" name="retDate" id="retDate" type="text">
+                                    <input class="form-control datetimepick" name="retDate" id="retDate" type="text">
                                 </div>
                             </div>
                             <div class="form-group modal-footer">
@@ -163,18 +167,23 @@
             }
         }
 
-        // inRecord 功能暂未完善
 
-        //datalist 对象
+         //datalist codeList 对象
         $(function () {
             InitDataList("/OutRecord/GetFixtureCode", null, "codeList");
         })
 
+         //初始化datetimpick 控件
+        $(function () {
+            InitDatetimepicker("datetimepick", "top-right")
+            InitDatetimepicker("query_datetimepick", "bottom-right");
+        })
 
+          //根据code 初始化 seqIDList
         $("#code").change(function () {
             var _code = $("#code").val();
             $("#seqIDList").empty();
-            if (_code == null || _code=="") {
+            if (_code == null || _code == "") {
                 toastr.warning("请先输入夹具代码");
                 return;
             }
@@ -208,7 +217,7 @@
                 Item.Date = row.RetDate;
                 record.push(Item);
                 console.log(record);
-                UpdateRecord("/InRecord/UpdateInRecord","inRecordTable", JSON.stringify(record));
+                UpdateRecord("/InRecord/UpdateInRecord", "inRecordTable", JSON.stringify(record));
             },
             //删除事件
             'click #btn_delete': function (e, value, row, index) {

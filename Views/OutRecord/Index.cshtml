@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/Content/bootstrap-table.min.css" />
     <link href="~/Content/diy-bootstraptable.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-editable.css" />
-    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <script src="~/Scripts/bootstrap-editable.min.js"></script>
     <!--行内编辑-->
     <!-- Latest compiled and minified JavaScript -->
@@ -57,11 +57,11 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="StartDate">开始日期</label>
                             <div class="col-sm-3">
-                                <input class="form-control" id="StartDate" type="text" name="StartDate" />
+                                <input class="form-control query_datetimepick" id="StartDate" type="text" name="StartDate" />
                             </div>
                             <label class="col-sm-2 control-label " for="StopDate">终止日期</label>
                             <div class="col-sm-3">
-                                <input class="form-control" id="StopDate" type="text" name="StopDate" />
+                                <input class="form-control query_datetimepick" id="StopDate" type="text" name="StopDate" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -148,7 +148,7 @@
                                 <div class=" form-group">
                                     <label class="col-xs-4 control-label" for="usedDate">领用日期</label>
                                     <div class="col-xs-6">
-                                        <input class="form-control" name="usedDate" id="usedDate" type="text">
+                                        <input class="form-control datetimepick" name="usedDate" id="usedDate" type="text">
                                     </div>
                                 </div>
                                 <div class="form-group modal-footer">
@@ -165,21 +165,29 @@
         </div>
     </div>
     <script type="text/javascript">
-
-
+   
         //添加领用记录
         function addOutRecord() {
             if (CheckFormNull("addform")) {
                 AddRecord("addform", "/OutRecord/AddOutRecord", "addOutRecordModal", "outRecordTable");
             }
         }
-
+       
         function query() {
-
+            var queryCode = $("#queryCode").val();
+            var queryName = $("#queryName").val();
+            var StartDate = $("#StartDate").val();
+            var StopDate = $("#StopDate").val();
         }
         //datalist codeList 对象
         $(function () {
             InitDataList("/OutRecord/GetFixtureCode", null, "codeList");
+        })
+
+        //初始化datetimpick 控件
+        $(function (){
+            InitDatetimepicker("datetimepick","top-right")
+            InitDatetimepicker("query_datetimepick", "bottom-right");
         })
 
         //根据code 初始化 seqIDList
@@ -221,7 +229,7 @@
                 Item.Date = row.UsedDate;
                 record.push(Item);
                 console.log(record);
-                UpdateRecord("/OutRecord/UpdateOutRecord","outRecordTable", JSON.stringify(record));
+                UpdateRecord("/OutRecord/UpdateOutRecord", "outRecordTable", JSON.stringify(record));
             },
             'click #btn_delete': function (e, value, row, index) {
                 var ItemIDs = new Array();
@@ -240,7 +248,7 @@
         }
 
 
-        
+
         /**
          * 数据列
          * */
