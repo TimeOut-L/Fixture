@@ -1,0 +1,30 @@
+﻿/*模态框 位置及大小修改*/
+.modal-dialog {
+    margin-top: 5%;
+    width: 350px;
+    height: 550px;
+}
+
+.col-sm-2 {
+    margin-left: 1%;
+}
+
+div#query {
+    border: 1px solid blue;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+}
+/*表头样式*/
+.table .thead-blue th {
+    color: #fff;
+    background-color: #3195f1;
+    border-color: #0d7adf;
+}
+/*行 hover*/
+.table-hover > tbody > tr:nth-child(odd):hover > td,
+.table-hover > tbody > tr:nth-child(odd):hover > th,
+.table-hover > tbody > tr:nth-child(even):hover > td,
+.table-hover > tbody > tr:nth-child(even):hover > th {
+    background-color: aquamarine;
+}

@@ -23,10 +23,12 @@ namespace FixtureManagement.Models.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<WorkCell> WorkCells { get; set; }  
         public DbSet<FixtureDefinition> FixtureDefinitions { get; set; }
         public DbSet<FixtureEntity> FixtureEntities { get; set; }
         public DbSet<FixtureInRecord> InRecords { get; set; }
         public DbSet<FixtureOutRecord> OutRecords { get; set; }
         public DbSet<FixtureFamily> Familys { get; set; }
+
     }
 }

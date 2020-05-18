@@ -1,4 +1,5 @@
-﻿using FixtureManagement.Service;
+﻿using FixtureManagement.Common;
+using FixtureManagement.Service;
 using FixtureManagement.Service.impl;
 using System;
 using System.Collections.Generic;
@@ -16,8 +17,13 @@ namespace FixtureManagement.filter
         //action执行前
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            string _userCode = (string)filterContext.HttpContext.Session["CurrentUser"];
-            var _userMenu = userService.GetMenuNodesByCode(_userCode);
+            var user=(CurrentUserWorkCell)filterContext.HttpContext.Session["CurrentUser"];
+            if (user == null)
+            {
+                filterContext.Result = new RedirectResult("../Login/Index");
+            }
+            string _userCode = user.code;
+            var _userMenu = userService.GetMenuNodesByCode(_userCode,user.workCell);
             string controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
             string actionName = filterContext.ActionDescriptor.ActionName;
             var bAjax = filterContext.HttpContext.Request.IsAjaxRequest();

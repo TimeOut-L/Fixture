@@ -9,13 +9,13 @@ namespace FixtureManagement.Models
     public class MenuNode
     {
         [Key]
-        public int MenuID { get; set; }
+        public string MenuID { get; set; }
         public string Name { get; set; }
       
         public string ControllerName { get; set; }
         public string ActionName { get; set; }
        
-        public int ParentMenuID { get; set; }
+        public string ParentMenuID { get; set; }
         public string NodeIcon { get; set; }
         
         public string ExpandIcon { get; set; }

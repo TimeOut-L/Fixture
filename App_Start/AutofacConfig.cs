@@ -20,7 +20,7 @@ namespace FixtureManagement.App_Start
             var builder = new ContainerBuilder();
             builder.RegisterType<UserServiceImpl>().As<UserService>();
             builder.RegisterType<OutRecordServiceImpl>().As<OutRecordService>();
-
+            builder.RegisterType<InRecordServiceImpl>().As<InRecordService>();
             builder.RegisterControllers(Assembly.GetExecutingAssembly())//注册mvc的Controller
                 .PropertiesAutowired();//属性注入
             container = builder.Build();

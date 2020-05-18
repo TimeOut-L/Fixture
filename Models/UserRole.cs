@@ -10,5 +10,6 @@ namespace FixtureManagement.Models
         public int ID { get; set; }
         public string UserCode { get; set; }
         public int RoleID { get; set;}
+        public string WorkCell { get; set; }
     }
 }

@@ -12,8 +12,6 @@ namespace FixtureManagement.Controllers
         public ActionResult Index()
         {
             return View();
-        }
-
-        
+        }    
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FixtureManagement.Models;
+using FixtureManagement.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,14 +16,9 @@ namespace FixtureManagement.Service
         /// <param name="password">密码</param>
         /// <param name="msg"> 返回的提示信息</param>
         /// <returns> true :通过 false 不通过</returns>
-        bool LoginValidate(string code,string password,out string msg);
+        bool LoginValidate(string code,string password,string workCell,out string msg);
 
-        /// <summary>
-        /// 获取当前登录用户 的 姓名
-        /// </summary>
-        /// <param name="code">登录 账号</param>
-        /// <returns></returns>
-        string GetCurrentUserName(string code);
+        
 
         /// <summary>
         /// 获取 账户信息
@@ -31,10 +27,22 @@ namespace FixtureManagement.Service
         /// <returns></returns>
         User GetUserByCode(string code);
 
+        
         //拆分到另一个服务
-        List<MenuNode> GetMenuNodesByCode(string code);
+        List<MenuNode> GetMenuNodesByCode(string code,string workCell);
         //List<string> GetRoleByCode(string code);
 
-        //List<Ro>
+        
+        /// <summary>
+        ///  读取用户相关信息
+        /// </summary>
+        /// <param name="workCell">admin 所在部门</param>
+        /// <returns></returns>
+        List<UserViewModel> GetAllUserWithWorkCell(string workCell);
+
+        bool Add(string code, string password, string name , string roleName,string workCell);
+
+        bool Delete(UserViewModel userView);
+        bool Delete(List<UserViewModel> userViews);
     }
 }

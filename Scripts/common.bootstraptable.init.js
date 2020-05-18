@@ -4,30 +4,32 @@
  * @param {any} tableId  table id
  * @param {any} requestUrl  初始化 url
  * @param {any} dataColumns  数据列
+ * @param {any} rowStyle  行样式
  */
-function BoootstrapTableInit(tableId, requestUrl, rowStyle, dataColumns, ) {
+function BoootstrapTableInit(tableId, requestUrl, rowStyle, dataColumns) {
     $("#" + tableId).bootstrapTable({
         url: requestUrl,
         method: 'post',
-        toolbar: '#toolbar',//工具列
-        rowStyle: rowStyle, //行样式
+        toolbar: '#toolbar', //工具列
+        rowStyle: rowStyle,  //行样式
         theadClasses: "thead-blue",  //设置thead-blue为表头样式
         cache: false, //禁用缓存
-        pagination: true,//关闭分页
+        pagination: true, //是否显示分页
         showFooter: false,//是否显示列脚
-        showPaginationSwitch: false, //是否显示 数据条数选择框
+        showPaginationSwitch: true,  //  是否显 示  数据条数选择框
         sortable: true,                      //是否启用排序
-        sortOrder: "asc",                    //排序方式
+        sortOrder: "asc",                 //排序方式
+        sidePagination: "client",         // 分页方式：client客户端分页，server服务端分页（*）
         search: true, //启用搜索
         showSearchButton: true,  //
         showFullscreen: true,    // 全屏按钮
-        showToggle: true,//显示详细视图和列表
+        showToggle: true, //显示详细视图和列表
         showColumns: true,
         showRefresh: true, //显示刷新按钮
-        clickToSelect: true,  //点击选中 checkbox
+        clickToSelect: true,   //点击选中 checkbox
         pageNumber: 1,  //初始化加载第一页，默认第一页
         pageSize: 7,    //每页的记录行数
-        pageList: [3, 5, 7, 9, 'ALL'],   //可供选择的页面显示条数
+        pageList: [1, 3, 5, 7, 9, 'ALL'],    //可供选择的页面显示条数
         maintainSelected: true,  //记住选中项即使翻页
         paginationPreText: "上一页",
         paginationNextText: "下一页",
@@ -39,6 +41,7 @@ function BoootstrapTableInit(tableId, requestUrl, rowStyle, dataColumns, ) {
         //onDblClickCell: function (field, value, row, $element) {
         //    alert(value);
         //}
+        //queryParams: queryParams
     });
 }
 
@@ -51,6 +54,45 @@ function diyFormatter(value, name) {
     var _a = "<a hre=\"javascript:void(0);\"" + "data-name=\"" + name + "\" data-value=\"" + value + "\" class=\" editable editable-click\">" + value + "</a>";
     return _a;
 }
+
+/**
+ * 获取select source  数据 及 data list 数据
+ * @param {any} requestUrl 请求url
+ * @param {any} jsonData   部分需要数据
+ */
+function getEditableSource(requestUrl, jsonData) {
+    var result = [];
+    $.ajax({
+        url: requestUrl,
+        async: false,
+        type: "get",
+        data: { "_Code": jsonData },
+        success: function (data, status) {
+            $.each(data, function (key, item) {
+                result.push({ value: item.value, text: item.value });
+            });
+        }
+    });
+    //console.log(result);
+    return result;
+}
+
+/**
+ * 初始化 datalist 对象 可进一步扩展为动态加载暂未实现
+ * @param {any} requestUrl  数据源 url
+ * @param {any} jsonData    可选参数 可为空
+ * @param {any} dataListID   datalist id
+ */
+function InitDataList(requestUrl, jsonData, dataListID) {
+    var result = getEditableSource(requestUrl, jsonData);
+    // console.log(result);
+    $("#" + dataListID).empty();
+    $.each(result, function (index, item) {
+        var option = "<option label=\"" + item.text + "\"value=\"" + item.value + "\"</option>";
+        $("#" + dataListID).append(option);
+    })
+}
+
 
 /**
  * 日期格式化
@@ -72,6 +114,24 @@ function changeDateFormat(cellval) {
 }
 
 /**
+ * datetimepick 初始化 dateClass 使用datetimepick 的 类选择
+ * positionClass 位置
+ */
+
+function InitDatetimepicker(dateClass,positionClass) {
+    $("." + dateClass).datetimepicker({
+        language: 'zh-CN',
+        pickerPosition: positionClass,
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    })
+}
+/**
  * 获取表格选中数据的 ID
  * 并转化为json 串
  * @param {any} tableId
@@ -81,7 +141,7 @@ function getSelectedData(tableId) {
     //存储数据
     var ItemIDs = new Array();
     //console.log(rows);
-    if (rows.length == 0) {// rows 主要是为了判断是否选中，下面的else内容才是主要
+    if (rows.length == 0) {  // rows 主要是为了判断是否选中，下面的 else 内容才是主要
         toastr.warning("请先选择要删除的记录!");
         return;
     } else {
@@ -95,6 +155,7 @@ function getSelectedData(tableId) {
     return JSON.stringify(ItemIDs);
 }
 
+
 /**
  * 删除确认框  可扩展为 通用弹出框 设置参数 传入对应值即可
  * 暂不考虑
@@ -103,31 +164,33 @@ function getSelectedData(tableId) {
  * @param {any} ItemIDs  待删除的 数据 id
  */
 function confirmOrCancelDeleteData(requestUrl, tableId, ItemIDs) {
-   swal.fire({
+    swal.fire({
         title: '确定删除吗？',
         text: ' 这可能是非常重要的记录！',
-        type: 'warning',
+        icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: '确定删除！',
         cancelButtonText: '取消删除！',
-        confirmButtonClass: 'btn btn-success ',
-        cancelButtonClass: 'btn btn-danger',
-       buttonsStyling: false
-   }).then(function (isConfirm) {
-       if (isConfirm.value == true) {
-           DeleteRecords(requestUrl, tableId, ItemIDs);
-       } else if (isConfirm.dismiss == 'cancel'){
-           swal.fire({
-               title: '已取消',
-               text: '这会是一个聪明的决定',
-           })
-       }
+        customClass: {
+            confirmButton: 'btn btn-success ',
+            cancelButton: 'btn btn-danger',
+        },
+        buttonsStyling: false
+    }).then(function (isConfirm) {
+        if (isConfirm.value == true) {
+            DeleteRecords(requestUrl, tableId, ItemIDs);
+        } else if (isConfirm.dismiss == 'cancel') {
+            swal.fire({
+                title: '已取消',
+                text: '这会是一个聪明的决定',
+            })
+        }
         //console.log(isConfirm.value);
         //console.log(isConfirm.dismiss);
-        
-    }) 
+
+    })
 }
 
 /**
@@ -143,6 +206,7 @@ function AddRecord(formId, requestUrl, modalIdOfForm, tableId) {
         url: requestUrl,//url
         data: $('#' + formId).serialize(),
         success: function (result) {
+            
             if (result.success) {
                 $("#" + modalIdOfForm).modal('hide');
                 ResetForm(formId);
@@ -162,14 +226,17 @@ function AddRecord(formId, requestUrl, modalIdOfForm, tableId) {
 /**
  * 删除记录
  * @param {any} reuestUrl 请求url
- * @param {any} tableId s表格 id
+ * @param {any} tableId 表格 id
  * @param {any} ItemIDs  待删除的 数据 id
  */
 function DeleteRecords(requestUrl, tableId, ItemIDs) {
+    console.log(ItemIDs);
     $.ajax({
         url: requestUrl,
         type: "post",
-        data: { "ItemIDs": ItemIDs },
+        data: { "record": ItemIDs },
+        dataType: "json",
+        traditional: false,
         success: function (result) {
             if (result.success) {
                 RefreshTable(tableId);
@@ -187,32 +254,31 @@ function DeleteRecords(requestUrl, tableId, ItemIDs) {
 }
 
 /**
- * 修改一条记录 
- * @param {any} formId  修改记录表单 的 id
- * @param {any} requestUrl 请求  url
- * @param {any} modalIdOfForm  表单所在模态框
- * @param {any} tableId   记录 所在表格的 table id
+ *  更新记录
+ * @param {any} requestUrl 请求url
+ * @param {any} tableId 表格 id
+ * @param {any} jsonData    json 数据
  */
-function UpdateRecord(formId, requestUrl, modalIdOfForm, tableId) {
+function UpdateRecord(requestUrl, tableId,jsonData) {
     $.ajax({
-        type: "POST",//方法类型
-        url: requestUrl,//url
-        data: $('#' + formId).serialize(),
+        url: requestUrl,
+        type: 'post',
+        data: { "record": jsonData },
+        dataType: "json",
+        traditional: false,
         success: function (result) {
             if (result.success) {
-                $("#" + modalIdOfForm).modal('hide');
-                ResetForm(formId);
+                toastr.success("编辑已保存");
+            } else {
                 RefreshTable(tableId);
-                toastr.success('记录修改成功');
-            }
-            else {
                 toastr.warning(result.msg);
-            }
+            }           
         },
         error: function (e) {
-            toastr.error('记录修改错误');
+            RefreshTable(tableId);
+            toastr.error("错误");
         }
-    });
+    })
 }
 
 

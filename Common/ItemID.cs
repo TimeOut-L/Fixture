@@ -8,11 +8,10 @@ namespace FixtureManagement.Common
 {
     [Serializable]
     /**
-     * 物品代码及日期
+     * 物品
      */
     public class ItemID
-    {
-       
+    {    
         public int ID { get; set; }
        
     } 

@@ -4,66 +4,43 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
+    <title>领用记录管理</title>
+
+    <link rel="stylesheet" href="~/Content/bootstrap-table.min.css" />
+    <link href="~/Content/diy-bootstraptable.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-editable.css" />
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <script src="~/Scripts/bootstrap-editable.min.js"></script>
     <!--行内编辑-->
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
+    <script src="~/Scripts/bootstrap-table.min.js"></script>
     <!-- Latest compiled and minified Locales -->
-    <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="~/Scripts/bootstrap-table-zh-CN.min.js"></script>
     <script src="~/Scripts/bootstrap-table-editable.min.js"></script>
-    <!--最新版本会有 warning -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.js"></script>
-
+    <!--datetimepicker 日期选择插件-->
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.fr.js"></script>
+    <!-- 弹出框插件-->
+    <script src="~/Scripts/sweetalert2.min.js"></script>
     <!-- 消息提示插件：toastr.js -->
     <link href="~/Content/toastr/toastr.min.css" rel="stylesheet" />
     <script src="~/Scripts/toastr.min.js" type="text/javascript"></script>
-    <script src="~/Scripts//es6-promise.min.js "></script>
-    <script src="~/Scripts//es6-promise.auto.min.js "></script>
+    <script src="~/Scripts/es6-promise.min.js "></script>
+    <script src="~/Scripts/es6-promise.auto.min.js "></script>
+    <!-- 图表插件 echarts -->
+    <script src="~/Scripts/echarts/echarts.min.js"></script>
 
     <script src="~/Scripts/common.toastr.init.js"></script>
     <script src="~/Scripts/common.form.validate.js"></script>
     <script src="~/Scripts/common.bootstraptable.init.js"></script>
 
-    <style>
-        /*模态框 位置及大小修改*/
-        .modal-dialog {
-            margin-top: 5%;
-            width: 350px;
-            height: 550px;
-        }
-
-        .col-sm-2 {
-            margin-left: 1%;
-        }
-
-        div#query {
-            border: 1px solid blue;
-            margin-top: 15px;
-            margin-bottom: 10px;
-            padding-top: 10px;
-        }
-        /*表头样式*/
-        .table .thead-blue th {
-            color: #fff;
-            background-color: #3195f1;
-            border-color: #0d7adf;
-        }
-        /*行 hover*/
-        .table-hover > tbody > tr:nth-child(odd):hover > td,
-        .table-hover > tbody > tr:nth-child(odd):hover > th,
-        .table-hover > tbody > tr:nth-child(even):hover > td,
-        .table-hover > tbody > tr:nth-child(even):hover > th {
-            background-color: aquamarine;
-        }
-    </style>
 </head>
 <body>
     <div class="panel-body" style="padding-bottom:0px;">
         <button class="btn btn-info " data-toggle="collapse" data-target="#query"> 查询项</button>
+        <!--文件excell 批量-->
+        <!--<input type="file" />-->
         <!-- 条件查询框 -->
         <div id="query" class="collapse">
             <div class="row">
@@ -82,15 +59,15 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="StartDate">开始日期</label>
                             <div class="col-sm-3">
-                                <input class="form-control" id="StartDate" type="text" name="StartDate" />
+                                <input class="form-control query_datetimepick" id="StartDate" type="text" name="StartDate" />
                             </div>
                             <label class="col-sm-2 control-label " for="StopDate">终止日期</label>
                             <div class="col-sm-3">
-                                <input class="form-control" id="StopDate" type="text" name="StopDate" />
+                                <input class="form-control query_datetimepick" id="StopDate" type="text" name="StopDate" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <button type="button" class="col-sm-1 col-sm-offset-5 btn-primary">查询</button>
+                            <button type="button" class="col-sm-1 col-sm-offset-5 btn-primary" onclick="query()">查询</button>
                         </div>
                     </form>
                 </div>
@@ -109,12 +86,21 @@
                 </button>
                 <button id="btn_edit" type="button" class="btn btn-warning">
                     <i></i>
-                    <span>行内编辑</span>
+                    <span>蓝色可编辑</span>
+                </button>
+                <button id="btn_chart" type="button" class="btn btn-primary">
+                    <i class="fa fa-bar-chart-o" aria-hidden="true"></i>
+                    <span>图表</span>
                 </button>
             </div>
 
             <table id="outRecordTable" class="table-striped">
             </table>
+
+            <!--图表界面-->
+            <div id="outRecordChart">
+
+            </div>
             <!-- 添加 modal 框-->
             <div class="modal fade" id="addOutRecordModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog ">
@@ -128,13 +114,19 @@
                                 <div class=" form-group">
                                     <label class="col-xs-4 control-label" for="code">夹具代码</label>
                                     <div class="col-xs-6">
-                                        <input class="form-control" name="code" id="code" type="text">
+                                        <input class="form-control" name="code" id="code" type="text" list="codeList" autocomplete="off">
+                                        <!--code 列表-->
+                                        <datalist id="codeList">
+                                        </datalist>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-xs-4 control-label" for="seqID">夹具序列号</label>
                                     <div class="col-xs-6">
-                                        <input class="form-control" name="seqID" id="seqID" type="text">
+                                        <input class="form-control" name="seqID" id="seqID" type="text" list="seqIDList">
+                                        <!--seqIDList 列表-->
+                                        <datalist id="seqIDList">
+                                        </datalist>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -158,7 +150,7 @@
                                 <div class=" form-group">
                                     <label class="col-xs-4 control-label" for="usedDate">领用日期</label>
                                     <div class="col-xs-6">
-                                        <input class="form-control" name="usedDate" id="usedDate" type="text">
+                                        <input class="form-control datetimepick" name="usedDate" id="usedDate" type="text">
                                     </div>
                                 </div>
                                 <div class="form-group modal-footer">
@@ -175,12 +167,50 @@
         </div>
     </div>
     <script type="text/javascript">
+
         //添加领用记录
         function addOutRecord() {
             if (CheckFormNull("addform")) {
                 AddRecord("addform", "/OutRecord/AddOutRecord", "addOutRecordModal", "outRecordTable");
             }
         }
+       //待完善
+        function query() {
+             toastr.success("暂时不能使用");
+            return;
+            console.log($("#queryform").serialize());
+            $.ajax({
+                url: '/OutRecord/QeuryOutRecords',
+                type: 'post',
+                data: $("#queryform").serialize(),
+                success: function (result) {
+                    toastr.success(result.msg);
+                    $("#outRecordTable").bootstrapTable('load', result);
+                }
+            })
+           
+        }
+        //datalist codeList 对象
+        $(function () {
+            InitDataList("/OutRecord/GetFixtureCode", null, "codeList");
+        })
+
+        //初始化datetimpick 控件
+        $(function () {
+            InitDatetimepicker("datetimepick", "top-right")
+            InitDatetimepicker("query_datetimepick", "bottom-right");
+        })
+
+        //根据code 初始化 seqIDList
+        $("#code").change(function () {
+            var _code = $("#code").val();
+            if (_code == null) {
+                toastr.warning("请先输入夹具代码");
+                return;
+            }
+            InitDataList("/OutRecord/GetFixtureSeqIDByCode", _code, "seqIDList");
+
+        })
 
 
         //btn_remove 事件
@@ -199,15 +229,26 @@
         window.operationEvents = {
             //编辑事件
             'click #btn_update': function (e, value, row, index) {
-
+                var record = new Array();
+                var Item = new Object();
+                Item.ID = row.ID;
+                Item.Code = row.Code;
+                Item.SeqID = row.SeqID;
+                Item.ByName = row.UsedByName;
+                Item.OperationByName = row.OperationByName;
+                Item.ProdLineID = row.ProdLineID;
+                Item.Date = row.UsedDate;
+                record.push(Item);
+                console.log(record);
+                UpdateRecord("/OutRecord/UpdateOutRecord", "outRecordTable", JSON.stringify(record));
             },
             'click #btn_delete': function (e, value, row, index) {
                 var ItemIDs = new Array();
-                Item = new Object();
+                var Item = new Object();
                 Item.ID = row.ID;
                 ItemIDs.push(Item);
                 console.log(ItemIDs);
-                confirmOrCancelDeleteData("/OutRecord/DeleteOutRecords", "outRecordTable", ItemIDs)
+                confirmOrCancelDeleteData("/OutRecord/DeleteOutRecords", "outRecordTable", JSON.stringify(ItemIDs));
             }
         }
 
@@ -217,21 +258,8 @@
             return { classes: classes[index % classes.length] };
         }
 
-        function getEditableSource(requestUrl, jsonData) {
-            var result = [];
-            $.ajax({
-                url: requestUrl,
-                async: false,
-                type: "get",
-                data: { "temp": jsonData },
-                success: function (data, status) {                    
-                    $.each(data, function (key, item) {
-                        result.push({ value: item.value, text: item.value });
-                    });
-                }
-            });
-            return result;
-        }
+
+
         /**
          * 数据列
          * */
@@ -247,6 +275,7 @@
             field: 'Code',
             title: '夹具代码',
             visable: true,
+            // editable 初始化
             editable: {
                 type: 'select',
                 title: '夹具代码',
@@ -257,7 +286,7 @@
                 noeditFormatter: function (value, row, index) {
                     return diyFormatter(value, 'Code');
                 },
-                source: function (value, row, index) {                  
+                source: function (value, row, index) {
                     return getEditableSource("/OutRecord/GetFixtureCode", null)
                 }
             }
@@ -266,6 +295,7 @@
             title: '夹具序列号',
             visable: true,
             align: 'center',
+            // editable 初始化
             editable: {
                 type: 'select',
                 title: '夹具序列号',
@@ -275,14 +305,14 @@
                 validate: function (value) {
                     if (!value) return '夹具序列号不能为空';
                 },
-                source: function (value, row, index) {                  
-                    var data = $("#outRecordTable").bootstrapTable('getData');                
+                source: function (value, row, index) {
+                    var data = $("#outRecordTable").bootstrapTable('getData');
                     //2.获取所在的索引
-                    var index = $(this).parents('tr').data('index');               
+                    var index = $(this).parents('tr').data('index');
                     //获取当前行数据
-                    var datas = data[index];                  
+                    var datas = data[index];
                     //获取当前行的某个数据
-                    var _code = datas.Code;                
+                    var _code = datas.Code;
                     return getEditableSource("/OutRecord/GetFixtureSeqIDByCode", _code);
                 }
             }
@@ -338,8 +368,9 @@
          * 调用 TableInit
          * */
         $(function () {
+            //添加记录表单  设置操作人的值 且不可修改
             $("#operationByName").attr("value", window.sessionStorage.getItem("userName"));
-            $("#operationByName").attr("disabled", "disabled");
+            $("#operationByName").attr("readonly", "readonly");
             var itable = TableInit();//.初始化  Table
         });
     </script>
