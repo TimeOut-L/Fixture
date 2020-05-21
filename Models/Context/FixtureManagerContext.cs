@@ -29,6 +29,6 @@ namespace FixtureManagement.Models.Context
         public DbSet<FixtureInRecord> InRecords { get; set; }
         public DbSet<FixtureOutRecord> OutRecords { get; set; }
         public DbSet<FixtureFamily> Familys { get; set; }
-
+        public DbSet<FixturePurchase> Purchases { get; set; }
     }
 }
