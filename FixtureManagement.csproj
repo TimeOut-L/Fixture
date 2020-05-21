@@ -248,9 +248,11 @@
     <Compile Include="Common\InOutEditRecord.cs" />
     <Compile Include="Common\InOutQueryRecord.cs" />
     <Compile Include="Common\ItemID.cs" />
+    <Compile Include="Controllers\FixturePurchaseController.cs" />
     <Compile Include="Controllers\ManagerFamilyController.cs" />
     <Compile Include="filter\UserFilter.cs" />
     <Compile Include="Models\FixtureFamily.cs" />
+    <Compile Include="Models\FixturePurchase.cs" />
     <Compile Include="Models\WorkCell.cs" />
     <Compile Include="Service\InRecordService.cs" />
     <Compile Include="Service\impl\InRecordServiceImpl.cs" />
@@ -401,6 +403,9 @@
     <Content Include="Scripts\toastr.js.map" />
     <Content Include="Views\ManagerFamily\Index.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\FixturePurchase\Apply.cshtml" />
+    <Content Include="Views\FixturePurchase\FirstPass.cshtml" />
+    <Content Include="Views\FixturePurchase\LastPass.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
