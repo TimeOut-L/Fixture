@@ -36,6 +36,10 @@
                     <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
                     <span>新增</span>
                 </button>
+                @*<button id="btn_remove" type="button" class="btn btn-danger">
+                        <i class="glyphicon glyphicon-remove" aria-hidden="true"></i>
+                        <span>删除</span>
+                    </button>*@
             </div>
             <table id="PurchaseTable" class="table-striped"></table>
             <!-- 添加 modal 框-->
@@ -112,17 +116,65 @@
         }
 
 
+        ////btn_remove 事件
+        //$("#btn_remove").on("click", function () {
+
+        //    //获取选中数据
+        //    var id = []  ;
+        //    var jsonData = $.map($('#FamilyTable').bootstrapTable('getSelections'), function (row) {
+        //        return row;
+        //    });
+
+        //    for (i = 0; i < jsonData.length; i++) {
+        //        id[i] = jsonData[i].FamilyID;
+        //    }
+        //    var ids = id.join(';');
+        //    console.log(ids);
+        //    if (ids == null||ids=="") {
+        //        toastr.warning("请先选择要删除的记录!");
+        //        return;
+        //    }
+
+        //    confirmOrCancelDeleteData("/ManagerFamily/DeleteFamilyRecords", "FamilyTable", ids);
+        //    var itable = TableInit();
+
+        //})
+
         // 行样式
         function rowStyle(row, index) {
             var classes = ['success', 'danger']
             return { classes: classes[index % classes.length] };
         }
 
+        ////操作列事情
+        //window.operationEvents = {
+        //    //编辑事件
+        //    'click #btn_update': function (e, value, row, index) {
+        //        console.log(222);
+        //        var record = new Array();
+        //        var Item = new Object();
+        //        Item.FamilyID = row.FamilyID;
+        //        Item.FamilyName = row.FamilyName;
+        //        record.push(Item);
+        //        UpdateRecord("/ManagerFamily/EditFamilyRecord", "FamilyTable".JSON.stringify(record));
+        //    },
+        //    'click #btn_delete': function (e, value, row, index) {
+        //        console.log(111);
+        //        var record = new Array();
+        //        var Item = new Object();
+        //        Item.FamilyID = row.FamilyID;
+        //        Item.FamilyName = row.FamilyName;
+        //        record.push(Item);
+        //        confirmOrCancelDeleteData("/ManagerFamily/DeleteFamilyRecords", "FamilyTable", JSON.stringify(record));
+        //    }
+        //}
 
         /**
          * 数据列
          * */
-        var columns = [ {
+        var columns = [{
+            title: "全选", field: "select", checkbox: true
+        }, {
             field: 'AppBy',
             title: '用户编号',
             visable: true,
@@ -133,7 +185,7 @@
             title: '用户名',
             visable: true,
             align: 'center',
-            
+
             }, {
                 field: 'FamilyID',
                 title: '类型编号',
@@ -178,20 +230,33 @@
             formatter: function (value, row, index) {
                 return [
                     '<div class="btn-group">',
-                    '<button id="btn_delete"  type="button" class="btn btn-danger" onclick="del(this)"><i class="glyphicon glyphicon-remove" aria-hidden="true"  ></i><span>撤销</span></button>',
+                    '<div class="btn-group">',
+                    '<button id="btn_update"  type="button" class="btn btn-warning" onclick="update(this)" data-toggle="modal" data-target="#editOutRecordModal"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i><span></span></button>',
+                    '<button id="btn_delete"  type="button" class="btn btn-danger" onclick="del(this)"><i class="glyphicon glyphicon-remove" aria-hidden="true"  ></i><span></span></button>',
                     '</div>'
                 ].join(' ');
             }
         },]
 
-        function del(obj) {
-            Billno = obj.parentNode.parentNode.parentNode.childNodes[5].textContent;
-            State = "撤销";
-            var record = Billno + ";" + State;
-            UpdateRecord("/FixturePurchase/DeleteApply", "PurchaseTable", record);
-        }
+        //function del(obj) {
 
+        //    FamilyID = obj.parentNode.parentNode.parentNode.previousSibling.previousSibling.innerHTML;
+        //    FamilyName = obj.parentNode.parentNode.parentNode.previousSibling.firstChild.text;
+        //    var id = []  ;
+        //    id[0] = FamilyID;
+        //    var ids = id.join(';');
 
+        //    confirmOrCancelDeleteData("/ManagerFamily/DeleteFamilyRecords", "FamilyTable",ids);
+
+        //}
+
+        //function update(obj) {
+        //    FamilyID = obj.parentNode.parentNode.parentNode.previousSibling.previousSibling.innerHTML;
+        //    FamilyName = obj.parentNode.parentNode.parentNode.previousSibling.firstChild.text;
+        //    var record = FamilyID + ";" + FamilyName;
+        //    c
+        //    UpdateRecord("/ManagerFamily/EditFamilyRecord","FamilyTable", record);
+        //}
 
 
         /**
@@ -199,7 +264,7 @@
          * */
         var TableInit = function () {
             var PurchaseTable = new Object();
-            
+
             PurchaseTable = BoootstrapTableInit("PurchaseTable", '/FixturePurchase/ReadPurchaseWithUser', rowStyle, columns)
             return PurchaseTable;
         }
