@@ -249,17 +249,21 @@
     <Compile Include="Common\InOutQueryRecord.cs" />
     <Compile Include="Common\ItemID.cs" />
     <Compile Include="Controllers\FixturePurchaseController.cs" />
+    <Compile Include="Controllers\FixtureRepairController.cs" />
     <Compile Include="Controllers\ManagerFamilyController.cs" />
     <Compile Include="Controllers\FixtureScrapController.cs" />
     <Compile Include="filter\UserFilter.cs" />
+    <Compile Include="Models\FixtureRepair.cs" />
     <Compile Include="Models\FixtureScrap.cs" />
     <Compile Include="Models\FixtureFamily.cs" />
     <Compile Include="Models\FixturePurchase.cs" />
     <Compile Include="Models\WorkCell.cs" />
     <Compile Include="Service\impl\PurchaseServiceImpl.cs" />
+    <Compile Include="Service\impl\ScrapServiceImpl.cs" />
     <Compile Include="Service\InRecordService.cs" />
     <Compile Include="Service\impl\InRecordServiceImpl.cs" />
     <Compile Include="Service\PurchaseService.cs" />
+    <Compile Include="Service\ScrapService.cs" />
     <Compile Include="ViewModels\MenuTreeViewModel.cs" />
     <Compile Include="Models\MenuNode.cs" />
     <Compile Include="Controllers\FixtureEntityController.cs" />
@@ -414,7 +418,9 @@
     <Content Include="Views\FixtureScrap\FirstPass.cshtml" />
     <Content Include="Views\FixtureScrap\LastPass.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\FixtureRepair\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -89,7 +89,7 @@ namespace FixtureManagement.Controllers
             return Json(fixturePurchases, JsonRequestBehavior.AllowGet);
         }
 
-        //查询本车间正在State的采购申请
+        //查询本车间正在终审的采购申请
         [HttpPost]
         public ActionResult ReadPurchaseLastPass()
         {
@@ -101,9 +101,9 @@ namespace FixtureManagement.Controllers
             return Json(fixturePurchases, JsonRequestBehavior.AllowGet);
         }
 
-        //申请人撤销申请
+        //修改报废状态
         [HttpPost]
-        public ActionResult DeleteApply()
+        public ActionResult UpdateState()
         {
             string JSONData = Request["record"];
             string[] arr = JSONData.Split(';');
@@ -143,137 +143,6 @@ namespace FixtureManagement.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
 
         }
-
-        //通过初审
-        [HttpPost]
-        public ActionResult PassFirstApply()
-        {
-
-            string JSONData = Request["record"];
-            string[] arr = JSONData.Split(';');
-            var _record = purchaseService.FindByBillno(arr[0]);
-            if (_record == null)
-            {
-                var error = new
-                {
-                    succes = false,
-                    msg = "该条记录不存在请刷新表格"
-                };
-                return Json(error, JsonRequestBehavior.AllowGet);
-            }
-            _record.AppBy = _record.AppBy;
-            _record.AppByName = _record.AppByName;
-            _record.FamilyID = _record.FamilyID;
-            _record.Code = _record.Code;
-            _record.SeqID = _record.SeqID;
-            _record.BillNo = _record.BillNo;
-            _record.RegDate = _record.RegDate;
-            _record.Pic = _record.Pic;
-            _record.State = arr[1];
-            if (!purchaseService.Update(_record))
-            {
-                var error = new
-                {
-                    succes = false,
-                    msg = "编辑保存失败"
-                };
-                return Json(error, JsonRequestBehavior.AllowGet);
-            }
-
-            var data = new
-            {
-                success = true,
-            };
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
-
-        //终审通过
-        [HttpPost]
-        public ActionResult PassLastApply()
-        {
-
-            string JSONData = Request["record"];
-            string[] arr = JSONData.Split(';');
-            var _record = purchaseService.FindByBillno(arr[0]);
-            if (_record == null)
-            {
-                var error = new
-                {
-                    succes = false,
-                    msg = "该条记录不存在请刷新表格"
-                };
-                return Json(error, JsonRequestBehavior.AllowGet);
-            }
-            _record.AppBy = _record.AppBy;
-            _record.AppByName = _record.AppByName;
-            _record.FamilyID = _record.FamilyID;
-            _record.Code = _record.Code;
-            _record.SeqID = _record.SeqID;
-            _record.BillNo = _record.BillNo;
-            _record.RegDate = _record.RegDate;
-            _record.Pic = _record.Pic;
-            _record.State = arr[1];
-            if (!purchaseService.Update(_record))
-            {
-                var error = new
-                {
-                    succes = false,
-                    msg = "编辑保存失败"
-                };
-                return Json(error, JsonRequestBehavior.AllowGet);
-            }
-
-            var data = new
-            {
-                success = true,
-            };
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
-
-        //审查者驳回申请
-        [HttpPost]
-        public ActionResult RebutApply()
-        {
-
-            string JSONData = Request["record"];
-            string[] arr = JSONData.Split(';');
-            var _record = purchaseService.FindByBillno(arr[0]);
-            if (_record == null)
-            {
-                var error = new
-                {
-                    succes = false,
-                    msg = "该条记录不存在请刷新表格"
-                };
-                return Json(error, JsonRequestBehavior.AllowGet);
-            }
-            _record.AppBy = _record.AppBy;
-            _record.AppByName = _record.AppByName;
-            _record.FamilyID = _record.FamilyID;
-            _record.Code = _record.Code;
-            _record.SeqID = _record.SeqID;
-            _record.BillNo = _record.BillNo;
-            _record.RegDate = _record.RegDate;
-            _record.Pic = _record.Pic;
-            _record.State = arr[1];
-            if (!purchaseService.Update(_record))
-            {
-                var error = new
-                {
-                    succes = false,
-                    msg = "编辑保存失败"
-                };
-                return Json(error, JsonRequestBehavior.AllowGet);
-            }
-
-            var data = new
-            {
-                success = true,
-            };
-            return Json(data, JsonRequestBehavior.AllowGet);
-
-        }
-
 
     }
 }

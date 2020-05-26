@@ -30,115 +30,11 @@
 <body>
     <div class="panel-body" style="padding-bottom:0px;">
         <div>
-            <!-- 工具栏 -->
-            <div id="toolbar" class="btn-group">
-                <button id="btn_add" type="button" class="btn btn-success" data-toggle="modal" data-target="#addPurchaseModal">
-                    <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
-                    <span>新增</span>
-                </button>
-                @*<button id="btn_remove" type="button" class="btn btn-danger">
-                        <i class="glyphicon glyphicon-remove" aria-hidden="true"></i>
-                        <span>删除</span>
-                    </button>*@
-            </div>
-            <table id="PurchaseTable" class="table-striped"></table>
-            <!-- 添加 modal 框-->
-            <div class="modal fade" id="addPurchaseModal" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog ">
-                    <div class="modal-content" sstyle="border-radius:5px">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title" id="myModalLabel">采购申请</h4>
-                        </div>
-                        <div class="modal-body">
-                            <form id="addform" class="form-horizontal" action="##" method="post">
-                                <div class="form-group">
-                                    <label class="col-xs-4 control-label" for="familycode">类别代码</label>
-                                    <div class="col-xs-6">
-                                        <input class="form-control" name="familycode" id="familycode" type="text">
-                                    </div>
-                                </div>
-                                <div class=" form-group">
-                                    <label class="col-xs-4 control-label" for="code">夹具代码</label>
-                                    <div class="col-xs-6">
-                                        <input class="form-control" name="code" id="code" autocomplete="off" type="text" list="codeList">
-                                        <!--code 列表-->
-                                        <datalist id="codeList"></datalist>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-xs-4  control-label" for="seqID">夹具序列号</label>
-                                    <div class="col-xs-6">
-                                        <input class="form-control" name="seqID" id="seqID" type="text" list="seqIDList">
-                                        <!--seqIDList 列表-->
-                                        <datalist id="seqIDList"></datalist>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-xs-4 control-label" for="billNo">采购订单号</label>
-                                    <div class="col-xs-6">
-                                        <input class="form-control" name="billNo" id="billNo" type="text">
-                                    </div>
-                                </div>
-                                <div class=" form-group">
-                                    <label class="col-xs-4 control-label" for="regDate">申请日期</label>
-                                    <div class="col-xs-6">
-                                        <input class="form-control datetimepick" name="regDate" id="regDate" type="text">
-                                    </div>
-                                </div>
-                                @* 待修改 *@
-                                <div class="form-group">
-                                    <label class="col-xs-4 control-label" for="pic">图片</label>
-                                    <div class="col-xs-6">
-                                        <input class="form-control" name="pic" id="pic" type="text">
-                                    </div>
-                                </div>
-
-                                <div class="form-group modal-footer">
-                                    <div class="col-xs-6 col-xs-offset-4">
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
-                                        <button type="button" class="btn btn-warning" onclick="addApply()">提交</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <table id="ScrapTable" class="table-striped"></table>
         </div>
     </div>
 
     <script type="text/javascript">
-        function addApply() {
-            if (CheckFormNull("addform")) {
-                AddRecord("addform", "/FixturePurchase/AddPurChaseRecord", "addPurchaseModal", "PurchaseTable");
-            }
-        }
-
-
-        ////btn_remove 事件
-        //$("#btn_remove").on("click", function () {
-
-        //    //获取选中数据
-        //    var id = []  ;
-        //    var jsonData = $.map($('#FamilyTable').bootstrapTable('getSelections'), function (row) {
-        //        return row;
-        //    });
-
-        //    for (i = 0; i < jsonData.length; i++) {
-        //        id[i] = jsonData[i].FamilyID;
-        //    }
-        //    var ids = id.join(';');
-        //    console.log(ids);
-        //    if (ids == null||ids=="") {
-        //        toastr.warning("请先选择要删除的记录!");
-        //        return;
-        //    }
-
-        //    confirmOrCancelDeleteData("/ManagerFamily/DeleteFamilyRecords", "FamilyTable", ids);
-        //    var itable = TableInit();
-
-        //})
 
         // 行样式
         function rowStyle(row, index) {
@@ -146,74 +42,41 @@
             return { classes: classes[index % classes.length] };
         }
 
-        ////操作列事情
-        //window.operationEvents = {
-        //    //编辑事件
-        //    'click #btn_update': function (e, value, row, index) {
-        //        console.log(222);
-        //        var record = new Array();
-        //        var Item = new Object();
-        //        Item.FamilyID = row.FamilyID;
-        //        Item.FamilyName = row.FamilyName;
-        //        record.push(Item);
-        //        UpdateRecord("/ManagerFamily/EditFamilyRecord", "FamilyTable".JSON.stringify(record));
-        //    },
-        //    'click #btn_delete': function (e, value, row, index) {
-        //        console.log(111);
-        //        var record = new Array();
-        //        var Item = new Object();
-        //        Item.FamilyID = row.FamilyID;
-        //        Item.FamilyName = row.FamilyName;
-        //        record.push(Item);
-        //        confirmOrCancelDeleteData("/ManagerFamily/DeleteFamilyRecords", "FamilyTable", JSON.stringify(record));
-        //    }
-        //}
 
         /**
          * 数据列
          * */
-        var columns = [{
-            title: "全选", field: "select", checkbox: true
-        }, {
-            field: 'AppBy',
-            title: '用户编号',
-            visable: true,
-            sortable: true,
-            align: 'center',
-        }, {
-            field: 'AppByName',
-            title: '用户名',
-            visable: true,
-            align: 'center',
-
+        var columns = [
+            {
+                field: 'ScrapBy',
+                title: '用户编号',
+                visable: true,
+                sortable: true,
+                align: 'center',
             }, {
-                field: 'FamilyID',
-                title: '类型编号',
+                field: 'ScrapByName',
+                title: '用户名',
                 visable: true,
                 align: 'center',
-            },{
+
+            }, {
                 field: 'Code',
                 title: '夹具编号',
                 visable: true,
                 align: 'center',
             }, {
-                field: 'SeqID',
+                field: 'SeqId',
                 title: '夹具序列号',
                 visable: true,
                 align: 'center',
             }, {
-                field: 'BillNo',
-                title: '采购单号',
+                field: 'UsedCount',
+                title: '物品寿命计数',
                 visable: true,
                 align: 'center',
             }, {
-                field: 'RegDate',
-                title: '采购时间',
-                visable: true,
-                align: 'center',
-            }, {
-                field: 'Pic',
-                title: '图片',
+                field: 'ScrapReason',
+                title: '报废原因',
                 visable: true,
                 align: 'center',
             }, {
@@ -222,41 +85,37 @@
                 visable: true,
                 align: 'center',
             },
-        {
-            field: 'Operation',
-            title: '操作',
-            //events: operationEvents,
-            align: 'center',
-            formatter: function (value, row, index) {
-                return [
-                    '<div class="btn-group">',
-                    '<div class="btn-group">',
-                    '<button id="btn_update"  type="button" class="btn btn-warning" onclick="update(this)" data-toggle="modal" data-target="#editOutRecordModal"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i><span></span></button>',
-                    '<button id="btn_delete"  type="button" class="btn btn-danger" onclick="del(this)"><i class="glyphicon glyphicon-remove" aria-hidden="true"  ></i><span></span></button>',
-                    '</div>'
-                ].join(' ');
-            }
-        },]
+            {
+                field: 'Operation',
+                title: '操作',
+                //events: operationEvents,
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return [
+                        '<div class="btn-group">',
+                        '<button id="btn_update"  type="button" class="btn btn-success" onclick="update(this)" data-toggle="modal" ><i  aria-hidden="true"></i><span>终审通过√</span></button>',
+                        '<button id="btn_delete"  type="button" class="btn btn-danger" onclick="del(this)"><i  aria-hidden="true"  ></i><span>×驳回</span></button>',
+                        '</div>'
+                    ].join(' ');
+                }
+            },]
 
-        //function del(obj) {
+        function del(obj) {
 
-        //    FamilyID = obj.parentNode.parentNode.parentNode.previousSibling.previousSibling.innerHTML;
-        //    FamilyName = obj.parentNode.parentNode.parentNode.previousSibling.firstChild.text;
-        //    var id = []  ;
-        //    id[0] = FamilyID;
-        //    var ids = id.join(';');
+            Code = obj.parentNode.parentNode.parentNode.childNodes[2].textContent;
+            SeqID = obj.parentNode.parentNode.parentNode.childNodes[3].textContent;
+            State = "驳回";
+            var record = Code + ";" + SeqID + ";" + State;
+            UpdateRecord("/FixtureScrap/UpdateScrap", "ScrapTable", record);
 
-        //    confirmOrCancelDeleteData("/ManagerFamily/DeleteFamilyRecords", "FamilyTable",ids);
-
-        //}
-
-        //function update(obj) {
-        //    FamilyID = obj.parentNode.parentNode.parentNode.previousSibling.previousSibling.innerHTML;
-        //    FamilyName = obj.parentNode.parentNode.parentNode.previousSibling.firstChild.text;
-        //    var record = FamilyID + ";" + FamilyName;
-        //    c
-        //    UpdateRecord("/ManagerFamily/EditFamilyRecord","FamilyTable", record);
-        //}
+        }
+        function update(obj) {
+            Code = obj.parentNode.parentNode.parentNode.childNodes[2].textContent;
+            SeqID = obj.parentNode.parentNode.parentNode.childNodes[3].textContent;
+            State = "审核全过";
+            var record = Code + ";" + SeqID + ";" + State;
+            UpdateRecord("/FixtureScrap/UpdateScrap", "ScrapTable", record);
+        }
 
 
         /**
@@ -265,7 +124,7 @@
         var TableInit = function () {
             var PurchaseTable = new Object();
 
-            PurchaseTable = BoootstrapTableInit("PurchaseTable", '/FixturePurchase/ReadPurchaseWithUser', rowStyle, columns)
+            PurchaseTable = BoootstrapTableInit("ScrapTable", '/FixtureScrap/ReadScrapLastPass', rowStyle, columns)
             return PurchaseTable;
         }
 
