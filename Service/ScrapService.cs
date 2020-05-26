@@ -2,22 +2,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
 namespace FixtureManagement.Service
 {
-    interface PurchaseService
+    interface ScrapService
     {
 
+
+
         /// <summary>
-        /// 修改记录
+        /// 修改报废信息
         /// </summary>
         /// <param name="outRecord"></param>
         /// <returns></returns>
-        bool Update(FixturePurchase fp);
+        bool Update(FixtureScrap fp);
+
+        //根据code和seqid找夹具报废表，返回夹具报废表
+        FixtureScrap FindByCode_SeqId(string Code,int SeqId);
 
 
-        FixturePurchase FindByBillno(string Billno);
+
     }
 }

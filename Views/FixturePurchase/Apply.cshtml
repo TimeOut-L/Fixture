@@ -145,7 +145,7 @@
                 visable: true,
                 align: 'center',
             }, {
-                field: 'SeqID',
+                field: 'SeqId',
                 title: '夹具序列号',
                 visable: true,
                 align: 'center',
@@ -188,7 +188,7 @@
             Billno = obj.parentNode.parentNode.parentNode.childNodes[5].textContent;
             State = "撤销";
             var record = Billno + ";" + State;
-            UpdateRecord("/FixturePurchase/DeleteApply", "PurchaseTable", record);
+            UpdateRecord("/FixturePurchase/UpdateState", "PurchaseTable", record);
         }
 
 

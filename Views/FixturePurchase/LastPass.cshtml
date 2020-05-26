@@ -122,7 +122,7 @@
             Billno = obj.parentNode.parentNode.parentNode.childNodes[5].textContent;
             State = "驳回";
             var record = Billno + ";" + State;
-            UpdateRecord("/FixturePurchase/RebutApply", "PurchaseTable", record);
+            UpdateRecord("/FixturePurchase/UpdateState", "PurchaseTable", record);
 
         }
 
@@ -130,7 +130,7 @@
             Billno = obj.parentNode.parentNode.parentNode.childNodes[5].textContent;
             State = "审核全过";
             var record = Billno + ";" + State;
-            UpdateRecord("/FixturePurchase/PassLastApply", "PurchaseTable", record);
+            UpdateRecord("/FixturePurchase/UpdateState", "PurchaseTable", record);
         }
 
 

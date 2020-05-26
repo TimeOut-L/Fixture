@@ -115,14 +115,14 @@
             Billno = obj.parentNode.parentNode.parentNode.childNodes[5].textContent;
             State = "驳回";
             var record = Billno + ";" + State;
-            UpdateRecord("/FixturePurchase/RebutApply", "PurchaseTable", record);
+            UpdateRecord("/FixturePurchase/UpdateState", "PurchaseTable", record);
         }
 
         function update(obj) {
             Billno = obj.parentNode.parentNode.parentNode.childNodes[5].textContent;
             State = "终审";
             var record = Billno + ";" + State;
-            UpdateRecord("/FixturePurchase/PassFirstApply", "PurchaseTable", record);
+            UpdateRecord("/FixturePurchase/UpdateState", "PurchaseTable", record);
         }
 
 
