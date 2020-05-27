@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>工具夹类别管理</title>
+    <title>报废管理</title>
     <link rel="stylesheet" href="~/Content/bootstrap-table.min.css" />
     <link href="~/Content/diy-bootstraptable.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-editable.css" />
@@ -122,10 +122,10 @@
          * table 初始化
          * */
         var TableInit = function () {
-            var PurchaseTable = new Object();
+            var ScrapTable = new Object();
 
-            PurchaseTable = BoootstrapTableInit("ScrapTable", '/FixtureScrap/ReadScrapLastPass', rowStyle, columns)
-            return PurchaseTable;
+           ScrapTable = BoootstrapTableInit("ScrapTable", '/FixtureScrap/ReadScrapLastPass', rowStyle, columns)
+            return ScrapTable;
         }
 
         /**
