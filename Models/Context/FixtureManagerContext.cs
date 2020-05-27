@@ -30,5 +30,7 @@ namespace FixtureManagement.Models.Context
         public DbSet<FixtureOutRecord> OutRecords { get; set; }
         public DbSet<FixtureFamily> Familys { get; set; }
         public DbSet<FixturePurchase> Purchases { get; set; }
+        public DbSet<FixtureScrap> Scraps { get; set; }
+        public DbSet<FixtureRepair> repairs { get; set; }
     }
 }

@@ -14,100 +14,94 @@ namespace FixtureManagement.Controllers
 {
     [LoginCheckFilter]
     [UserFilter]
-    public class FixturePurchaseController : Controller
+    public class FixtureScrapController : Controller
     {
         FixtureManagerContext context = new FixtureManagerContext();
         public UserService userService { get; set; }
-        PurchaseService purchaseService = new PurchaseServiceImpl();
-
-        // GET: FixturePurchase/Apply
+        ScrapService scrapService = new ScrapServiceImpl();
+        // GET: FixtureScrap/Apply
         public ActionResult Apply()
         {
             return View();
         }
 
-        // GET: FixturePurchase/FirstPass
+        // GET: FixtureScrap/FirstPass
         public ActionResult FirstPass()
         {
             return View();
         }
 
-        // GET: FixturePurchase/LastPass 
+        // GET: FixtureScrap/LastPass 
         public ActionResult LastPass()
         {
             return View();
         }
 
-
-        //添加采购申请
+        //添加报废申请
         [HttpPost]
-        public ActionResult AddPurChaseRecord()
+        public ActionResult AddScrapRecord()
         {
-
-            FixturePurchase fp = new FixturePurchase();
+            FixtureScrap fs = new FixtureScrap();
             var user = (CurrentUserWorkCell)Session["CurrentUser"];
-            fp.AppBy = user.code;//获取当前申请人的工号
-            fp.AppByName = userService.GetUserByCode(user.code).Name;//获取当前申请人姓名
-            fp.FamilyID = Convert.ToInt32(Request["familycode"]);
-            fp.Code = Request["code"];
-            fp.SeqID = Convert.ToInt32(Request["seqID"]);
-            fp.BillNo = Request["billNo"];
-            fp.RegDate = Convert.ToDateTime(Request["regDate"]);
-            fp.Pic = Request["pic"];
-            fp.State = "初审";
-
-            context.Purchases.Add(fp);
+            fs.ScrapBy = user.code;//获取当前申请人的工号
+            fs.ScrapByName = userService.GetUserByCode(user.code).Name;//获取当前申请人姓名
+            fs.Code = Request["code"];
+            fs.SeqId = Convert.ToInt32(Request["seqID"]);
+            FixtureEntity fixtureEntity = context.FixtureEntities.Find(fs.Code,fs.SeqId);
+            fs.UsedCount = fixtureEntity.UsedCount;
+            fs.ScrapReason = Request["reason"];
+            fs.State = "初审";
+            context.Scraps.Add(fs);
             context.SaveChanges();
-
 
             var data = new
             {
                 success = true,
             };
             return Json(data, JsonRequestBehavior.AllowGet);
-
+            
         }
 
-        //查询本用户提交的所有采购申请
+        //查询本用户能查看的报废申请
         [HttpPost]
-        public ActionResult ReadPurchaseWithUser()
+        public ActionResult ReadScrapWithUser()
         {
             var user = (CurrentUserWorkCell)Session["CurrentUser"];
             string currentcode = user.code;
-            List<FixturePurchase> fixturePurchases = context.Purchases.SqlQuery("select * from FixturePurchase where AppBy=" + currentcode).ToList();
-            return Json(fixturePurchases, JsonRequestBehavior.AllowGet);
+            List<FixtureScrap> fixtureScraps = context.Scraps.SqlQuery("select * from FixtureScrap where ScrapBy=" + currentcode).ToList();
+            return Json(fixtureScraps, JsonRequestBehavior.AllowGet);
+            
         }
-
-        //查询本车间正在初审的采购申请
+        //查询本车间正在初审的报废申请
         [HttpPost]
-        public ActionResult ReadPurchaseFirstPass()
+        public ActionResult ReadScrapFirstPass()
         {
             var user = (CurrentUserWorkCell)Session["CurrentUser"];
             string State = "初审";
             string currentWorkCell = user.workCell;
-            List<FixturePurchase> fixturePurchases = context.Purchases.SqlQuery("select * from FixturePurchase fp join UserRole ur on fp.AppBy=ur.UserCode where State='" + State + "' and WorkCell='" + currentWorkCell + "'").ToList();
+            List<FixtureScrap> fixturePurchases = context.Scraps.SqlQuery("select * from FixtureScrap fs join UserRole ur on fs.ScrapBy=ur.UserCode where State='" + State + "' and WorkCell='" + currentWorkCell + "'").ToList();
             return Json(fixturePurchases, JsonRequestBehavior.AllowGet);
         }
 
-        //查询本车间正在终审的采购申请
+        //查询本车间正在终审的报废申请
         [HttpPost]
-        public ActionResult ReadPurchaseLastPass()
+        public ActionResult ReadScrapLastPass()
         {
             var user = (CurrentUserWorkCell)Session["CurrentUser"];
             string State = "终审";
             string PassAll = "审核全过";
             string currentWorkCell = user.workCell;
-            List<FixturePurchase> fixturePurchases = context.Purchases.SqlQuery("select * from FixturePurchase fp join UserRole ur on fp.AppBy=ur.UserCode where ( State='" + State + "' or State='"+PassAll+"')and WorkCell='" + currentWorkCell + "'").ToList();
+            List<FixtureScrap> fixturePurchases = context.Scraps.SqlQuery("select * from FixtureScrap fs join UserRole ur on fs.ScrapBy=ur.UserCode where ( State='" + State + "' or State='" + PassAll + "')and WorkCell='" + currentWorkCell + "'").ToList();
             return Json(fixturePurchases, JsonRequestBehavior.AllowGet);
         }
 
-        //修改报废状态
+        //修改报废申请状态
         [HttpPost]
-        public ActionResult UpdateState()
+        public ActionResult UpdateScrap()
         {
             string JSONData = Request["record"];
             string[] arr = JSONData.Split(';');
-            var _record = purchaseService.FindByBillno(arr[0]);
+            var _record = scrapService.FindByCode_SeqId(arr[0],Convert.ToInt32(arr[1]));
             if (_record == null)
             {
                 var error = new
@@ -117,16 +111,13 @@ namespace FixtureManagement.Controllers
                 };
                 return Json(error, JsonRequestBehavior.AllowGet);
             }
-            _record.AppBy = _record.AppBy;
-            _record.AppByName = _record.AppByName;
-            _record.FamilyID = _record.FamilyID;
+            _record.ScrapBy = _record.ScrapBy;
+            _record.ScrapByName = _record.ScrapByName;
             _record.Code = _record.Code;
-            _record.SeqID = _record.SeqID;
-            _record.BillNo = _record.BillNo;
-            _record.RegDate = _record.RegDate;
-            _record.Pic = _record.Pic;
-            _record.State = arr[1];
-            if (!purchaseService.Update(_record))
+            _record.SeqId = _record.SeqId;
+            _record.ScrapReason = _record.ScrapReason;
+            _record.State = arr[2];
+            if (!scrapService.Update(_record))
             {
                 var error = new
                 {
@@ -141,8 +132,9 @@ namespace FixtureManagement.Controllers
                 success = true,
             };
             return Json(data, JsonRequestBehavior.AllowGet);
-
         }
+
+
 
     }
 }

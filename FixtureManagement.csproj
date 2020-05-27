@@ -249,13 +249,23 @@
     <Compile Include="Common\InOutQueryRecord.cs" />
     <Compile Include="Common\ItemID.cs" />
     <Compile Include="Controllers\FixturePurchaseController.cs" />
+    <Compile Include="Controllers\FixtureRepairController.cs" />
     <Compile Include="Controllers\ManagerFamilyController.cs" />
+    <Compile Include="Controllers\FixtureScrapController.cs" />
     <Compile Include="filter\UserFilter.cs" />
+    <Compile Include="Models\FixtureRepair.cs" />
+    <Compile Include="Models\FixtureScrap.cs" />
     <Compile Include="Models\FixtureFamily.cs" />
     <Compile Include="Models\FixturePurchase.cs" />
     <Compile Include="Models\WorkCell.cs" />
+    <Compile Include="Service\impl\PurchaseServiceImpl.cs" />
+    <Compile Include="Service\impl\RepairServiceImpl.cs" />
+    <Compile Include="Service\impl\ScrapServiceImpl.cs" />
     <Compile Include="Service\InRecordService.cs" />
     <Compile Include="Service\impl\InRecordServiceImpl.cs" />
+    <Compile Include="Service\PurchaseService.cs" />
+    <Compile Include="Service\RepairService.cs" />
+    <Compile Include="Service\ScrapService.cs" />
     <Compile Include="ViewModels\MenuTreeViewModel.cs" />
     <Compile Include="Models\MenuNode.cs" />
     <Compile Include="Controllers\FixtureEntityController.cs" />
@@ -406,6 +416,11 @@
     <Content Include="Views\FixturePurchase\Apply.cshtml" />
     <Content Include="Views\FixturePurchase\FirstPass.cshtml" />
     <Content Include="Views\FixturePurchase\LastPass.cshtml" />
+    <Content Include="Views\FixtureScrap\Apply.cshtml" />
+    <Content Include="Views\FixtureScrap\FirstPass.cshtml" />
+    <Content Include="Views\FixtureScrap\LastPass.cshtml" />
+    <Content Include="Views\FixtureRepair\Apply.cshtml" />
+    <Content Include="Views\FixtureRepair\DealWith.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

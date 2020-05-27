@@ -191,7 +191,6 @@
             FamilyID = obj.parentNode.parentNode.parentNode.previousSibling.previousSibling.innerHTML;
             FamilyName = obj.parentNode.parentNode.parentNode.previousSibling.firstChild.text;
             var record = FamilyID + ";" + FamilyName;
-            c
             UpdateRecord("/ManagerFamily/EditFamilyRecord","FamilyTable", record);
         }
 

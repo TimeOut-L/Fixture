@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>采购管理</title>
+    <title>报废管理</title>
     <link rel="stylesheet" href="~/Content/bootstrap-table.min.css" />
     <link href="~/Content/diy-bootstraptable.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-editable.css" />
@@ -30,64 +30,53 @@
 <body>
     <div class="panel-body" style="padding-bottom:0px;">
         <div>
-            <table id="PurchaseTable" class="table-striped"></table>
+            <table id="ScrapTable" class="table-striped"></table>
         </div>
     </div>
 
     <script type="text/javascript">
- 
+
         // 行样式
         function rowStyle(row, index) {
             var classes = ['success', 'danger']
             return { classes: classes[index % classes.length] };
         }
 
-        
 
         /**
          * 数据列
          * */
         var columns = [
             {
-            field: 'AppBy',
-            title: '用户编号',
-            visable: true,
-            sortable: true,
-            align: 'center',
-        }, {
-            field: 'AppByName',
-            title: '用户名',
-            visable: true,
-            align: 'center',
-
+                field: 'ScrapBy',
+                title: '用户编号',
+                visable: true,
+                sortable: true,
+                align: 'center',
             }, {
-                field: 'FamilyID',
-                title: '类型编号',
+                field: 'ScrapByName',
+                title: '用户名',
                 visable: true,
                 align: 'center',
-            },{
+
+            }, {
                 field: 'Code',
                 title: '夹具编号',
                 visable: true,
                 align: 'center',
             }, {
-                field: 'SeqID',
+                field: 'SeqId',
                 title: '夹具序列号',
                 visable: true,
                 align: 'center',
             }, {
-                field: 'BillNo',
-                title: '采购单号',
+                field: 'UsedCount',
+                title: '物品寿命计数',
                 visable: true,
                 align: 'center',
             }, {
-                field: 'RegDate',
-                title: '采购时间',
-                visable: true,
-                align: 'center',
-            }, {
-                field: 'Pic',
-                title: '图片',
+                field: 'ScrapReason',
+                title: '报废原因',
                 visable: true,
                 align: 'center',
             }, {
@@ -96,33 +85,36 @@
                 visable: true,
                 align: 'center',
             },
-        {
-            field: 'Operation',
-            title: '操作',
-            //events: operationEvents,
-            align: 'center',
-            formatter: function (value, row, index) {
-                return [
-                    '<div class="btn-group">',
-                    '<button id="btn_update"  type="button" class="btn btn-success" onclick="update(this)" data-toggle="modal" ><i  aria-hidden="true"></i><span>初审通过√</span></button>',
-                    '<button id="btn_delete"  type="button" class="btn btn-danger" onclick="del(this)"><i  aria-hidden="true"  ></i><span>×驳回</span></button>',
-                    '</div>'
-                ].join(' ');
-            }
-        },]
+            {
+                field: 'Operation',
+                title: '操作',
+                //events: operationEvents,
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return [
+                        '<div class="btn-group">',
+                        '<button id="btn_update"  type="button" class="btn btn-success" onclick="update(this)" data-toggle="modal" ><i  aria-hidden="true"></i><span>终审通过√</span></button>',
+                        '<button id="btn_delete"  type="button" class="btn btn-danger" onclick="del(this)"><i  aria-hidden="true"  ></i><span>×驳回</span></button>',
+                        '</div>'
+                    ].join(' ');
+                }
+            },]
 
         function del(obj) {
-            Billno = obj.parentNode.parentNode.parentNode.childNodes[5].textContent;
-            State = "驳回";
-            var record = Billno + ";" + State;
-            UpdateRecord("/FixturePurchase/UpdateState", "PurchaseTable", record);
-        }
 
+            Code = obj.parentNode.parentNode.parentNode.childNodes[2].textContent;
+            SeqID = obj.parentNode.parentNode.parentNode.childNodes[3].textContent;
+            State = "驳回";
+            var record = Code + ";" + SeqID + ";" + State;
+            UpdateRecord("/FixtureScrap/UpdateScrap", "ScrapTable", record);
+
+        }
         function update(obj) {
-            Billno = obj.parentNode.parentNode.parentNode.childNodes[5].textContent;
-            State = "终审";
-            var record = Billno + ";" + State;
-            UpdateRecord("/FixturePurchase/UpdateState", "PurchaseTable", record);
+            Code = obj.parentNode.parentNode.parentNode.childNodes[2].textContent;
+            SeqID = obj.parentNode.parentNode.parentNode.childNodes[3].textContent;
+            State = "审核全过";
+            var record = Code + ";" + SeqID + ";" + State;
+            UpdateRecord("/FixtureScrap/UpdateScrap", "ScrapTable", record);
         }
 
 
@@ -130,10 +122,10 @@
          * table 初始化
          * */
         var TableInit = function () {
-            var PurchaseTable = new Object();
+            var ScrapTable = new Object();
 
-            PurchaseTable = BoootstrapTableInit("PurchaseTable", '/FixturePurchase/ReadPurchaseFirstPass', rowStyle, columns)
-            return PurchaseTable;
+           ScrapTable = BoootstrapTableInit("ScrapTable", '/FixtureScrap/ReadScrapLastPass', rowStyle, columns)
+            return ScrapTable;
         }
 
         /**
