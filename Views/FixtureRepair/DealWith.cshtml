@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>报废管理</title>
+    <title>报修管理</title>
     <link rel="stylesheet" href="~/Content/bootstrap-table.min.css" />
     <link href="~/Content/diy-bootstraptable.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-editable.css" />
@@ -30,12 +30,12 @@
 <body>
     <div class="panel-body" style="padding-bottom:0px;">
         <div>
-            <table id="ScrapTable" class="table-striped"></table>
+            <table id="RepairTable" class="table-striped"></table>
         </div>
     </div>
 
     <script type="text/javascript">
-       
+
         // 行样式
         function rowStyle(row, index) {
             var classes = ['success', 'danger']
@@ -48,14 +48,14 @@
          * */
         var columns = [
             {
-                field: 'ScrapBy',
-                title: '用户编号',
+                field: 'RepBy',
+                title: '申请人编号',
                 visable: true,
                 sortable: true,
                 align: 'center',
             }, {
-                field: 'ScrapByName',
-                title: '用户名',
+                field: 'RepByName',
+                title: '申请人用户名',
                 visable: true,
                 align: 'center',
 
@@ -65,18 +65,36 @@
                 visable: true,
                 align: 'center',
             }, {
-                field: 'SeqId',
+                field: 'SeqID',
                 title: '夹具序列号',
                 visable: true,
                 align: 'center',
             }, {
-                field: 'UsedCount',
-                title: '物品寿命计数',
+                field: 'faultDes',
+                title: '故障描述',
                 visable: true,
                 align: 'center',
             }, {
-                field: 'ScrapReason',
-                title: '报废原因',
+                field: 'faultPic',
+                title: '故障图片',
+                visable: true,
+                align: 'center',
+            }, {
+                field: 'DealBy',
+                title: '处理人编号',
+                visable: true,
+                sortable: true,
+                align: 'center',
+            }, {
+                field: 'DealByName',
+                title: '处理人用户名',
+                visable: true,
+                align: 'center',
+
+            },
+            {
+                field: 'DealDes',
+                title: '处理描述',
                 visable: true,
                 align: 'center',
             }, {
@@ -93,7 +111,7 @@
                 formatter: function (value, row, index) {
                     return [
                         '<div class="btn-group">',
-                        '<button id="btn_update"  type="button" class="btn btn-success" onclick="update(this)" data-toggle="modal" ><i  aria-hidden="true"></i><span>初审通过√</span></button>',
+                        '<button id="btn_update"  type="button" class="btn btn-success" onclick="update(this)" data-toggle="modal" ><i  aria-hidden="true"></i><span>通过√</span></button>',
                         '<button id="btn_delete"  type="button" class="btn btn-danger" onclick="del(this)"><i  aria-hidden="true"  ></i><span>×驳回</span></button>',
                         '</div>'
                     ].join(' ');
@@ -106,15 +124,15 @@
             SeqID = obj.parentNode.parentNode.parentNode.childNodes[3].textContent;
             State = "驳回";
             var record = Code + ";" + SeqID + ";" + State;
-            UpdateRecord("/FixtureScrap/UpdateScrap", "ScrapTable", record);
+            UpdateRecord("/FixtureRepair/UpdateRepair", "RepairTable", record);
 
         }
         function update(obj) {
             Code = obj.parentNode.parentNode.parentNode.childNodes[2].textContent;
             SeqID = obj.parentNode.parentNode.parentNode.childNodes[3].textContent;
-            State = "终审";
+            State = "通过";
             var record = Code + ";" + SeqID + ";" + State;
-            UpdateRecord("/FixtureScrap/UpdateScrap", "ScrapTable", record);
+            UpdateRecord("/FixtureRepair/UpdateRepair", "RepairTable", record);
         }
 
 
@@ -122,10 +140,10 @@
          * table 初始化
          * */
         var TableInit = function () {
-            var ScrapTable = new Object();
+            var PurchaseTable = new Object();
 
-            ScrapTable = BoootstrapTableInit("ScrapTable", '/FixtureScrap/ReadScrapFirstPass', rowStyle, columns)
-            return ScrapTable;
+            PurchaseTable = BoootstrapTableInit("RepairTable", '/FixtureRepair/ReadRepairState', rowStyle, columns)
+            return PurchaseTable;
         }
 
         /**
