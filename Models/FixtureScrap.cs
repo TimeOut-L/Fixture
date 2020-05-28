@@ -11,9 +11,8 @@ namespace FixtureManagement.Models
     {
         public string ScrapBy { get; set; }
         public string ScrapByName { get; set; }
-
         [Key]
-        [Column(Order = 1)]
+        [Column(Order =1)]
         public string Code { get; set; }
         [Key]
         [Column(Order = 2)]

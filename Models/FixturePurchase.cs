@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -12,7 +13,9 @@ namespace FixtureManagement.Models
         public string AppBy { get; set; }
         public string AppByName { get; set; }
         public int FamilyID { get; set; }
+      
         public string Code { get; set; }
+       
         public int SeqID { get; set; }
         [Key]
         public string BillNo { get; set; }
