@@ -244,6 +244,7 @@ function DeleteRecords(requestUrl, tableId, ItemIDs) {
                 toastr.success('删除成功');
             }
             else {
+                RefreshTable(tableId);
                 toastr.warning(result.msg);
             }
         },
@@ -269,6 +270,7 @@ function UpdateRecord(requestUrl, tableId,jsonData) {
         success: function (result) {
             if (result.success) {
                 toastr.success("编辑已保存");
+                RefreshTable(tableId);
             } else {
                 RefreshTable(tableId);
                 toastr.warning(result.msg);

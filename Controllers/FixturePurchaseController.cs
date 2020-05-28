@@ -101,7 +101,7 @@ namespace FixtureManagement.Controllers
             return Json(fixturePurchases, JsonRequestBehavior.AllowGet);
         }
 
-        //修改报废状态
+        //修改申请状态
         [HttpPost]
         public ActionResult UpdateState()
         {

@@ -122,7 +122,7 @@
         /**
          * 数据列
          * */
-        var columns = [ {
+        var columns = [{
             field: 'AppBy',
             title: '用户编号',
             visable: true,
@@ -133,43 +133,46 @@
             title: '用户名',
             visable: true,
             align: 'center',
-            
-            }, {
-                field: 'FamilyID',
-                title: '类型编号',
-                visable: true,
-                align: 'center',
-            },{
-                field: 'Code',
-                title: '夹具编号',
-                visable: true,
-                align: 'center',
-            }, {
-                field: 'SeqId',
-                title: '夹具序列号',
-                visable: true,
-                align: 'center',
-            }, {
-                field: 'BillNo',
-                title: '采购单号',
-                visable: true,
-                align: 'center',
-            }, {
-                field: 'RegDate',
-                title: '采购时间',
-                visable: true,
-                align: 'center',
-            }, {
-                field: 'Pic',
-                title: '图片',
-                visable: true,
-                align: 'center',
-            }, {
-                field: 'State',
-                title: '审查状态',
-                visable: true,
-                align: 'center',
-            },
+
+        }, {
+            field: 'FamilyID',
+            title: '类型编号',
+            visable: true,
+            align: 'center',
+        }, {
+            field: 'Code',
+            title: '夹具编号',
+            visable: true,
+            align: 'center',
+        }, {
+            field: 'SeqId',
+            title: '夹具序列号',
+            visable: true,
+            align: 'center',
+        }, {
+            field: 'BillNo',
+            title: '采购单号',
+            visable: true,
+            align: 'center',
+        }, {
+            field: 'RegDate',
+            title: '采购时间',
+            visable: true,
+            align: 'center',
+            formatter: function (value, row, index) {
+                return changeDateFormat(value)
+            }
+        }, {
+            field: 'Pic',
+            title: '图片',
+            visable: true,
+            align: 'center',
+        }, {
+            field: 'State',
+            title: '审查状态',
+            visable: true,
+            align: 'center',
+        },
         {
             field: 'Operation',
             title: '操作',
@@ -199,7 +202,7 @@
          * */
         var TableInit = function () {
             var PurchaseTable = new Object();
-            
+
             PurchaseTable = BoootstrapTableInit("PurchaseTable", '/FixturePurchase/ReadPurchaseWithUser', rowStyle, columns)
             return PurchaseTable;
         }

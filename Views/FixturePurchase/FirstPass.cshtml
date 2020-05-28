@@ -35,37 +35,37 @@
     </div>
 
     <script type="text/javascript">
- 
+
         // 行样式
         function rowStyle(row, index) {
             var classes = ['success', 'danger']
             return { classes: classes[index % classes.length] };
         }
 
-        
+
 
         /**
          * 数据列
          * */
         var columns = [
             {
-            field: 'AppBy',
-            title: '用户编号',
-            visable: true,
-            sortable: true,
-            align: 'center',
-        }, {
-            field: 'AppByName',
-            title: '用户名',
-            visable: true,
-            align: 'center',
+                field: 'AppBy',
+                title: '用户编号',
+                visable: true,
+                sortable: true,
+                align: 'center',
+            }, {
+                field: 'AppByName',
+                title: '用户名',
+                visable: true,
+                align: 'center',
 
             }, {
                 field: 'FamilyID',
                 title: '类型编号',
                 visable: true,
                 align: 'center',
-            },{
+            }, {
                 field: 'Code',
                 title: '夹具编号',
                 visable: true,
@@ -85,6 +85,9 @@
                 title: '采购时间',
                 visable: true,
                 align: 'center',
+                formatter: function (value, row, index) {
+                    return changeDateFormat(value)
+                }
             }, {
                 field: 'Pic',
                 title: '图片',
@@ -96,20 +99,20 @@
                 visable: true,
                 align: 'center',
             },
-        {
-            field: 'Operation',
-            title: '操作',
-            //events: operationEvents,
-            align: 'center',
-            formatter: function (value, row, index) {
-                return [
-                    '<div class="btn-group">',
-                    '<button id="btn_update"  type="button" class="btn btn-success" onclick="update(this)" data-toggle="modal" ><i  aria-hidden="true"></i><span>初审通过√</span></button>',
-                    '<button id="btn_delete"  type="button" class="btn btn-danger" onclick="del(this)"><i  aria-hidden="true"  ></i><span>×驳回</span></button>',
-                    '</div>'
-                ].join(' ');
-            }
-        },]
+            {
+                field: 'Operation',
+                title: '操作',
+                //events: operationEvents,
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return [
+                        '<div class="btn-group">',
+                        '<button id="btn_update"  type="button" class="btn btn-success" onclick="update(this)" data-toggle="modal" ><i  aria-hidden="true"></i><span>初审通过√</span></button>',
+                        '<button id="btn_delete"  type="button" class="btn btn-danger" onclick="del(this)"><i  aria-hidden="true"  ></i><span>×驳回</span></button>',
+                        '</div>'
+                    ].join(' ');
+                }
+            },]
 
         function del(obj) {
             Billno = obj.parentNode.parentNode.parentNode.childNodes[5].textContent;

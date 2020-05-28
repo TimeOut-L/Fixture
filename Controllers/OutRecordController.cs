@@ -61,7 +61,7 @@ namespace FixtureManagement.Controllers
             int ProdLineID = Convert.ToInt32(Request["prodLineID"]);
             DateTime UsedDate = Convert.ToDateTime(Request["usedDate"]);
 
-            // TODO 判断是否是本部门的夹具 不是则无法添加
+            
 
             //数据处理
             FixtureOutRecord outRecord = new FixtureOutRecord();

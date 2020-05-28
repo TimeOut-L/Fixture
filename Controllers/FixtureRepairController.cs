@@ -59,7 +59,7 @@ namespace FixtureManagement.Controllers
 
         }
 
-        //查询本用户能查看的报废申请
+        //查询本用户能查看的报修申请
         [HttpPost]
         public ActionResult ReadRepairWithUser()
         {
@@ -69,7 +69,7 @@ namespace FixtureManagement.Controllers
             return Json(fixtureRepairs, JsonRequestBehavior.AllowGet);
 
         }
-        //查询本车间正在初审的报废申请
+        //查询本车间正在初审的报修申请
         [HttpPost]
         public ActionResult ReadRepairState()
         {
@@ -102,7 +102,7 @@ namespace FixtureManagement.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        //修改报废申请状态
+        //修改报修申请状态
         [HttpPost]
         public ActionResult UpdateRepair()
         {
