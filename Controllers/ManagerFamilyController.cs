@@ -8,7 +8,6 @@ using System.Web;
 using System.Web.Mvc;
 
 using FixtureManagement.Common;
-using FixtureManagement.filter;
 using FixtureManagement.Models;
 using FixtureManagement.Models.Context;
 using Newtonsoft.Json;
@@ -16,18 +15,18 @@ using Newtonsoft.Json.Linq;
 
 namespace FixtureManagement.Controllers
 {
-    [LoginCheckFilter]
-    [UserFilter]
     public class ManagerFamilyController : Controller
-    {   
-        FixtureManagerContext context = new FixtureManagerContext();
+    {
+
         
+        FixtureManagerContext context = new FixtureManagerContext();
+
         public ActionResult Index()
         {
             return View();
         }
 
-      
+
         //查询所有的类别
         [HttpPost]
         public ActionResult ReadFamilyRecord()
@@ -38,8 +37,7 @@ namespace FixtureManagement.Controllers
         }
 
 
-        [HttpPost]
-        
+
         //修改工夹具的类别
         public ActionResult EditFamilyRecord()
         {
@@ -57,11 +55,9 @@ namespace FixtureManagement.Controllers
             };
             return Json(data, JsonRequestBehavior.AllowGet);
 
-
         }
-        [HttpPost]
+
         //创建工夹具的类别
-       
         public ActionResult AddFamilyRecord()
         {
             int FamilyID = 0;
@@ -79,10 +75,9 @@ namespace FixtureManagement.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
 
         }
-        [HttpPost]
-        
+
         public ActionResult DeleteFamilyRecord() {
-            string jsonData = Request["record"];
+            string jsonData = Request["ItemIDs"];
             string[]  arr = jsonData.Split(';');
             FixtureFamily family = context.Familys.Find(Convert.ToInt32(arr[0]));
             int id = family.FamilyID;
@@ -96,12 +91,10 @@ namespace FixtureManagement.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-      
         public ActionResult DeleteFamilyRecords()
         {
-            string datastring = Request["record"];
-            string[] ids = datastring.Split(':');
+            string datastring = Request["ItemIDs"];
+            string[] ids = datastring.Split(';');
             foreach (string id in ids)
             {
               

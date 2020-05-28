@@ -32,7 +32,7 @@
         <div>
             <!-- 工具栏 -->
             <div id="toolbar" class="btn-group">
-                <button id="btn_add" type="button" class="btn btn-success" data-toggle="modal" data-target="#addFamilyModal">
+                <button id="btn_add" type="button" class="btn btn-success" data-toggle="modal" data-target="#addUserModal">
                     <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
                     <span>新增</span>
                 </button>
@@ -43,7 +43,7 @@
             </div>
             <table id="FamilyTable" class="table-striped"></table>
             <!-- 添加 modal 框-->
-            <div class="modal fade" id="addFamilyModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog ">
                     <div class="modal-content" sstyle="border-radius:5px">
                         <div class="modal-header">
@@ -75,9 +75,10 @@
     <script type="text/javascript">
         function addFamily() {
             if (CheckFormNull("addform")) {
-                AddRecord("addform", "/ManagerFamily/AddFamilyRecord", "addFamilyModal", "FamilyTable");
+                AddRecord("addform", "/ManagerFamily/AddFamilyRecord", "addUserModal", "FamilyTable");
             }
         }
+
 
 
         //btn_remove 事件
@@ -87,15 +88,12 @@
             var id = []  ;
             var jsonData = $.map($('#FamilyTable').bootstrapTable('getSelections'), function (row) {
                 return row;
-            });           
-          
+            });
             for (i = 0; i < jsonData.length; i++) {
                 id[i] = jsonData[i].FamilyID;
             }
             var ids = id.join(';');
-            console.log(ids);
-            if (ids == null||ids=="") {
-                toastr.warning("请先选择要删除的记录!");
+            if (ids == null) {
                 return;
             }
            
@@ -110,28 +108,7 @@
             return { classes: classes[index % classes.length] };
         }
 
-        //操作列事情
-        window.operationEvents = {
-            //编辑事件
-            'click #btn_update': function (e, value, row, index) {
-                console.log(222);
-                var record = new Array();
-                var Item = new Object();
-                Item.FamilyID = row.FamilyID;
-                Item.FamilyName = row.FamilyName;       
-                record.push(Item);
-                UpdateRecord("/ManagerFamily/EditFamilyRecord", "FamilyTable".JSON.stringify(record));
-            },
-            'click #btn_delete': function (e, value, row, index) {
-                console.log(111);
-                var record = new Array();
-                var Item = new Object();
-                Item.FamilyID = row.FamilyID;
-                Item.FamilyName = row.FamilyName;
-                record.push(Item);
-                confirmOrCancelDeleteData("/ManagerFamily/DeleteFamilyRecords", "FamilyTable", JSON.stringify(record));
-            }
-        }
+
 
         /**
          * 数据列
@@ -177,21 +154,20 @@
 
         function del(obj) {
          
+ 
             FamilyID = obj.parentNode.parentNode.parentNode.previousSibling.previousSibling.innerHTML;
             FamilyName = obj.parentNode.parentNode.parentNode.previousSibling.firstChild.text;
-            var id = []  ;
-            id[0] = FamilyID;
-            var ids = id.join(';');
-           
-            confirmOrCancelDeleteData("/ManagerFamily/DeleteFamilyRecords", "FamilyTable",ids);
-            
+            var record = FamilyID + ";" + FamilyName;
+            confirmOrCancelDeleteData("/ManagerFamily/DeleteFamilyRecord", "FamilyTable",record);
+            var itable = TableInit();
+
         }
 
         function update(obj) {
             FamilyID = obj.parentNode.parentNode.parentNode.previousSibling.previousSibling.innerHTML;
             FamilyName = obj.parentNode.parentNode.parentNode.previousSibling.firstChild.text;
             var record = FamilyID + ";" + FamilyName;
-            UpdateRecord("/ManagerFamily/EditFamilyRecord","FamilyTable", record);
+            UpdateRecord("/ManagerFamily/EditFamilyRecord", record);
         }
 
 
@@ -209,6 +185,7 @@
          * */
         $(function () {
             var itable = TableInit();//.初始化  Table
+
         });</script>
 </body>
 </html>
