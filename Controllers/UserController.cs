@@ -125,9 +125,69 @@ namespace FixtureManagement.Controllers
                     };
                     return Json(error, JsonRequestBehavior.AllowGet);
                 }
+                if (obj.RoleName.Equals("Admin"))
+                {
+                    var error = new
+                    {
+                        success = false,
+                        msg = "请注意无法删除同级账户,删除未执行",
+                    };
+                    return Json(error, JsonRequestBehavior.AllowGet);
+                }
                 userViews.Add(obj);
             }
             if (!userService.Delete(userViews))
+            {
+                var exception = new
+                {
+                    success = false,
+                    msg = "可能有些记录不存在,删除未执行"
+                };
+                return Json(exception, JsonRequestBehavior.AllowGet);
+            }
+            var data = new
+            {
+                success = true,
+            };
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        ///  修改1用户角色
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult UpdateUser()
+        {
+            string jsonData = Request["record"];
+            JArray jArray = JArray.Parse(jsonData);
+            UserViewModel userView = new UserViewModel();
+            var _user = (CurrentUserWorkCell)Session["CurrentUser"];
+            foreach (var item in jArray)
+            {
+                JsonSerializer js = new JsonSerializer();
+                UserViewModel obj = (UserViewModel)js.Deserialize(item.CreateReader(), typeof(UserViewModel));
+                if (obj.Code == _user.code)
+                {
+                    var error = new
+                    {
+                        success = false,
+                        msg = "请注意无法修改自己的账号,修改未执行",
+                    };
+                    return Json(error, JsonRequestBehavior.AllowGet);
+                }
+                if (obj.RoleName.Equals("Admin"))
+                {
+                    var error = new
+                    {
+                        success = false,
+                        msg = "请注意无法修改同级账户,修改未执行",
+                    };
+                    return Json(error, JsonRequestBehavior.AllowGet);
+                }
+                userView = obj;
+            }
+            if (!userService.Update(userView))
             {
                 var exception = new
                 {

@@ -42,6 +42,7 @@ namespace FixtureManagement.Service
 
         bool Add(string code, string password, string name , string roleName,string workCell);
 
+        bool Update(UserViewModel userView);
         bool Delete(UserViewModel userView);
         bool Delete(List<UserViewModel> userViews);
     }

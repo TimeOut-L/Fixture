@@ -140,6 +140,8 @@ namespace FixtureManagement.Service.impl
             return true;
         }
 
+
+
         /// <summary>
         ///  删除当前部门用户 ,用户可能在其他部门拥有角色
         /// </summary>
@@ -182,6 +184,25 @@ namespace FixtureManagement.Service.impl
             if (pass)
                 context.SaveChanges();
             return pass;
+        }
+
+        public bool Update(UserViewModel userView)
+        {
+            var _user = context.Users.Find(userView.Code);
+            if (_user == null)
+            {
+                return false;
+            }
+            var list = from r in context.Roles where r.RoleName == userView.RoleName select r.RoleID;
+            if (list.Count() == 0)
+            {
+                return false;
+            }
+            int RoleID = list.FirstOrDefault();
+            var _userRoles = context.UserRoles.Where(ur => ur.UserCode == userView.Code);
+            _userRoles.FirstOrDefault().RoleID = RoleID;
+            return context.SaveChanges() > 0;
+
         }
     }
 }
